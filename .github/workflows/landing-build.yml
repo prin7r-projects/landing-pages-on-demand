@@ -1,0 +1,39 @@
+name: landing build
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apps/landing/**"
+      - "Dockerfile.landing"
+      - "docker-compose.yml"
+      - ".github/workflows/landing-build.yml"
+  pull_request:
+    paths:
+      - "apps/landing/**"
+
+concurrency:
+  group: landing-build-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/landing
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+          cache-dependency-path: apps/landing/package-lock.json
+      - name: install
+        run: npm install --no-audit --no-fund
+      - name: typecheck
+        run: npx tsc --noEmit
+      - name: build
+        run: npm run build
+        env:
+          NEXT_TELEMETRY_DISABLED: "1"

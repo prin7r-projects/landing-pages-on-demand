@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Render — Pitch deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #0E1116;
+    --paper: #FAF7F2;
+    --bone: #EDE7DD;
+    --accent: #E8554E;
+    --mute: #8A8579;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  body {
+    font-family: "Inter", system-ui, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  .deck { display: flex; flex-direction: column; gap: 24px; padding: 40px; max-width: 1120px; margin: 0 auto; }
+  .slide {
+    aspect-ratio: 16 / 9;
+    background: var(--paper);
+    border: 1px solid var(--bone);
+    padding: 56px 64px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    page-break-after: always;
+  }
+  .slide-number {
+    position: absolute; bottom: 24px; right: 32px;
+    font-family: "JetBrains Mono", monospace;
+    color: var(--mute); font-size: 12px; letter-spacing: 0.04em;
+  }
+  .slide-eyebrow {
+    font-family: "JetBrains Mono", monospace;
+    color: var(--mute);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .slide h1, .slide h2 {
+    font-family: "Fraunces", serif;
+    font-weight: 600;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    line-height: 1.05;
+  }
+  .slide h1 { font-size: clamp(36px, 5vw, 64px); }
+  .slide h2 { font-size: clamp(28px, 3.5vw, 40px); margin-bottom: 24px; }
+  .slide p, .slide li {
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--ink);
+    max-width: 60ch;
+  }
+  .slide ul { list-style: none; padding-left: 0; }
+  .slide li {
+    padding-left: 24px; position: relative; margin-bottom: 12px;
+  }
+  .slide li::before {
+    content: ""; position: absolute; left: 0; top: 12px;
+    width: 12px; height: 1px; background: var(--accent);
+  }
+  .accent { color: var(--accent); }
+  .mute { color: var(--mute); }
+  .mono { font-family: "JetBrains Mono", monospace; }
+
+  .stamp {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: "Fraunces", serif; font-weight: 600; font-size: 28px;
+  }
+  .stamp .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
+
+  .pricing-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-top: 20px; }
+  .price-card { border: 1px solid var(--bone); padding: 20px; }
+  .price-card .tier { font-family: "JetBrains Mono", monospace; font-size: 11px; color: var(--mute); letter-spacing: 0.1em; text-transform: uppercase; }
+  .price-card .amount { font-family: "Fraunces", serif; font-weight: 600; font-size: 28px; margin: 6px 0 12px; }
+  .price-card ul li { font-size: 13px; margin-bottom: 6px; }
+  .price-card ul li::before { top: 9px; }
+
+  .grid-20 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px; margin-top: 20px; }
+  .grid-20 div {
+    aspect-ratio: 4/3;
+    background: var(--bone);
+    position: relative;
+  }
+  .grid-20 div::after {
+    content: ""; position: absolute; inset: 0; border: 1px solid rgba(14,17,22,0.05);
+  }
+  .grid-20 div:nth-child(7), .grid-20 div:nth-child(13) { background: var(--accent); opacity: 0.85; }
+
+  .timeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 20px; }
+  .timeline > div { border-top: 2px solid var(--ink); padding-top: 12px; }
+  .timeline h3 { font-family: "Fraunces", serif; font-size: 18px; font-weight: 600; margin-bottom: 6px; }
+  .timeline p { font-size: 14px; color: var(--mute); }
+
+  @media print {
+    .deck { padding: 0; gap: 0; }
+    .slide { border: none; height: 100vh; aspect-ratio: auto; }
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- 1 -->
+  <section class="slide">
+    <div>
+      <div class="stamp">Render<span class="dot"></span></div>
+    </div>
+    <div>
+      <p class="slide-eyebrow">Pitch — 2026 Q2</p>
+      <h1>A landing page on your<br/>domain in 30 minutes.</h1>
+      <p style="margin-top: 24px; color: var(--mute); font-size: 16px;">The site you are reading was made by Render in 27 minutes.</p>
+    </div>
+    <div class="slide-number">01 / 10</div>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <p class="slide-eyebrow">The problem</p>
+    <h2>The buyer is not shopping for a tool. They are shopping for the elimination of Saturday.</h2>
+    <ul>
+      <li>Page builders solve layout — not the empty canvas.</li>
+      <li>AI generators look like AI generators.</li>
+      <li>Freelancers cost $4k and 8 days.</li>
+      <li>Founders confuse "I can do it" with "I should do it."</li>
+    </ul>
+    <div class="slide-number">02 / 10</div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <p class="slide-eyebrow">The product</p>
+    <h2>One brief in. One live URL out.</h2>
+    <ul>
+      <li>Average turnaround: <span class="accent">27 min</span>.</li>
+      <li>Output ships to the buyer's domain, in a real GitHub repo, with real TLS and real analytics.</li>
+      <li>Brand identity is generated <em>first</em> — palette, typography, voice — and the page is laid out around it.</li>
+      <li>No template gallery. No empty canvas.</li>
+    </ul>
+    <div class="slide-number">03 / 10</div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <p class="slide-eyebrow">Why now</p>
+    <h2>Three things became true in the same year.</h2>
+    <ul>
+      <li>Claude Opus 4.7 produces credible brand systems on demand.</li>
+      <li>Vercel-class deploy primitives are commoditized: a Dockerfile + a Traefik label.</li>
+      <li>The premium for "AI-built but tasteful" is rising while tolerance for "AI-built but obviously templated" is collapsing.</li>
+    </ul>
+    <div class="slide-number">04 / 10</div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <p class="slide-eyebrow">The self-referential proof</p>
+    <h2>20 landings, 20 distinct identities,<br/>built in one afternoon.</h2>
+    <div class="grid-20">
+      <div></div><div></div><div></div><div></div><div></div>
+      <div></div><div></div><div></div><div></div><div></div>
+      <div></div><div></div><div></div><div></div><div></div>
+      <div></div><div></div><div></div><div></div><div></div>
+    </div>
+    <p class="mute" style="margin-top: 16px; font-size: 13px;">Each thumbnail above is clickable on the live site. The page you are reading is one of them.</p>
+    <div class="slide-number">05 / 10</div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <p class="slide-eyebrow">Pricing</p>
+    <h2>Self-serve floor. Concierge ceiling.</h2>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="tier">Free</div>
+        <div class="amount">$0</div>
+        <ul><li>1 page on render.so</li><li>7-day analytics</li><li>"Built with Render" footer</li></ul>
+      </div>
+      <div class="price-card">
+        <div class="tier">Self-serve</div>
+        <div class="amount">$29<span class="mute" style="font-size:14px;">/mo</span></div>
+        <ul><li>Unlimited briefs</li><li>Custom domain</li><li>1 brand kit</li></ul>
+      </div>
+      <div class="price-card">
+        <div class="tier">Team</div>
+        <div class="amount">$99<span class="mute" style="font-size:14px;">/mo</span></div>
+        <ul><li>5 seats</li><li>10 brand kits</li><li>Page versioning</li></ul>
+      </div>
+      <div class="price-card">
+        <div class="tier">Concierge</div>
+        <div class="amount">$1,200<span class="mute" style="font-size:14px;"> setup</span></div>
+        <ul><li>20-min Zoom brief</li><li>Human polish pass</li><li>$99/mo retainer</li></ul>
+      </div>
+    </div>
+    <div class="slide-number">06 / 10</div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <p class="slide-eyebrow">Market &amp; wedge</p>
+    <h2>The wedge is the 30-minute promise.</h2>
+    <ul>
+      <li>~$2B annual global spend on small-business landing-page work (Webflow + freelancers + agencies).</li>
+      <li>Beachhead: technical founders + fractional CMOs.</li>
+      <li>Other vendors compete on flexibility. Render competes on the <em>entire delivery loop</em>.</li>
+    </ul>
+    <div class="slide-number">07 / 10</div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <p class="slide-eyebrow">90-day plan</p>
+    <h2>From launch to $60k MRR.</h2>
+    <div class="timeline">
+      <div>
+        <h3>Week 1</h3>
+        <p>HN + PH launch concurrent with the 20-landing portfolio. 25 self-serve + 4 concierge. $4k MRR.</p>
+      </div>
+      <div>
+        <h3>Weeks 2–4</h3>
+        <p>Weekly X thread + newsletter sends. $14k MRR, NPS median ≥ 45.</p>
+      </div>
+      <div>
+        <h3>Weeks 5–8</h3>
+        <p>Team tier launch. Brand-kit reuse. $35k MRR.</p>
+      </div>
+      <div>
+        <h3>Weeks 9–12</h3>
+        <p>12 comparison posts shipped. First named case study. $60k MRR.</p>
+      </div>
+    </div>
+    <div class="slide-number">08 / 10</div>
+  </section>
+
+  <!-- 9 -->
+  <section class="slide">
+    <p class="slide-eyebrow">The moat</p>
+    <h2>The pipeline, not the model.</h2>
+    <ul>
+      <li>Playbook + orchestrator + deploy runner + per-tenant repo + container topology — assembled, tested in production on 20 landings.</li>
+      <li>Every new customer landing is <em>also</em> a marketing artifact for the next customer.</li>
+      <li>Re-render-on-demand as a workflow primitive — competitors cannot copy without rebuilding the deploy stack.</li>
+    </ul>
+    <div class="slide-number">09 / 10</div>
+  </section>
+
+  <!-- 10 -->
+  <section class="slide">
+    <p class="slide-eyebrow">The ask</p>
+    <h2>Today: try it.<br/>Send a brief.</h2>
+    <ul>
+      <li>$250k SAFE — 12 months of runway focused on team tier, brand-kit reuse, and `apps/app` (auth + billing).</li>
+      <li>Hiring: a second concierge by month 2.</li>
+      <li>Warm intros: Demand Curve, Lenny, RevGenius.</li>
+      <li class="mono"><span class="accent">→</span> landing-pages-on-demand.prin7r.com</li>
+    </ul>
+    <div class="slide-number">10 / 10</div>
+  </section>
+
+</div>
+</body>
+</html>

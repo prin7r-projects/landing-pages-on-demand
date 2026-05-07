@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://landing-pages-on-demand.prin7r.com/sitemap.xml

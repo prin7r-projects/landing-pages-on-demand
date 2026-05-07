@@ -1,0 +1,33 @@
+# deps
+node_modules
+.pnpm-store
+
+# builds
+.next
+out
+dist
+build
+.turbo
+*.tsbuildinfo
+
+# env
+.env
+.env.local
+.env.*.local
+
+# system
+.DS_Store
+Thumbs.db
+*.log
+.idea
+.vscode
+
+# wasp / open-saas (apps/app)
+apps/app/.wasp
+apps/app/.wasp-cache
+apps/app/.env.server
+apps/app/.env.client
+apps/app/migrations/dev.db
+apps/app/migrations/dev.db-journal
+
+# next standalone artifacts (kept inside apps/landing on purpose)

@@ -1,0 +1,44 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    background: #FAF7F2;
+    color: #0E1116;
+  }
+  body {
+    font-feature-settings: "ss01", "ss02";
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  ::selection {
+    background: #E8554E;
+    color: #FAF7F2;
+  }
+}
+
+@layer utilities {
+  .grid-lines {
+    background-image:
+      linear-gradient(to right, rgba(14, 17, 22, 0.04) 1px, transparent 1px);
+    background-size: calc(100% / 12) 100%;
+  }
+  .render-bar {
+    position: absolute;
+    left: 0; right: 0;
+    height: 1px;
+    background: #E8554E;
+    box-shadow: 0 0 12px rgba(232, 85, 78, 0.4);
+    animation: render-scan 4.4s ease-in-out infinite;
+  }
+  @keyframes render-scan {
+    0%   { top: 0%; opacity: 0; }
+    8%   { opacity: 1; }
+    92%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .render-bar { animation: none; opacity: 0; }
+  }
+}

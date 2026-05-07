@@ -1,0 +1,16 @@
+services:
+  landing:
+    build:
+      context: .
+      dockerfile: Dockerfile.landing
+    image: prin7r/landing-pages-on-demand:latest
+    container_name: landing-pages-on-demand
+    restart: unless-stopped
+    expose:
+      - "3000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.landing-pages-on-demand.rule=Host(`landing-pages-on-demand.prin7r.com`)"
+      - "traefik.http.routers.landing-pages-on-demand.entrypoints=websecure"
+      - "traefik.http.routers.landing-pages-on-demand.tls.certresolver=letsencrypt"
+      - "traefik.http.services.landing-pages-on-demand.loadbalancer.server.port=3000"
