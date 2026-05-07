@@ -2,6 +2,7 @@ import { Logo } from "@/components/Logo";
 import { WireframeMock } from "@/components/WireframeMock";
 import { PortfolioGrid } from "@/components/PortfolioGrid";
 import { BriefForm } from "@/components/BriefForm";
+import { PricingCta } from "@/components/PricingCta";
 
 export default function Home() {
   return (
@@ -310,6 +311,7 @@ function Pricing() {
   const tiers = [
     {
       name: "Free",
+      plan: "free" as const,
       price: "$0",
       tag: "Try it",
       lines: [
@@ -323,6 +325,7 @@ function Pricing() {
     },
     {
       name: "Self-serve",
+      plan: "self-serve" as const,
       price: "$29 / mo",
       tag: "Most operators",
       lines: [
@@ -332,12 +335,13 @@ function Pricing() {
         "90-day analytics",
         "Edit-via-PR",
       ],
-      cta: "Start self-serve",
+      cta: "Pay $29 in crypto",
       href: "#send",
       featured: true,
     },
     {
       name: "Team",
+      plan: "team" as const,
       price: "$99 / mo",
       tag: "Agencies & fractional CMOs",
       lines: [
@@ -346,12 +350,13 @@ function Pricing() {
         "Page versioning + diff",
         "Slack delivery digest",
       ],
-      cta: "Start team trial",
+      cta: "Pay $99 in crypto",
       href: "#send",
       featured: false,
     },
     {
       name: "Concierge",
+      plan: "concierge" as const,
       price: "$1,200 + $99 / mo",
       tag: "Done for you",
       lines: [
@@ -379,6 +384,11 @@ function Pricing() {
           <p className="mt-5 text-[16px] leading-[1.6] text-ink/80">
             Pricing is on the page. There is no &lsquo;contact sales&rsquo;
             tier. The concierge fee covers a real human on a real call.
+          </p>
+          <p className="mt-4 max-w-prose font-mono text-[12px] leading-[1.55] text-mute">
+            <span className="text-accent">→</span> Paid plans check out in
+            USDT/USDC via NOWPayments hosted invoice. No card on file. No
+            credit-bureau hit.
           </p>
         </div>
 
@@ -411,20 +421,12 @@ function Pricing() {
                   </li>
                 ))}
               </ul>
-              <a
-                href={t.href}
-                className={
-                  "mt-7 inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium " +
-                  (t.featured
-                    ? "bg-ink text-paper hover:opacity-90"
-                    : "border border-ink text-ink hover:bg-ink hover:text-paper")
-                }
-              >
-                {t.cta}
-                <span aria-hidden className="font-mono text-[11px] text-accent">
-                  →
-                </span>
-              </a>
+              <PricingCta
+                plan={t.plan}
+                fallbackHref={t.href}
+                featured={t.featured}
+                label={t.cta}
+              />
             </div>
           ))}
         </div>

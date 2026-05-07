@@ -5,7 +5,16 @@
 - **Live**: <https://landing-pages-on-demand.prin7r.com>
 - **Notion opportunity**: `3543ceec-2619-8124-81fb-c9076db87b72` (Prin7r workspace, Opportunities database, Wave 2)
 - **Pitch deck**: [`docs/pitch-deck.html`](docs/pitch-deck.html) &mdash; opens directly in a browser
+- **Design system**: [`DESIGN.md`](DESIGN.md) &mdash; canonical design + style guide (15-section playbook)
 - **Strategy + design dossier**: [`docs/`](docs/) (10 markdown files, see below)
+
+## Screenshots
+
+Captured from the live deploy via Playwright. Re-run the capture script after any landing change (see [`DESIGN.md`](DESIGN.md) section 13).
+
+| Desktop &mdash; 1440 &times; 900 | Mobile &mdash; 390 &times; 844 |
+| --- | --- |
+| [![Render landing &mdash; desktop](docs/screenshots/landing-desktop.png)](docs/screenshots/landing-desktop.png) | [![Render landing &mdash; mobile](docs/screenshots/landing-mobile.png)](docs/screenshots/landing-mobile.png) |
 
 ## Repo layout
 
@@ -72,6 +81,19 @@ curl -sI https://landing-pages-on-demand.prin7r.com
 See [`.env.example`](.env.example). Only `NEXT_PUBLIC_SITE_URL` is required for
 the landing render. `LEAD_WEBHOOK_URL` is optional (the brief form posts to it
 if present and acks-only otherwise).
+
+The paid pricing tiers route through NOWPayments hosted invoices. Set on the
+deploy host at `/opt/prin7r-deploys/landing-pages-on-demand/.env`:
+
+```
+NOWPAYMENTS_API_KEY=...        # https://nowpayments.io > Settings > API Keys
+NOWPAYMENTS_IPN_SECRET=...     # paired secret used to verify x-nowpayments-sig
+NOWPAYMENTS_SANDBOX=false
+```
+
+If `NOWPAYMENTS_API_KEY` is missing the pricing CTAs gracefully fall back to the
+brief-form anchor instead of failing the click. The webhook stub at
+`/api/webhooks/nowpayments` rejects unsigned requests with HTTP 401.
 
 ## Self-referential proof
 
