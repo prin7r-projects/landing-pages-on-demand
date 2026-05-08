@@ -6,6 +6,8 @@ services:
     image: prin7r/landing-pages-on-demand:latest
     container_name: landing-pages-on-demand
     restart: unless-stopped
+    env_file:
+      - .env
     expose:
       - "3000"
     labels:
