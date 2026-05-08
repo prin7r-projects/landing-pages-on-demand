@@ -127,7 +127,7 @@ export default async function copyPass(brandJson, briefPayload) {
 
   try {
     const response = await anthropic.messages.create({
-      model: 'claude-sonnet-4-20250514',
+      model: 'claude-opus-4-7',
       max_tokens: 2048,
       temperature: 0.7,
       system: 'You are a senior conversion copywriter. You write only strict JSON. No markdown, no explanations.',
