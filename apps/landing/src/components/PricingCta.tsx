@@ -69,10 +69,10 @@ export function PricingCta({
   };
 
   const className =
-    "mt-7 inline-flex items-center gap-2 px-4 py-2 text-[13px] font-medium disabled:opacity-60 " +
+    "mt-auto inline-flex items-center gap-3 px-5 py-3 font-display text-[12px] uppercase tracking-wider2 disabled:opacity-60 " +
     (featured
-      ? "bg-ink text-paper hover:opacity-90"
-      : "border border-ink text-ink hover:bg-ink hover:text-paper");
+      ? "bg-accent text-paper hover:bg-ink"
+      : "border-2 border-ink text-ink hover:bg-ink hover:text-paper");
 
   return (
     <>
@@ -84,14 +84,14 @@ export function PricingCta({
         aria-label={`${label} — ${plan} plan checkout`}
       >
         {pending ? "Opening checkout…" : label}
-        <span aria-hidden className="font-mono text-[11px] text-accent">
+        <span aria-hidden className="font-mono text-[11px]">
           →
         </span>
       </button>
       {error ? (
         <p
           role="alert"
-          className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-accent"
+          className="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-accent"
         >
           {error}
         </p>

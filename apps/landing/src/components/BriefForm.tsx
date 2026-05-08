@@ -34,14 +34,14 @@ export function BriefForm() {
 
   if (submitted) {
     return (
-      <div className="border border-ink/15 bg-paper p-6 sm:p-8">
-        <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-accent">
-          Brief received
+      <div className="border-2 border-ink bg-paper p-6 sm:p-8">
+        <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
+          [ BRIEF / RECEIVED ]
         </div>
-        <p className="mt-3 font-display text-2xl font-semibold leading-tight text-ink">
-          We&rsquo;ll have your page on a preview URL shortly.
+        <p className="mt-4 font-display text-[28px] uppercase leading-[0.95] tracking-tighter2 text-ink sm:text-[36px]">
+          Preview URL inbound.
         </p>
-        <p className="mt-3 max-w-prose text-sm leading-relaxed text-ink/80">
+        <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink/80">
           A real human reads every brief during the early-access period. You&rsquo;ll
           get an email within the hour with the preview URL and a link to map your
           domain. No card on file, no fine print.
@@ -53,23 +53,23 @@ export function BriefForm() {
   return (
     <form
       onSubmit={onSubmit}
-      className="border border-ink/15 bg-paper p-6 sm:p-8"
+      className="border-2 border-ink bg-paper p-6 sm:p-8"
       noValidate
     >
-      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
-        Send a brief — first page free
+      <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-mute">
+        [ INTAKE / FIRST PAGE FREE ]
       </div>
-      <h3 className="mt-3 font-display text-2xl font-semibold leading-tight text-ink">
+      <h3 className="mt-3 font-display text-[28px] uppercase leading-[0.95] tracking-tighter2 text-ink sm:text-[36px]">
         Five fields. One live URL.
       </h3>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2">
+      <div className="mt-7 grid gap-5 sm:grid-cols-2">
         <Field label="Business name" name="business_name" required placeholder="Acme Plumbing" />
         <Field label="Email for delivery" name="email" type="email" required placeholder="you@acme.com" />
       </div>
 
       <Field
-        className="mt-4"
+        className="mt-5"
         label="What do you sell, and to whom?"
         name="description"
         as="textarea"
@@ -78,7 +78,7 @@ export function BriefForm() {
         placeholder="One paragraph — what the offering is, who buys it, and why now."
       />
 
-      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+      <div className="mt-5 grid gap-5 sm:grid-cols-2">
         <Field label="Primary CTA" name="cta" placeholder="Book a free consult" />
         <Field
           label="Domain (if you have one)"
@@ -88,26 +88,25 @@ export function BriefForm() {
         />
       </div>
 
-      <div className="mt-6 flex flex-wrap items-center gap-3">
+      <div className="mt-7 flex flex-wrap items-center gap-4">
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center gap-2 bg-ink px-5 py-3 font-medium text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="inline-flex items-center gap-3 bg-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider2 text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {submitting ? "Sending…" : "Send the brief"}
           <span aria-hidden className="font-mono text-[12px] text-accent">→</span>
         </button>
         <a
           href="#talk"
-          className="font-medium text-ink underline-offset-4 hover:underline"
+          className="font-mono text-[12px] uppercase tracking-[0.18em] text-ink underline-offset-4 hover:underline"
         >
           Or talk to a human
         </a>
       </div>
 
-      <p className="mt-5 text-[12px] leading-relaxed text-mute">
-        We&rsquo;ll never share the brief. The first page is on us. There is no upsell
-        sequence in your inbox.
+      <p className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute">
+        We&rsquo;ll never share the brief. The first page is on us. No upsell sequence.
       </p>
     </form>
   );
@@ -138,11 +137,11 @@ function Field({
 }: FieldProps) {
   const id = `field-${name}`;
   const baseClasses =
-    "mt-1 block w-full border-b border-ink/15 bg-transparent px-0 py-2 text-[15px] text-ink placeholder:text-ink/30 focus:border-ink focus:outline-none";
+    "mt-2 block w-full border-b-2 border-ink bg-transparent px-0 py-2 text-[15px] text-ink placeholder:text-ink/30 focus:border-accent focus:outline-none";
   return (
     <label htmlFor={id} className={`block ${className}`}>
-      <span className="font-mono text-[10px] uppercase tracking-[0.14em] text-mute">
-        {label} {required ? <span className="text-accent">·</span> : null}
+      <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mute">
+        {label} {required ? <span className="text-accent">*</span> : null}
       </span>
       {as === "textarea" ? (
         <textarea
@@ -164,7 +163,7 @@ function Field({
         />
       )}
       {help ? (
-        <span className="mt-1 block text-[12px] text-mute">{help}</span>
+        <span className="mt-2 block font-mono text-[10.5px] uppercase tracking-[0.14em] text-mute">{help}</span>
       ) : null}
     </label>
   );

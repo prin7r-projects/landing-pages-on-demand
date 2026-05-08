@@ -6,7 +6,8 @@ import { PricingCta } from "@/components/PricingCta";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-paper text-ink">
+    <main className="min-h-[100dvh] bg-paper text-ink">
+      <div className="grain" aria-hidden />
       <TopNav />
       <Hero />
       <Marquee />
@@ -21,26 +22,42 @@ export default function Home() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* TopNav                                                              */
+/* ------------------------------------------------------------------ */
+
 function TopNav() {
   return (
-    <header className="border-b border-ink/10">
-      <div className="mx-auto flex max-w-content items-center justify-between px-5 py-5 sm:px-8">
-        <Logo className="text-[20px]" />
+    <header className="border-b-2 border-ink">
+      <div className="mx-auto flex max-w-content items-center justify-between px-5 py-4 sm:px-8">
+        <Logo className="text-[22px]" />
+        <span className="hidden font-mono text-[11px] uppercase tracking-[0.22em] text-ink/70 md:inline">
+          UNIT 01 · WAVE 2 · REV 2.6
+        </span>
         <nav className="hidden items-center gap-7 md:flex">
-          <a href="#proof" className="text-[13px] text-ink/80 hover:text-ink">
+          <a
+            href="#proof"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink hover:text-accent"
+          >
             Proof
           </a>
-          <a href="#features" className="text-[13px] text-ink/80 hover:text-ink">
-            How it works
+          <a
+            href="#features"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink hover:text-accent"
+          >
+            How
           </a>
-          <a href="#pricing" className="text-[13px] text-ink/80 hover:text-ink">
+          <a
+            href="#pricing"
+            className="font-mono text-[11px] uppercase tracking-[0.18em] text-ink hover:text-accent"
+          >
             Pricing
           </a>
           <a
             href="#send"
-            className="bg-ink px-3 py-2 text-[13px] font-medium text-paper hover:opacity-90"
+            className="bg-ink px-4 py-2 font-display text-[11px] uppercase tracking-wider2 text-paper hover:bg-accent"
           >
-            Send a brief
+            Send brief
           </a>
         </nav>
       </div>
@@ -48,68 +65,94 @@ function TopNav() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Hero — viewport-bleeding macro-typography                           */
+/* ------------------------------------------------------------------ */
+
 function Hero() {
   return (
-    <section className="relative overflow-hidden border-b border-ink/10">
-      <div className="mx-auto grid max-w-content gap-16 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-12 lg:gap-12 lg:py-32">
-        <div className="lg:col-span-7">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-            Render &middot; productized landing studio
-          </p>
-          <h1 className="mt-6 font-display text-[44px] font-semibold leading-[1.02] tracking-tightish text-ink sm:text-[56px] lg:text-[72px]">
-            A landing page on your domain in{" "}
-            <span className="relative inline-block">
-              <span>30 minutes.</span>
-              <span
-                aria-hidden
-                className="absolute bottom-2 left-0 right-0 h-[8px] bg-accent/25"
-              />
+    <section className="relative overflow-hidden border-b-2 border-ink">
+      {/* Top metadata strip — telemetry register */}
+      <div className="border-b border-ink/30">
+        <div className="mx-auto flex max-w-content items-center justify-between gap-4 px-5 py-3 font-mono text-[10.5px] uppercase tracking-[0.22em] text-ink/70 sm:px-8">
+          <span className="text-accent">[ RENDER / PRODUCTIZED LANDING STUDIO ]</span>
+          <span className="hidden md:inline">SUBSTRATE: PAPER · INK: 0A0A0A · ACCENT: E61919</span>
+          <span>BRIEF → LIVE · 27M MEDIAN</span>
+        </div>
+      </div>
+
+      <div className="mx-auto max-w-content px-5 pt-10 sm:px-8 sm:pt-14">
+        <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+          A landing page on your domain in
+        </p>
+
+        {/* The macro headline — bleeds toward the viewport edge */}
+        <h1
+          className="mt-3 font-display uppercase text-ink display-mega"
+          style={{ textWrap: "balance" }}
+        >
+          30
+          <span className="text-accent">·</span>
+          Minutes
+        </h1>
+
+        {/* Inline rule with metadata, like a draftsman's title block */}
+        <div className="mt-6 grid items-end gap-x-6 gap-y-3 border-t-2 border-ink pt-5 md:grid-cols-12">
+          <p className="text-[16px] leading-[1.55] text-ink/85 md:col-span-7 md:text-[18px]">
+            Send the brief. Render writes the copy, picks the palette, and
+            pushes the page live to your domain &mdash; with a real Next.js
+            repo, real analytics, and a real Let&rsquo;s Encrypt certificate.
+            <span className="block pt-3 font-mono text-[12px] uppercase tracking-[0.18em] text-ink/70">
+              <span className="text-accent">{"<<"}</span>{" "}
+              The site you are reading was rendered in 27 minutes, alongside 19
+              sibling landings, by the very pipeline this product packages.
             </span>
-          </h1>
-          <p className="mt-6 max-w-prose text-[18px] leading-[1.55] text-ink/85 sm:text-[19px]">
-            Send the brief. We write the copy, pick the palette, and push the
-            page live to your domain &mdash; with a real Next.js repo, real
-            analytics, and a real Let&rsquo;s Encrypt certificate.
-          </p>
-          <p className="mt-4 max-w-prose font-mono text-[13px] leading-[1.55] text-mute">
-            <span className="text-accent">→</span> The site you are reading was
-            rendered in 27 minutes, alongside 19 sibling landings, by the very
-            pipeline this product packages.
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <a
-              href="#send"
-              className="inline-flex items-center gap-2 bg-ink px-5 py-3 font-medium text-paper hover:opacity-90"
-            >
-              Send a brief
-              <span aria-hidden className="font-mono text-[12px] text-accent">
-                →
-              </span>
-            </a>
-            <a
-              href="#talk"
-              className="inline-flex items-center font-medium text-ink underline-offset-4 hover:underline"
-            >
-              Talk to a human
-            </a>
-          </div>
-
-          <dl className="mt-12 grid grid-cols-3 gap-4 border-t border-ink/10 pt-8">
+          <dl className="grid grid-cols-3 gap-px border-2 border-ink bg-ink md:col-span-5">
             <Stat k="27 min" v="median brief → live" />
-            <Stat k="20 / 20" v="sibling landings shipped" />
+            <Stat k="20 / 20" v="sibling landings" />
             <Stat k="real" v="repo · domain · cert" />
           </dl>
         </div>
+      </div>
 
-        <aside className="lg:col-span-5">
-          <div className="sticky top-12">
-            <WireframeMock />
-            <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
-              Live preview &middot; render scan in progress
+      {/* Hero CTAs */}
+      <div className="mx-auto mt-10 flex max-w-content flex-wrap items-center gap-4 px-5 sm:px-8">
+        <a
+          href="#send"
+          className="inline-flex items-center gap-3 bg-accent px-6 py-3 font-display text-[14px] uppercase tracking-wider2 text-paper hover:bg-ink"
+        >
+          Send a brief
+          <span aria-hidden className="font-mono text-[12px]">→</span>
+        </a>
+        <a
+          href="#talk"
+          className="inline-flex items-center gap-3 border-2 border-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider2 text-ink hover:bg-ink hover:text-paper"
+        >
+          Talk to a human
+          <span aria-hidden className="font-mono text-[12px]">↗</span>
+        </a>
+      </div>
+
+      {/* Wireframe band — full-width, anchored to the bottom of the hero */}
+      <div className="mx-auto mt-12 max-w-content px-5 pb-16 sm:px-8 sm:pb-20">
+        <div className="grid gap-x-8 gap-y-4 md:grid-cols-12">
+          <div className="md:col-span-3">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+              [ LIVE PREVIEW ]
+            </p>
+            <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/70">
+              RENDER SCAN <br /> IN PROGRESS
+            </p>
+            <p className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.18em] text-ink/55">
+              FIG. 01 · WIREFRAME / <br /> ACME ARTIFACT
             </p>
           </div>
-        </aside>
+          <div className="md:col-span-9">
+            <WireframeMock />
+          </div>
+        </div>
       </div>
     </section>
   );
@@ -117,34 +160,40 @@ function Hero() {
 
 function Stat({ k, v }: { k: string; v: string }) {
   return (
-    <div>
-      <dt className="font-display text-[24px] font-semibold leading-none text-ink">
+    <div className="bg-paper p-4 sm:p-5">
+      <dt className="font-display text-[26px] uppercase leading-none tracking-tighter2 text-ink sm:text-[30px]">
         {k}
       </dt>
-      <dd className="mt-1 font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
+      <dd className="mt-2 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute">
         {v}
       </dd>
     </div>
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Marquee — kinetic register                                          */
+/* ------------------------------------------------------------------ */
+
 function Marquee() {
   const items = [
-    "27 min p95",
-    "Real Next.js repo",
-    "Custom domain",
-    "Lighthouse ≥ 95",
-    "Lets Encrypt cert",
-    "Edit via PR",
-    "Re-brief, don't redesign",
-    "20 sibling landings live",
+    "27 MIN P95",
+    "REAL NEXT.JS REPO",
+    "CUSTOM DOMAIN",
+    "LIGHTHOUSE ≥ 95",
+    "LET'S ENCRYPT CERT",
+    "EDIT VIA PR",
+    "RE-BRIEF, DON'T REDESIGN",
+    "20 SIBLING LANDINGS",
   ];
+  // Two copies for seamless loop
+  const loop = [...items, ...items];
   return (
-    <div className="border-b border-ink/10 bg-bone/60 py-3">
-      <div className="mx-auto flex max-w-content flex-wrap items-center justify-center gap-x-6 gap-y-2 px-5 font-mono text-[11px] uppercase tracking-[0.14em] text-mute sm:px-8">
-        {items.map((it, i) => (
-          <span key={it} className="flex items-center gap-3">
-            {i > 0 ? <span className="text-accent">·</span> : null}
+    <div className="overflow-hidden border-b-2 border-ink bg-ink py-3 text-paper">
+      <div className="marquee-track flex w-max items-center gap-6 px-5 font-mono text-[12px] uppercase tracking-[0.22em] sm:px-8">
+        {loop.map((it, i) => (
+          <span key={`${it}-${i}`} className="flex items-center gap-6">
+            <span className="text-accent">///</span>
             <span>{it}</span>
           </span>
         ))}
@@ -153,40 +202,42 @@ function Marquee() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Proof — portfolio rack                                              */
+/* ------------------------------------------------------------------ */
+
 function Proof() {
   return (
-    <section id="proof" className="border-b border-ink/10">
+    <section id="proof" className="border-b-2 border-ink">
       <div className="mx-auto max-w-content px-5 py-20 sm:px-8 sm:py-28">
-        <div className="grid gap-10 lg:grid-cols-12">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
           <div className="lg:col-span-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-              The proof
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+              [ THE PROOF ]
             </p>
-            <h2 className="mt-4 font-display text-[36px] font-semibold leading-[1.05] tracking-tightish text-ink sm:text-[44px]">
-              20 distinct landings.<br />
-              One afternoon.<br />
-              One pipeline.
+            <h2 className="mt-4 font-display uppercase text-ink display-large">
+              20 landings.<br />
+              One afternoon.
             </h2>
-            <p className="mt-5 max-w-prose text-[16px] leading-[1.6] text-ink/80">
-              Below is the full prin7r-projects Wave 2 portfolio. Each thumbnail
-              links to a different brand, palette, and voice &mdash; all generated
-              by the same Render pipeline that built the page you are reading.
-              Click any. Inspect the source. Compare to other AI page generators
-              without leaving the tab.
+            <p className="mt-6 max-w-prose text-[16px] leading-[1.6] text-ink/85">
+              Below is the full prin7r-projects Wave 2 portfolio. Each cell
+              links to a different brand, palette, and voice &mdash; all
+              generated by the same Render pipeline that built the page you
+              are reading. Click any. Inspect the source.
             </p>
-            <div className="mt-8 flex flex-wrap gap-3">
+            <div className="mt-8 flex flex-wrap gap-4">
               <a
                 href="https://github.com/prin7r-projects"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 border border-ink px-4 py-2 text-[13px] font-medium text-ink hover:bg-ink hover:text-paper"
+                className="inline-flex items-center gap-3 border-2 border-ink px-5 py-3 font-display text-[12px] uppercase tracking-wider2 text-ink hover:bg-ink hover:text-paper"
               >
                 See the GitHub org
                 <span aria-hidden className="font-mono text-[11px]">↗</span>
               </a>
               <a
                 href="#features"
-                className="text-[13px] font-medium text-ink underline-offset-4 hover:underline"
+                className="inline-flex items-center font-mono text-[12px] uppercase tracking-[0.18em] text-ink underline-offset-4 hover:underline"
               >
                 Or read how it works
               </a>
@@ -200,6 +251,10 @@ function Proof() {
     </section>
   );
 }
+
+/* ------------------------------------------------------------------ */
+/* Triad — three principles                                            */
+/* ------------------------------------------------------------------ */
 
 function Triad() {
   const items = [
@@ -220,55 +275,66 @@ function Triad() {
     },
   ];
   return (
-    <section id="features" className="border-b border-ink/10">
+    <section id="features" className="border-b-2 border-ink">
       <div className="mx-auto max-w-content px-5 py-20 sm:px-8 sm:py-28">
-        <div className="max-w-prose">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-            How it works
-          </p>
-          <h2 className="mt-4 font-display text-[36px] font-semibold leading-[1.05] tracking-tightish text-ink sm:text-[44px]">
-            Three decisions Render makes for you,<br />
-            and one you keep.
-          </h2>
-          <p className="mt-5 text-[16px] leading-[1.6] text-ink/80">
-            The decision you keep is &lsquo;is this the right business to
-            pitch?&rsquo; Everything else &mdash; copy, palette, typography,
-            deploy &mdash; is on us.
-          </p>
+        <div className="grid gap-12 lg:grid-cols-12 lg:gap-16">
+          <div className="lg:col-span-5">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+              [ HOW IT WORKS ]
+            </p>
+            <h2 className="mt-4 font-display uppercase text-ink display-large">
+              Three calls<br />
+              we make.<br />
+              <span className="text-accent">One</span> stays yours.
+            </h2>
+            <p className="mt-6 text-[16px] leading-[1.6] text-ink/85">
+              The decision you keep is &lsquo;is this the right business to
+              pitch?&rsquo; Everything else &mdash; copy, palette, typography,
+              deploy &mdash; is on us.
+            </p>
+          </div>
+          <ol className="grid gap-px border-2 border-ink bg-ink lg:col-span-7 lg:grid-cols-1">
+            {items.map((it) => (
+              <li key={it.tag} className="bg-paper p-7 sm:p-9">
+                <div className="flex items-start gap-6 sm:gap-8">
+                  <div className="font-display text-[44px] uppercase leading-none tracking-tighter2 text-accent sm:text-[56px]">
+                    {it.tag}
+                  </div>
+                  <div className="flex-1 border-l-2 border-ink pl-6 sm:pl-8">
+                    <h3 className="font-display text-[22px] uppercase leading-[1.05] tracking-tighter2 text-ink sm:text-[26px]">
+                      {it.t}
+                    </h3>
+                    <p className="mt-3 text-[15px] leading-[1.6] text-ink/85">{it.b}</p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-
-        <ol className="mt-14 grid gap-px border-t border-ink/10 bg-ink/10 sm:grid-cols-3">
-          {items.map((it) => (
-            <li key={it.tag} className="bg-paper p-8 sm:p-10">
-              <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
-                {it.tag}
-              </div>
-              <h3 className="mt-3 font-display text-[24px] font-semibold leading-[1.15] text-ink">
-                {it.t}
-              </h3>
-              <p className="mt-3 text-[15px] leading-[1.6] text-ink/80">{it.b}</p>
-            </li>
-          ))}
-        </ol>
       </div>
     </section>
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* FromTheCode — terminal band, dark substrate                         */
+/* ------------------------------------------------------------------ */
+
 function FromTheCode() {
   return (
-    <section className="border-b border-ink/10 bg-ink text-paper">
+    <section className="relative border-b-2 border-ink bg-ink text-paper">
       <div className="mx-auto max-w-content px-5 py-20 sm:px-8 sm:py-28">
         <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
           <div className="lg:col-span-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-              From the codebase
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+              [ FROM THE CODEBASE ]
             </p>
-            <h2 className="mt-4 font-display text-[36px] font-semibold leading-[1.05] tracking-tightish sm:text-[44px]">
-              Four passes. One brief.<br />
-              One live URL.
+            <h2 className="mt-4 font-display uppercase display-large">
+              Four passes.<br />
+              One brief.<br />
+              One <span className="text-accent">live URL</span>.
             </h2>
-            <p className="mt-5 max-w-prose text-[16px] leading-[1.6] text-paper/80">
+            <p className="mt-6 max-w-prose text-[16px] leading-[1.6] text-paper/85">
               The orchestrator runs the same four passes for every brief.
               Brand → Copy → Render → Deploy. The output is a per-tenant
               repo and a per-tenant container. Nothing multi-tenant, nothing
@@ -278,7 +344,7 @@ function FromTheCode() {
               href="https://github.com/prin7r-projects/landing-pages-on-demand/blob/main/docs/02-architecture.md"
               target="_blank"
               rel="noreferrer"
-              className="mt-7 inline-flex items-center gap-2 border border-paper/40 px-4 py-2 text-[13px] font-medium hover:bg-paper hover:text-ink"
+              className="mt-8 inline-flex items-center gap-3 border-2 border-paper px-5 py-3 font-display text-[12px] uppercase tracking-wider2 text-paper hover:bg-paper hover:text-ink"
             >
               Read the architecture doc
               <span aria-hidden className="font-mono text-[11px]">↗</span>
@@ -286,20 +352,30 @@ function FromTheCode() {
           </div>
 
           <div className="lg:col-span-7">
-            <pre className="overflow-x-auto rounded border border-paper/15 bg-ink p-6 font-mono text-[12.5px] leading-[1.7] text-paper/95 sm:p-7">
-{`# brief in
-$ render brief acme.json
+            <div className="border-2 border-paper">
+              {/* terminal title bar */}
+              <div className="flex items-center justify-between border-b-2 border-paper bg-paper px-4 py-2 text-ink">
+                <span className="font-mono text-[10.5px] uppercase tracking-[0.22em]">
+                  /BIN/RENDER · BRIEF=ACME.JSON
+                </span>
+                <span className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-accent">
+                  T+27M12S
+                </span>
+              </div>
+              <pre className="overflow-x-auto bg-ink p-6 font-mono text-[12.5px] leading-[1.7] text-paper sm:p-7">
+{`$ render brief acme.json
 
-[01/04] brand    fraunces + inter,  ink + paper + accent
-[02/04] copy     hero + triad + cta + footer
-[03/04] render   apps/landing → standalone
-[04/04] deploy   gh repo create + ssh up
+[01/04] BRAND     fraunces + inter,  ink + paper + accent
+[02/04] COPY      hero + triad + cta + footer
+[03/04] RENDER    apps/landing → standalone
+[04/04] DEPLOY    gh repo create + ssh up
 
-→ live at https://acme.com  in 27m12s
-   lighthouse  perf 99  a11y 100  best 100  seo 100
-   real cert   issued by Lets Encrypt
-   real repo   github.com/acme/acme-landing`}
-            </pre>
+→ LIVE AT  https://acme.com   in 27m12s
+  LIGHTHOUSE  perf 99   a11y 100   best 100   seo 100
+  CERT        Let's Encrypt R13
+  REPO        github.com/acme/acme-landing`}
+              </pre>
+            </div>
           </div>
         </div>
       </div>
@@ -307,13 +383,18 @@ $ render brief acme.json
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Pricing — 4 monolithic tiers in a rigid hairline grid               */
+/* ------------------------------------------------------------------ */
+
 function Pricing() {
   const tiers = [
     {
       name: "Free",
       plan: "free" as const,
       price: "$0",
-      tag: "Try it",
+      sub: "First page on us",
+      tag: "[ TRY IT ]",
       lines: [
         "1 page on render.so",
         "7-day analytics",
@@ -326,8 +407,9 @@ function Pricing() {
     {
       name: "Self-serve",
       plan: "self-serve" as const,
-      price: "$29 / mo",
-      tag: "Most operators",
+      price: "$29",
+      sub: "/ MONTH",
+      tag: "[ MOST OPERATORS ]",
       lines: [
         "Unlimited briefs",
         "Custom domain (we handle ACME)",
@@ -342,8 +424,9 @@ function Pricing() {
     {
       name: "Team",
       plan: "team" as const,
-      price: "$99 / mo",
-      tag: "Agencies & fractional CMOs",
+      price: "$99",
+      sub: "/ MONTH",
+      tag: "[ AGENCIES + FRACTIONAL ]",
       lines: [
         "5 seats",
         "10 brand kits",
@@ -357,8 +440,9 @@ function Pricing() {
     {
       name: "Concierge",
       plan: "concierge" as const,
-      price: "$1,200 + $99 / mo",
-      tag: "Done for you",
+      price: "$1,200",
+      sub: "+ $99 / MO",
+      tag: "[ DONE FOR YOU ]",
       lines: [
         "20-min Zoom brief intake",
         "One human polish pass",
@@ -371,62 +455,82 @@ function Pricing() {
     },
   ];
   return (
-    <section id="pricing" className="border-b border-ink/10">
+    <section id="pricing" className="border-b-2 border-ink">
       <div className="mx-auto max-w-content px-5 py-20 sm:px-8 sm:py-28">
-        <div className="max-w-prose">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-            Pricing
-          </p>
-          <h2 className="mt-4 font-display text-[36px] font-semibold leading-[1.05] tracking-tightish text-ink sm:text-[44px]">
-            Self-serve floor.<br />
-            Concierge ceiling.
-          </h2>
-          <p className="mt-5 text-[16px] leading-[1.6] text-ink/80">
-            Pricing is on the page. There is no &lsquo;contact sales&rsquo;
-            tier. The concierge fee covers a real human on a real call.
-          </p>
-          <p className="mt-4 max-w-prose font-mono text-[12px] leading-[1.55] text-mute">
-            <span className="text-accent">→</span> Paid plans check out in
-            USDT/USDC via NOWPayments hosted invoice. No card on file. No
-            credit-bureau hit.
-          </p>
+        <div className="grid items-end gap-6 md:grid-cols-12">
+          <div className="md:col-span-7">
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+              [ PRICING ]
+            </p>
+            <h2 className="mt-4 font-display uppercase text-ink display-large">
+              Floor &amp; ceiling.<br />
+              No middle tier of <span className="text-accent">vapour</span>.
+            </h2>
+          </div>
+          <div className="md:col-span-5">
+            <p className="text-[15px] leading-[1.6] text-ink/85">
+              Pricing is on the page. There is no &lsquo;contact sales&rsquo;
+              tier. The concierge fee covers a real human on a real call.
+            </p>
+            <p className="mt-3 font-mono text-[11px] uppercase tracking-[0.18em] text-ink/65">
+              <span className="text-accent">{">>"}</span> Paid plans check out
+              in USDT/USDC via NOWPayments hosted invoice. No card on file.
+            </p>
+          </div>
         </div>
 
-        <div className="mt-12 grid gap-px border border-ink/10 bg-ink/10 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-12 grid gap-px border-2 border-ink bg-ink sm:grid-cols-2 lg:grid-cols-4">
           {tiers.map((t) => (
             <div
               key={t.name}
               className={
-                "flex flex-col bg-paper p-7 " +
-                (t.featured ? "ring-1 ring-inset ring-accent" : "")
+                "relative flex flex-col bg-paper p-7 " +
+                (t.featured ? "ring-4 ring-inset ring-accent" : "")
               }
             >
-              <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
+              {t.featured ? (
+                <span className="absolute right-3 top-3 z-10 bg-accent px-3 py-1 font-mono text-[10px] uppercase tracking-[0.22em] text-paper">
+                  Recommended
+                </span>
+              ) : null}
+
+              <div className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-mute">
                 {t.tag}
               </div>
-              <div className="mt-2 font-display text-[24px] font-semibold leading-tight text-ink">
+
+              <div className="mt-3 font-display text-[28px] uppercase leading-[0.95] tracking-tighter2 text-ink">
                 {t.name}
               </div>
-              <div className="mt-1 font-mono text-[14px] text-ink">
-                {t.price}
+
+              <div className="mt-5 flex items-baseline gap-2 border-t-2 border-ink pt-5">
+                <span className="font-display text-[44px] uppercase leading-none tracking-tighter2 text-ink">
+                  {t.price}
+                </span>
+                <span className="font-mono text-[11px] uppercase tracking-[0.18em] text-mute">
+                  {t.sub}
+                </span>
               </div>
-              <ul className="mt-5 space-y-2 text-[14px] leading-[1.55] text-ink/80">
+
+              <ul className="mt-6 flex-1 space-y-3 text-[14px] leading-[1.55] text-ink/85">
                 {t.lines.map((line) => (
                   <li key={line} className="relative pl-5">
                     <span
                       aria-hidden
-                      className="absolute left-0 top-[10px] inline-block h-px w-3 bg-accent"
+                      className="absolute left-0 top-[8px] inline-block h-[2px] w-3 bg-accent"
                     />
                     {line}
                   </li>
                 ))}
               </ul>
-              <PricingCta
-                plan={t.plan}
-                fallbackHref={t.href}
-                featured={t.featured}
-                label={t.cta}
-              />
+
+              <div className="mt-7">
+                <PricingCta
+                  plan={t.plan}
+                  fallbackHref={t.href}
+                  featured={t.featured}
+                  label={t.cta}
+                />
+              </div>
             </div>
           ))}
         </div>
@@ -435,23 +539,28 @@ function Pricing() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Concierge                                                           */
+/* ------------------------------------------------------------------ */
+
 function Concierge() {
   return (
-    <section id="talk" className="border-b border-ink/10 bg-bone/40">
+    <section id="talk" className="border-b-2 border-ink bg-bone">
       <div className="mx-auto max-w-content px-5 py-20 sm:px-8 sm:py-28">
-        <div className="grid gap-10 lg:grid-cols-12">
+        <div className="grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
-            <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-              Concierge
+            <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+              [ CONCIERGE ]
             </p>
-            <h2 className="mt-4 font-display text-[36px] font-semibold leading-[1.05] tracking-tightish text-ink sm:text-[44px]">
+            <h2 className="mt-4 font-display uppercase text-ink display-large">
               You explain.<br />
               We type.<br />
-              The page is live before the call ends.
+              Live before <br className="hidden md:inline" />
+              the call ends.
             </h2>
           </div>
           <div className="lg:col-span-7">
-            <ol className="grid gap-px border border-ink/10 bg-ink/10 sm:grid-cols-3">
+            <ol className="grid gap-px border-2 border-ink bg-ink sm:grid-cols-3">
               <Step
                 n="01"
                 t="Book the call"
@@ -474,15 +583,13 @@ function Concierge() {
                 href="https://cal.com/prin7r/render-concierge"
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex items-center gap-2 bg-ink px-5 py-3 font-medium text-paper hover:opacity-90"
+                className="inline-flex items-center gap-3 bg-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider2 text-paper hover:bg-accent"
               >
                 Book a concierge slot
-                <span aria-hidden className="font-mono text-[12px] text-accent">
-                  ↗
-                </span>
+                <span aria-hidden className="font-mono text-[12px]">↗</span>
               </a>
-              <span className="font-mono text-[12px] uppercase tracking-[0.14em] text-mute">
-                $1,200 setup &middot; $99 / mo retainer
+              <span className="font-mono text-[11px] uppercase tracking-[0.22em] text-ink/70">
+                $1,200 SETUP · $99 / MO RETAINER
               </span>
             </div>
           </div>
@@ -495,46 +602,50 @@ function Concierge() {
 function Step({ n, t, b }: { n: string; t: string; b: string }) {
   return (
     <li className="bg-paper p-7">
-      <div className="font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
+      <div className="font-display text-[36px] uppercase leading-none tracking-tighter2 text-accent">
         {n}
       </div>
-      <h3 className="mt-3 font-display text-[20px] font-semibold leading-[1.2] text-ink">
+      <h3 className="mt-4 border-t-2 border-ink pt-3 font-display text-[18px] uppercase leading-[1.1] tracking-tighter2 text-ink">
         {t}
       </h3>
-      <p className="mt-3 text-[14.5px] leading-[1.6] text-ink/80">{b}</p>
+      <p className="mt-3 text-[14px] leading-[1.6] text-ink/85">{b}</p>
     </li>
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Send — brief intake                                                 */
+/* ------------------------------------------------------------------ */
+
 function Send() {
   return (
-    <section id="send" className="border-b border-ink/10">
+    <section id="send" className="border-b-2 border-ink">
       <div className="mx-auto grid max-w-content gap-12 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-12">
         <div className="lg:col-span-5">
-          <p className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
-            Send a brief
+          <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-accent">
+            [ SEND A BRIEF ]
           </p>
-          <h2 className="mt-4 font-display text-[36px] font-semibold leading-[1.05] tracking-tightish text-ink sm:text-[44px]">
+          <h2 className="mt-4 font-display uppercase text-ink display-large">
             One brief.<br />
             One live URL.<br />
-            Today.
+            <span className="text-accent">Today.</span>
           </h2>
-          <p className="mt-5 max-w-prose text-[16px] leading-[1.6] text-ink/80">
+          <p className="mt-6 max-w-prose text-[16px] leading-[1.6] text-ink/85">
             We&rsquo;ll have a preview URL in your inbox within the hour during
             early access. You won&rsquo;t need to put a card on file until you map
             a custom domain.
           </p>
-          <ul className="mt-8 space-y-3 text-[14.5px] leading-[1.55] text-ink/80">
+          <ul className="mt-8 space-y-3 border-t-2 border-ink pt-6 font-mono text-[12px] uppercase leading-[1.6] tracking-[0.14em] text-ink">
             <li className="relative pl-5">
-              <span aria-hidden className="absolute left-0 top-[10px] inline-block h-px w-3 bg-accent" />
+              <span aria-hidden className="absolute left-0 top-[10px] inline-block h-[2px] w-3 bg-accent" />
               Real Next.js repo on your GitHub
             </li>
             <li className="relative pl-5">
-              <span aria-hidden className="absolute left-0 top-[10px] inline-block h-px w-3 bg-accent" />
-              Real Lighthouse score, real Let&rsquo;s Encrypt cert
+              <span aria-hidden className="absolute left-0 top-[10px] inline-block h-[2px] w-3 bg-accent" />
+              Real Lighthouse score · real Let&rsquo;s Encrypt cert
             </li>
             <li className="relative pl-5">
-              <span aria-hidden className="absolute left-0 top-[10px] inline-block h-px w-3 bg-accent" />
+              <span aria-hidden className="absolute left-0 top-[10px] inline-block h-[2px] w-3 bg-accent" />
               No upsell sequence. Ever.
             </li>
           </ul>
@@ -548,27 +659,39 @@ function Send() {
   );
 }
 
+/* ------------------------------------------------------------------ */
+/* Footer                                                              */
+/* ------------------------------------------------------------------ */
+
 function Footer() {
   return (
-    <footer className="bg-paper">
-      <div className="mx-auto max-w-content px-5 py-12 sm:px-8 sm:py-16">
-        <div className="flex flex-wrap items-end justify-between gap-8 border-b border-ink/10 pb-8">
-          <div>
-            <Logo className="text-[26px]" />
-            <p className="mt-3 max-w-[28rem] text-[14px] leading-[1.55] text-ink/80">
+    <footer className="overflow-hidden bg-ink text-paper">
+      <div className="mx-auto max-w-content px-5 py-16 sm:px-8 sm:py-20">
+        {/* Massive viewport-bleeding wordmark — anchored & clipped to its
+            container so the trailing dot kisses the right rule cleanly. */}
+        <div
+          className="whitespace-nowrap font-display uppercase leading-[0.85] tracking-tighter2 text-paper"
+          style={{ fontSize: "clamp(4rem, 17vw, 16rem)" }}
+        >
+          RENDER<span className="text-accent">.</span>
+        </div>
+
+        <div className="mt-10 grid gap-8 border-t-2 border-paper pt-8 md:grid-cols-12">
+          <div className="md:col-span-6">
+            <p className="max-w-[34rem] text-[14px] leading-[1.6] text-paper/85">
               A productized landing studio from the prin7r-projects portfolio.
               Single-page work only &mdash; for multi-page corporate sites we
               refer to a partner agency.
             </p>
           </div>
-          <nav className="flex flex-wrap gap-x-7 gap-y-2 text-[13px] text-ink/85">
-            <a href="#proof" className="hover:text-ink">Portfolio</a>
-            <a href="#features" className="hover:text-ink">How it works</a>
-            <a href="#pricing" className="hover:text-ink">Pricing</a>
-            <a href="#talk" className="hover:text-ink">Concierge</a>
+          <nav className="flex flex-wrap gap-x-6 gap-y-2 font-mono text-[11px] uppercase tracking-[0.22em] text-paper md:col-span-6 md:justify-end">
+            <a href="#proof" className="hover:text-accent">Portfolio</a>
+            <a href="#features" className="hover:text-accent">How</a>
+            <a href="#pricing" className="hover:text-accent">Pricing</a>
+            <a href="#talk" className="hover:text-accent">Concierge</a>
             <a
               href="https://github.com/prin7r-projects/landing-pages-on-demand"
-              className="hover:text-ink"
+              className="hover:text-accent"
               target="_blank"
               rel="noreferrer"
             >
@@ -577,13 +700,13 @@ function Footer() {
           </nav>
         </div>
 
-        <div className="mt-8 flex flex-wrap items-center justify-between gap-4">
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
+        <div className="mt-8 flex flex-wrap items-center justify-between gap-4 border-t border-paper/30 pt-6">
+          <p className="max-w-[40rem] font-mono text-[10.5px] uppercase tracking-[0.22em] text-paper/65">
             This site, plus 19 others in the prin7r-projects portfolio, was
             generated by the very pipeline this product packages.
           </p>
-          <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-mute">
-            © {new Date().getFullYear()} prin7r-projects · MIT
+          <p className="font-mono text-[10.5px] uppercase tracking-[0.22em] text-paper/65">
+            © {new Date().getFullYear()} prin7r-projects · MIT · UNIT 01 / D-08
           </p>
         </div>
       </div>

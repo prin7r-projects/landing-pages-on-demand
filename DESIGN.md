@@ -4,7 +4,7 @@ Canonical design + style guide for `landing-pages-on-demand` (brand: **Render**)
 
 This document is the single source of truth for visual decisions on the project. It is the Wave 2 v2 mandatory artifact owned by the Chief of Design and must stay in sync with the actual implementation in `apps/landing/`. Source of brand decisions: [`docs/01-brand-identity.md`](docs/01-brand-identity.md).
 
-Last updated: 2026-05-08.
+Last updated: 2026-05-08 (Wave 2 redesign — Swiss Industrial Print archetype).
 
 ---
 
@@ -14,13 +14,15 @@ Last updated: 2026-05-08.
 
 **Tagline**: *A landing page on your domain in 30 minutes.*
 
-**Primary audience — Maya, technical founder, 34**: ships marketing pages on the side at the cost of evening hours; wants a Webflow-quality result without owning Webflow's tab.
+**Primary audience — Maya, technical founder, 34**: ships marketing pages on the side at the cost of evening hours; wants a result that does not look like every Webflow template, without owning Webflow's tab.
 
 **Secondary audience — Daniel, fractional CMO, 41**: stands up six campaign-specific landings per month for portfolio clients; needs unit economics that beat $4k-per-page agency proposals.
 
 **Anti-audience**: visual designers who want a freeform canvas; teams that need 30+ pages and a CMS schema (we refer those out).
 
 The landing has one job: convince a busy operator that we can produce a live URL faster than they can finish a coffee, and that the output is real (a repo, a cert, a domain) rather than a hosted toy.
+
+**Visual archetype (chosen 2026-05-08)**: **Swiss Industrial Print**. The landing reads like a draftsman's title-block — heavy display sans, ruled borders, monolithic numerals, single aviation-red accent. The previous warm beige paper/bone palette (paper #FAF7F2 / bone #EDE7DD / serif Fraunces / Inter body) has been retired; that combination read as "another Substack-aesthetic studio site" and softened the engineering claim. The new substrate is near-pure newsprint with carbon ink, and the type is uppercase Archivo Black with Geist as body and JetBrains Mono for telemetry. The portfolio rack now uses extreme scale variance to amplify the self-referential claim ("20 distinct landings, one afternoon").
 
 ---
 
@@ -63,54 +65,61 @@ The brief form (`BriefForm.tsx`) is a hand-rolled Tailwind form. The pricing CTA
 
 ## 4. Color tokens
 
-Tokens live in [`apps/landing/tailwind.config.ts`](apps/landing/tailwind.config.ts) under `theme.extend.colors`. The five-token palette deliberately rejects the indigo / violet / teal default shipped by every YC SaaS site.
+Tokens live in [`apps/landing/tailwind.config.ts`](apps/landing/tailwind.config.ts) under `theme.extend.colors`. The five-token palette is the **Swiss Industrial substrate**: matte newsprint paper, carbon ink, a single aviation-red accent. The previous warm-beige paper/bone canvas was retired in the 2026-05-08 redesign because it read as "studio cosy" rather than "engineering deliverable" and clashed with the macro display type. There are no gradients, no soft shadows, and no rounded corners anywhere on the page.
 
 | Role     | Token      | Hex       | Tailwind class | Notes                                                                |
 |----------|------------|-----------|----------------|----------------------------------------------------------------------|
-| Ink      | `ink`      | `#0E1116` | `bg-ink`, `text-ink` | Near-black for body type and dense surfaces. Not pure black.    |
-| Paper    | `paper`    | `#FAF7F2` | `bg-paper`, `text-paper` | Warm off-white; 4% magenta. Carries the "studio paper" feel.     |
-| Bone     | `bone`     | `#EDE7DD` | `bg-bone`     | Sub-surface tone for cards, dividers, subtle bands.                  |
-| Accent   | `accent`   | `#E8554E` | `text-accent`, `bg-accent`, `ring-accent` | Tomato red. Single saturated hit, used sparingly for CTA + glyph. |
-| Mute     | `mute`     | `#8A8579` | `text-mute`   | Warm gray for captions, axis labels, code line numbers.             |
+| Ink      | `ink`      | `#0A0A0A` | `bg-ink`, `text-ink` | Carbon black for body type, dark substrate, and dividing rules. Not pure `#000`. |
+| Paper    | `paper`    | `#F8F8F6` | `bg-paper`, `text-paper` | Newsprint off-white. 0% chroma — the warm magenta tilt of the previous palette is gone. |
+| Bone     | `bone`     | `#ECECE8` | `bg-bone`     | Sub-substrate (concierge band) — half a step below paper, still neutral. |
+| Accent   | `accent`   | `#E61919` | `text-accent`, `bg-accent`, `ring-accent` | Aviation / hazard red. The single saturated hit, used as alert-grade marker. |
+| Mute     | `mute`     | `#5C5C58` | `text-mute`   | Neutral gray for telemetry captions, axis labels, footer metadata.   |
 
 **Usage rules:**
 
-- The accent appears at **most once per viewport region**. The page's accent budget is: hero arrow → eyebrow chevron → underline brushstroke → pricing-card ring → terminal cursor → footer dots. Adding a sixth requires a deliberate decision and an entry in §15 changelog.
-- Dark backgrounds use `ink` exclusively (the *From the codebase* terminal block). White-on-dark text uses `paper`, never pure white.
-- `bone` is for surfaces that need subtle separation from `paper` (the marquee row, the concierge band).
-- Body text uses `text-ink/85` for prose and `text-ink/80` for secondary copy. Captions use `text-mute`. Never use `text-gray-*` from Tailwind defaults.
+- The accent appears as the **only** saturated colour on the page. Its budget per viewport region is: one eyebrow tag, one numeric pip, one structural pip on a button or card, and the pricing recommended-pill. Anything else must be `ink` on `paper`. Adding a fifth instance per viewport requires a deliberate decision and an entry in §15 changelog.
+- Dark substrate: the *From the codebase* band uses pure `ink`; the Marquee strip uses `ink`; the Footer uses `ink`. White-on-dark text uses `paper`, never pure white.
+- `bone` separates the Concierge band from neighbouring paper sections without warming the page.
+- Body prose: `text-ink/85`. Secondary descriptive prose: `text-ink/85` (collapsed to one weight; the prior split between /85 and /80 was illegible noise). Telemetry captions: `text-mute`. Never use `text-gray-*` from Tailwind defaults.
 
-Accessibility: all foreground/background pairings used in `apps/landing/` were checked manually against WCAG AA. `ink` on `paper` is 18.4:1; `paper` on `ink` is 18.4:1; `accent` on `paper` is 4.61:1 (passes for body text). `ink/80` on `paper` is 14.7:1.
+Accessibility: foreground/background pairings used in `apps/landing/` were checked manually against WCAG AA. `ink` on `paper` is 19.6:1; `paper` on `ink` is 19.6:1; `accent` on `paper` is 4.74:1 (passes for body text); `accent` on `ink` is 4.14:1 (passes for large text and graphical objects); `ink/85` on `paper` is 16.9:1.
 
 ---
 
 ## 5. Typography
 
-Three families, loaded via `next/font/google` (see [`apps/landing/src/app/layout.tsx`](apps/landing/src/app/layout.tsx)):
+Three families, loaded via `next/font/google` (see [`apps/landing/src/app/layout.tsx`](apps/landing/src/app/layout.tsx)). The 2026-05-08 redesign retired Fraunces (serif) and Inter (banned by the Wave 2 redesign brief) and replaced them with Archivo Black + Geist:
 
 | Role | Family | CSS variable | Tailwind class | Weights used |
 |---|---|---|---|---|
-| Display | [Fraunces](https://fonts.google.com/specimen/Fraunces) | `--font-fraunces` | `font-display` | 400, 500, 600, 700 |
-| Body | [Inter](https://fonts.google.com/specimen/Inter) | `--font-inter` | `font-sans` | variable axis |
+| Display | [Archivo Black](https://fonts.google.com/specimen/Archivo+Black) | `--font-archivo` | `font-display` | 400 (the only weight Archivo Black ships) |
+| Body | [Geist](https://vercel.com/font) | `--font-geist` | `font-sans` | variable axis |
 | Mono | [JetBrains Mono](https://fonts.google.com/specimen/JetBrains+Mono) | `--font-jetbrains` | `font-mono` | variable axis |
 
-**Pairing rationale**: serif/sans contrast cues *studio + product* rather than *another component-library demo*. Fraunces is opinionated enough to feel editorial; Inter is invisible enough to disappear in body. JetBrains Mono carries the "this is real engineering" register in terminal blocks and metric tags.
+**Pairing rationale**: Archivo Black is the modern Swiss-Industrial workhorse — solid, unwavering, no romantic terminals — used in uppercase at extreme scale to form architectural blocks rather than read as text. Geist disappears in body copy, replacing Inter (which is the LLM default and was BANNED by the redesign brief); the two share the same Helvetica lineage so they mortise cleanly. JetBrains Mono carries the telemetry register in eyebrow tags, marquee strips, footer metadata, and the terminal block. **Fraunces is gone**: serif headlines are not compatible with the Swiss Industrial archetype.
 
 **Type scale (used in `apps/landing/src/app/page.tsx`):**
 
-| Level | Class | Use |
+| Level | Class / utility | Use |
 |---|---|---|
-| Hero | `text-[44px] sm:text-[56px] lg:text-[72px]` + `font-display font-semibold leading-[1.02] tracking-tightish` | H1 only |
-| Section H2 | `text-[36px] sm:text-[44px] font-display font-semibold leading-[1.05] tracking-tightish` | One per section |
-| H3 | `text-[24px] font-display font-semibold leading-[1.15]` | Cards, list items |
-| Body lead | `text-[18px] sm:text-[19px] leading-[1.55]` | Hero + section intros |
+| Hero macro | `.display-mega` (`clamp(3.25rem, 13vw, 14rem)`, line-height 0.86, tracking -0.045em, uppercase) | H1 only — viewport-bleeding |
+| Section H2 | `.display-large` (`clamp(2.25rem, 7.5vw, 6.5rem)`, line-height 0.9, tracking -0.035em, uppercase) | One per section |
+| Card H3 | `text-[20-26px] font-display uppercase leading-[1.05] tracking-tighter2` | Cards, list items |
+| Stat figure | `text-[26-30px] font-display uppercase leading-none tracking-tighter2` | Hero stat trio + pricing prices |
+| Body lead | `text-[16-18px] leading-[1.55]` | Hero + section intros |
 | Body | `text-[16px] leading-[1.6]` | Prose |
-| Body small | `text-[14px] leading-[1.55]` | Card body |
-| Eyebrow | `font-mono text-[11px] uppercase tracking-[0.18em] text-accent` | Section labels |
-| Caption | `font-mono text-[11px] uppercase tracking-[0.14em] text-mute` | Stats, marquee, footer notes |
-| Code | `font-mono text-[12.5px] leading-[1.7]` | Terminal block |
+| Body small | `text-[14-15px] leading-[1.55-1.6]` | Card body, list items |
+| Eyebrow | `font-mono text-[11px] uppercase tracking-[0.22em] text-accent` (with `[ ... ]` framing brackets) | Section labels |
+| Caption | `font-mono text-[10-11px] uppercase tracking-[0.18-0.22em] text-mute` | Stats, marquee, footer notes |
+| Code | `font-mono text-[12.5px] leading-[1.7] uppercase` | Terminal block |
 
-`tracking-tightish` is a custom letter-spacing token (`-0.018em`) for display text; defined in `tailwind.config.ts`.
+**Casing**: all display headlines, eyebrows, button labels, and marquee items are uppercase per the Swiss Industrial archetype. Body prose stays sentence case.
+
+Custom letter-spacing tokens (`tailwind.config.ts`):
+
+- `tracking-tighter2` = `-0.04em` (display headers, card titles, stat figures)
+- `tracking-wider2` = `0.08em` (button labels)
+- `tracking-tightish` = `-0.018em` (legacy, retained for compatibility with any inline use)
 
 ---
 
@@ -315,3 +324,4 @@ node /tmp/screenshot-render.mjs   # see wave2-reports/landing-pages-on-demand-po
 |---|---|---|
 | 2026-05-08 | Initial Wave 2 build: full landing, palette + type system, brand identity finalised. | Wave 2 build agent |
 | 2026-05-08 | **Wave 2 v2 polish**: added `DESIGN.md` (this file) at root; added desktop + mobile screenshots; integrated NOWPayments hosted-invoice flow on paid pricing tiers; added IPN webhook handler with HMAC-SHA512 verification; updated `.env.example` with `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_IPN_SECRET`, `NOWPAYMENTS_SANDBOX`. | Wave 2 polish agent |
+| 2026-05-08 | **Wave 2 redesign — Swiss Industrial Print archetype**. Retired the warm beige paper/bone palette (`#FAF7F2` / `#EDE7DD`) for newsprint off-white `#F8F8F6` over carbon ink `#0A0A0A`. Pushed accent from tomato `#E8554E` to aviation red `#E61919` per Swiss Industrial alert-grade rule. Retired Fraunces (serif) and Inter (banned) display+body stack; replaced with Archivo Black (display, uppercase, viewport-bleeding macro scale) + Geist (body) + JetBrains Mono (kept). Added `.display-mega` and `.display-large` clamp() utilities for viewport-bleeding type. Hero H1 redrafted as a single architectural block ("30·MINUTES"). Replaced the previous 3-column zig-zag with rigid hairline-grid sections separated by 2px solid ink rules between each band. Pricing tiers became a 4-cell rigid grid with monolithic display prices and a square aviation-red "Recommended" pill on the Self-serve tier; CTA on the featured tier flipped from filled-ink to filled-accent. Portfolio rack rebuilt with extreme scale variance — two hero cells (col-6 row-2), supporting cells at col-3 / col-4 / col-6, and per-cell type sized to its span (mega 56px / mid 34px / micro 20px). Marquee converted to a kinetic ink-on-paper inverted strip with `///` separators and reduced-motion fallback. Added a fixed-position low-opacity SVG noise grain overlay to break digital flatness. Removed all `border-radius` (radius scale is now `0 / 0 / 0`). Re-shot desktop (1440×900) and mobile (390×844) screenshots from the redeployed live site and replaced the pre-redesign captures in `docs/screenshots/`. NOWPayments routes, brief webhook, sitemap, and live URL contract were preserved unchanged. | Wave 2 redesign agent |

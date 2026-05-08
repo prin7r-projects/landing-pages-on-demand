@@ -1,17 +1,21 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter, JetBrains_Mono } from "next/font/google";
+import { Archivo_Black, Geist, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const fraunces = Fraunces({
+// Swiss Industrial Print: heavy sans-serif macro-typography (Archivo Black),
+// neutral body sans (Geist), and JetBrains Mono for tabular metadata.
+// Inter is BANNED for this brand. Fraunces (serif) does not fit this archetype
+// and has been retired.
+const archivo = Archivo_Black({
   subsets: ["latin"],
-  variable: "--font-fraunces",
+  variable: "--font-archivo",
   display: "swap",
-  weight: ["400", "500", "600", "700"],
+  weight: ["400"],
 });
 
-const inter = Inter({
+const geist = Geist({
   subsets: ["latin"],
-  variable: "--font-inter",
+  variable: "--font-geist",
   display: "swap",
 });
 
@@ -66,7 +70,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${inter.variable} ${jetbrains.variable}`}
+      className={`${archivo.variable} ${geist.variable} ${jetbrains.variable}`}
     >
       <body className="font-sans bg-paper text-ink">
         {children}

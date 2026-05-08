@@ -1,3 +1,5 @@
+// Swiss Industrial wordmark — heavy display sans, square accent block
+// (no rounded radii anywhere in this brand).
 export function Logo({
   className = "",
   ariaLabel = "Render",
@@ -7,13 +9,13 @@ export function Logo({
 }) {
   return (
     <span
-      className={`inline-flex items-baseline font-display font-semibold tracking-tightish ${className}`}
+      className={`inline-flex items-baseline font-display uppercase tracking-tighter2 ${className}`}
       aria-label={ariaLabel}
     >
       <span>Render</span>
       <span
         aria-hidden
-        className="ml-[2px] inline-block h-[6px] w-[6px] translate-y-[-2px] rounded-full bg-accent"
+        className="ml-[3px] inline-block h-[7px] w-[7px] translate-y-[-2px] bg-accent"
       />
     </span>
   );
