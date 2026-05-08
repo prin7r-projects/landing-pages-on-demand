@@ -52,24 +52,24 @@
     background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.95' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
   }
 
-  /* Render-scan accent line (kept from previous version) */
-  .render-bar {
+  /* Press-scan accent line (1px aviation-red bar tracking the wireframe) */
+  .press-bar {
     position: absolute;
     left: 0;
     right: 0;
     height: 1px;
     background: #E61919;
     box-shadow: 0 0 12px rgba(230, 25, 25, 0.45);
-    animation: render-scan 4.4s ease-in-out infinite;
+    animation: press-scan 4.4s ease-in-out infinite;
   }
-  @keyframes render-scan {
+  @keyframes press-scan {
     0%   { top: 0%; opacity: 0; }
     8%   { opacity: 1; }
     92%  { opacity: 1; }
     100% { top: 100%; opacity: 0; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .render-bar { animation: none; opacity: 0; }
+    .press-bar { animation: none; opacity: 0; }
   }
 
   /* Marquee infinite kinetic strip (single direction, mechanical) */

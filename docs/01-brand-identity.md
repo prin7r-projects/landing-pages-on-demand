@@ -2,14 +2,14 @@
 
 ## Brand pyramid
 
-- **Essence (1 word)**: *Render.* The product turns scattered business intent into a deployed page. The verb is the brand.
+- **Essence (1 word)**: *Pagewright.* The product turns scattered business intent into a deployed page — the wright (craftsperson) who builds the page. The compound is the brand.
 - **Personality (3 traits)**: candid, design-aware, fast-finishing.
 - **Values (3)**: Clarity over cleverness. Real screenshots over stock vectors. Done beats perfect.
 - **Attributes (5)**: typography-forward, generous whitespace, monochrome-with-one-accent, evidence-first copy, deploy-as-proof.
 
 ## Positioning statement
 
-> For founders and operators who need a real landing page yesterday, **Render** is a productized landing-page studio that ships a deployed, branded one-pager in 30 minutes — unlike DIY page builders that hand you a blank canvas, because Render writes the copy, picks the palette, and pushes the page live to your domain while you finish coffee.
+> For founders and operators who need a real landing page yesterday, **Pagewright** is a productized landing-page studio that ships a deployed, branded one-pager in 30 minutes — unlike DIY page builders that hand you a blank canvas, because Pagewright writes the copy, picks the palette, and pushes the page live to your domain while you finish coffee.
 
 ## Audience personas
 
@@ -27,7 +27,7 @@
 
 **Do**
 - Quote the turnaround in literal minutes.
-- Show the page that proves the claim ("this site you're reading was built by Render").
+- Show the page that proves the claim ("this site you're reading was built by Pagewright").
 - Treat the reader like an operator who has shipped before.
 
 **Don't**
@@ -61,12 +61,12 @@ Pairing rationale: the serif/sans contrast cues "studio + product" rather than "
 
 ### Logo concept
 
-A stamped square with the word `Render` set in Fraunces, leading-trimmed, with a single tomato-red dot replacing the period at the end. The dot is the deploy. Inline SVG:
+A heavy-display block with the word `Pagewright` set in Archivo Black uppercase, leading-trimmed, with a single aviation-red square replacing the period at the end. The square is the deploy. Inline SVG (the actual canonical wordmark lives in `apps/landing/src/components/Logo.tsx`):
 
 ```svg
-<svg width="160" height="40" viewBox="0 0 160 40" xmlns="http://www.w3.org/2000/svg">
-  <text x="0" y="30" font-family="Fraunces, serif" font-size="28" font-weight="600" fill="#0E1116">Render</text>
-  <circle cx="106" cy="32" r="4" fill="#E8554E"/>
+<svg width="220" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
+  <text x="0" y="28" font-family="Archivo Black, Helvetica, sans-serif" font-size="26" font-weight="900" fill="#0A0A0A" letter-spacing="-1">PAGEWRIGHT</text>
+  <rect x="200" y="22" width="7" height="7" fill="#E61919"/>
 </svg>
 ```
 
@@ -81,7 +81,7 @@ A stamped square with the word `Render` set in Fraunces, leading-trimmed, with a
 
 - Page enter: nothing. The page is the reward.
 - Hover: 80ms color shift, no scale.
-- One looping animation allowed per page (the hero "render line" — a single 1px tomato bar that scans down a wireframe to indicate deploy).
+- One looping animation allowed per page (the hero "press line" — a single 1px aviation-red bar that scans down a wireframe to indicate deploy).
 - Reduced-motion: kill the bar.
 
 ## Anti-references (do not look like these)

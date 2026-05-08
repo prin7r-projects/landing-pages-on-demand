@@ -35,7 +35,7 @@ Root cause: **AI generators optimize for "wow, look, it generated a page" demos;
 |----------------------|--------------------------------------------------------------------------------------------------------------------|
 | **Time**             | Average turnaround: 5–10 business days for the first cut. Premium rates for "this week."                          |
 | **Variance**         | Quality is bimodal: $400 gets you a passable Figma → 8 days; $4,000 gets you the right thing.                     |
-| **Brief overhead**   | The freelancer needs the same brief Render needs — but the buyer has to write it twice (once to filter freelancers, once to brief the chosen one). |
+| **Brief overhead**   | The freelancer needs the same brief Pagewright needs — but the buyer has to write it twice (once to filter freelancers, once to brief the chosen one). |
 | **Coordination**     | Designer hands off to dev; dev hands off to deploy; deploy hands off to "wait, the copy is wrong"; cycle repeats. |
 | **Vendor lock-in**   | Custom Webflow site means you re-hire the same freelancer for every change — billed hourly, scheduled weekly.     |
 
@@ -51,12 +51,12 @@ Root cause: **the freelance market is sized for $4k bespoke work, not $400 done-
 
 Root cause: **founders confuse "I can do it" with "I should do it."**
 
-## What Render attacks specifically
+## What Pagewright attacks specifically
 
-Render does not compete on "more flexible" or "more AI." Render competes on **the entire delivery loop**:
+Pagewright does not compete on "more flexible" or "more AI." Pagewright competes on **the entire delivery loop**:
 
 1. The brief is the only artifact the buyer has to produce.
-2. The output is on the buyer's own domain (no `*.render.so` URL).
+2. The output is on the buyer's own domain (no `*.pagewright.so` URL).
 3. The output is a real GitHub repo the buyer can fork.
 4. The turnaround is measured in minutes, with a public counter.
 5. Iteration is a re-brief, not a manual edit session.

@@ -1,6 +1,6 @@
-# Render — DESIGN.md
+# Pagewright — DESIGN.md
 
-Canonical design + style guide for `landing-pages-on-demand` (brand: **Render**).
+Canonical design + style guide for `landing-pages-on-demand` (brand: **Pagewright**).
 
 This document is the single source of truth for visual decisions on the project. It is the Wave 2 v2 mandatory artifact owned by the Chief of Design and must stay in sync with the actual implementation in `apps/landing/`. Source of brand decisions: [`docs/01-brand-identity.md`](docs/01-brand-identity.md).
 
@@ -10,7 +10,7 @@ Last updated: 2026-05-08 (Wave 2 redesign — Swiss Industrial Print archetype).
 
 ## 1. Product and audience
 
-**Product**: Render is a productized landing-page studio. The customer sends a one-screen brief; we ship a deployed, branded one-page Next.js site on their domain in roughly 30 minutes — with a real Let's Encrypt cert, real Lighthouse score, and a real GitHub repo they own.
+**Product**: Pagewright is a productized landing-page studio. The customer sends a one-screen brief; we ship a deployed, branded one-page Next.js site on their domain in roughly 30 minutes — with a real Let's Encrypt cert, real Lighthouse score, and a real GitHub repo they own.
 
 **Tagline**: *A landing page on your domain in 30 minutes.*
 
@@ -28,7 +28,7 @@ The landing has one job: convince a busy operator that we can produce a live URL
 
 ## 2. Visual positioning
 
-Render is positioned as **"editorial studio meets deploy pipeline"**. The page reads like a print piece — large serif headlines, generous whitespace, a single saturated accent — and behaves like an engineering tool — terminal blocks, lighthouse scoreboards, status callouts in monospace.
+Pagewright is positioned as **"editorial studio meets deploy pipeline"**. The page reads like a print piece — large serif headlines, generous whitespace, a single saturated accent — and behaves like an engineering tool — terminal blocks, lighthouse scoreboards, status callouts in monospace.
 
 Anti-references (do **not** look like these):
 
@@ -37,9 +37,9 @@ Anti-references (do **not** look like these):
 - **Notion.so** — pastel illustrative figures, rounded everything.
 - **Webflow / Framer template galleries** — generic SaaS hero with stock illustrations.
 
-Where Render sits on common axes:
+Where Pagewright sits on common axes:
 
-| Axis | Pole A | Render | Pole B |
+| Axis | Pole A | Pagewright | Pole B |
 |---|---|---|---|
 | Geometry | Strict 12-col grid | **Toward A — strict** | Free-form |
 | Color saturation | Monochrome | **Mostly A + one accent** | Maximalist |
@@ -135,7 +135,7 @@ borderRadius: { none: "0", sm: "2px", DEFAULT: "6px" }
 
 The accent ring on the featured pricing card uses `ring-1 ring-inset ring-accent` (no rounded corners — the rectangle stays).
 
-**Shadows**: there are none. The studio aesthetic uses 1px borders (`border-ink/10`) instead of shadows. Glassmorphism is forbidden. Only the hero's "render scan" line carries a depth cue, and it uses opacity, not shadow.
+**Shadows**: there are none. The studio aesthetic uses 1px borders (`border-ink/10`) instead of shadows. Glassmorphism is forbidden. Only the hero's "press scan" line carries a depth cue, and it uses opacity, not shadow.
 
 **Borders**:
 
@@ -177,8 +177,8 @@ Components shipped in `apps/landing/src/components/`:
 
 | Component | File | Role |
 |---|---|---|
-| `Logo` | [`Logo.tsx`](apps/landing/src/components/Logo.tsx) | Inline-SVG wordmark "Render" with the tomato-red period-dot glyph. Used in nav + footer + favicon source. |
-| `WireframeMock` | [`WireframeMock.tsx`](apps/landing/src/components/WireframeMock.tsx) | Hero aside — an inline SVG miniature of a landing page with an animated 1px tomato bar that scans top-to-bottom (the "render scan"). Disabled under `prefers-reduced-motion`. |
+| `Logo` | [`Logo.tsx`](apps/landing/src/components/Logo.tsx) | Inline-SVG wordmark "Pagewright" with the aviation-red square-block glyph. Used in nav + footer + favicon source. |
+| `WireframeMock` | [`WireframeMock.tsx`](apps/landing/src/components/WireframeMock.tsx) | Hero aside — an inline SVG miniature of a landing page with an animated 1px aviation-red bar that scans top-to-bottom (the "press scan"). Disabled under `prefers-reduced-motion`. |
 | `PortfolioGrid` | [`PortfolioGrid.tsx`](apps/landing/src/components/PortfolioGrid.tsx) | 20-thumbnail self-referential grid linking to sibling Wave 2 deploys. Each thumbnail is text-only (slug + tagline) — no image dependency. |
 | `BriefForm` | [`BriefForm.tsx`](apps/landing/src/components/BriefForm.tsx) | 5-field intake form (name, email, business, audience, deadline). POSTs to `LEAD_WEBHOOK_URL` if set; otherwise acknowledges locally. |
 | `PricingCta` | [`PricingCta.tsx`](apps/landing/src/components/PricingCta.tsx) | Client component that POSTs to `/api/checkout/nowpayments` and redirects to the hosted invoice URL. Falls back to `#send` for free / concierge tiers and on missing-env. |
@@ -199,13 +199,13 @@ API routes:
 The landing is a single-scroll page composed of these sections, in order:
 
 1. **TopNav** — `Logo` left, anchor links right, primary `Send a brief` CTA.
-2. **Hero** — eyebrow, H1 ("A landing page on your domain in 30 minutes."), lead paragraph, mono callout, two CTAs, three-stat row, `WireframeMock` aside with render scan.
+2. **Hero** — eyebrow, H1 ("A landing page on your domain in 30 minutes."), lead paragraph, mono callout, two CTAs, three-stat row, `WireframeMock` aside with press scan.
 3. **Marquee** — bone-tinted single row of 8 mono captions, pipe-separated. Acts as a feature-strip without claiming features.
 4. **Proof** (`#proof`) — copy block + `PortfolioGrid` of 20 sibling slugs. Anchors the self-referential proof claim.
 5. **Triad** (`#features`) — three numbered cards: brand pyramid → repo ownership → re-brief workflow.
-6. **FromTheCode** — ink-on-paper inverted band; copy + a terminal-block showing the four passes (`brand / copy / render / deploy`).
+6. **FromTheCode** — ink-on-paper inverted band; copy + a terminal-block showing the four passes (`brand / copy / press / deploy`).
 7. **Pricing** (`#pricing`) — H2 + paragraph + crypto-checkout note + 4-card grid (Free / Self-serve / Team / Concierge). The two paid plans route through the NOWPayments CTA.
-8. **Concierge** (`#talk`) — three-step ordered list + `cal.com/prin7r/render-concierge` button.
+8. **Concierge** (`#talk`) — three-step ordered list + `cal.com/prin7r/pagewright-concierge` button.
 9. **Send** (`#send`) — split layout: copy bullets on the left, `BriefForm` on the right.
 10. **Footer** — Logo + tagline + nav + self-referential proof line.
 
@@ -215,7 +215,7 @@ The landing is a single-scroll page composed of these sections, in order:
 
 ## 10. Imagery and generated asset rules
 
-Render's identity is **type-led, not image-led**. The landing ships with **zero raster images**. All visual elements are SVG (logo, wireframe mock) or text-on-color (portfolio grid, terminal block).
+Pagewright's identity is **type-led, not image-led**. The landing ships with **zero raster images**. All visual elements are SVG (logo, wireframe mock) or text-on-color (portfolio grid, terminal block).
 
 **Why no hero image**: hero photography on a Webflow-alternative landing reads as ironic. Type and a 1px scan line tell the story better.
 
@@ -229,13 +229,13 @@ Render's identity is **type-led, not image-led**. The landing ships with **zero 
 
 ## 11. Motion and interaction rules
 
-Render's motion budget is intentionally tiny. Three approved motion types:
+Pagewright's motion budget is intentionally tiny. Three approved motion types:
 
 1. **Page enter**: nothing. The page is the reward; no reveal animation.
 2. **Hover**: 80ms color shift on links and buttons. No scale, no translate, no shadow. Buttons darken via `hover:opacity-90` (filled) or invert via `hover:bg-ink hover:text-paper` (outline).
-3. **Render scan**: a single looping 1px tomato bar moving top-to-bottom over the `WireframeMock` SVG, indicating "deploy in progress". This is the only loop on the page.
+3. **Press scan**: a single looping 1px aviation-red bar moving top-to-bottom over the `WireframeMock` SVG, indicating "deploy in progress". This is the only loop on the page.
 
-**Reduced motion**: if the user has `prefers-reduced-motion: reduce`, the render-scan bar stops at the bottom and freezes (no looping). All other interactions are already motion-free.
+**Reduced motion**: if the user has `prefers-reduced-motion: reduce`, the press-scan bar stops at the bottom and freezes (no looping). All other interactions are already motion-free.
 
 **Focus styles**: every interactive element keeps its native browser focus ring. Tab order: skip-link (planned, see §12) → top-nav links → primary nav CTA → hero CTAs → portfolio links → pricing buttons → concierge CTA → brief-form fields → submit → footer links.
 
@@ -285,17 +285,17 @@ Captured from the live deployment via Playwright (chromium, full-page) immediate
 
 **Desktop (1440 × 900)** — [`docs/screenshots/landing-desktop.png`](docs/screenshots/landing-desktop.png)
 
-![Render landing — desktop, 1440×900](docs/screenshots/landing-desktop.png)
+![Pagewright landing — desktop, 1440×900](docs/screenshots/landing-desktop.png)
 
 **Mobile (390 × 844)** — [`docs/screenshots/landing-mobile.png`](docs/screenshots/landing-mobile.png)
 
-![Render landing — mobile, 390×844](docs/screenshots/landing-mobile.png)
+![Pagewright landing — mobile, 390×844](docs/screenshots/landing-mobile.png)
 
 **Capture command** (re-run when the landing changes):
 
 ```bash
 # from a host with playwright installed
-node /tmp/screenshot-render.mjs   # see wave2-reports/landing-pages-on-demand-polish.md for the script
+node /tmp/prin7r-screenshots/capture.mjs https://landing-pages-on-demand.prin7r.com
 ```
 
 **Live URL**: <https://landing-pages-on-demand.prin7r.com>. `curl -sI` should return `HTTP/2 200` with a Let's Encrypt R13 cert (`notAfter=2026-08-05`).
@@ -325,3 +325,4 @@ node /tmp/screenshot-render.mjs   # see wave2-reports/landing-pages-on-demand-po
 | 2026-05-08 | Initial Wave 2 build: full landing, palette + type system, brand identity finalised. | Wave 2 build agent |
 | 2026-05-08 | **Wave 2 v2 polish**: added `DESIGN.md` (this file) at root; added desktop + mobile screenshots; integrated NOWPayments hosted-invoice flow on paid pricing tiers; added IPN webhook handler with HMAC-SHA512 verification; updated `.env.example` with `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_IPN_SECRET`, `NOWPAYMENTS_SANDBOX`. | Wave 2 polish agent |
 | 2026-05-08 | **Wave 2 redesign — Swiss Industrial Print archetype**. Retired the warm beige paper/bone palette (`#FAF7F2` / `#EDE7DD`) for newsprint off-white `#F8F8F6` over carbon ink `#0A0A0A`. Pushed accent from tomato `#E8554E` to aviation red `#E61919` per Swiss Industrial alert-grade rule. Retired Fraunces (serif) and Inter (banned) display+body stack; replaced with Archivo Black (display, uppercase, viewport-bleeding macro scale) + Geist (body) + JetBrains Mono (kept). Added `.display-mega` and `.display-large` clamp() utilities for viewport-bleeding type. Hero H1 redrafted as a single architectural block ("30·MINUTES"). Replaced the previous 3-column zig-zag with rigid hairline-grid sections separated by 2px solid ink rules between each band. Pricing tiers became a 4-cell rigid grid with monolithic display prices and a square aviation-red "Recommended" pill on the Self-serve tier; CTA on the featured tier flipped from filled-ink to filled-accent. Portfolio rack rebuilt with extreme scale variance — two hero cells (col-6 row-2), supporting cells at col-3 / col-4 / col-6, and per-cell type sized to its span (mega 56px / mid 34px / micro 20px). Marquee converted to a kinetic ink-on-paper inverted strip with `///` separators and reduced-motion fallback. Added a fixed-position low-opacity SVG noise grain overlay to break digital flatness. Removed all `border-radius` (radius scale is now `0 / 0 / 0`). Re-shot desktop (1440×900) and mobile (390×844) screenshots from the redeployed live site and replaced the pre-redesign captures in `docs/screenshots/`. NOWPayments routes, brief webhook, sitemap, and live URL contract were preserved unchanged. | Wave 2 redesign agent |
+| 2026-05-08 | **Wave 2 rebrand — Render → Pagewright (FAIL on render.com PaaS conflict)**. Per the `wave2-name-research.md` backfill audit, the previous brand "Render" was unsalvageable: render.com is Render Inc. (a major Vercel/Heroku-tier PaaS), the SERP for "Render landing pages" is buried under their docs, and the trademark and Googleability checks all failed. Renamed to **Pagewright** — a craft-led compound (page + wright) with no active SaaS competitor and a clean SERP. All landing copy, the wordmark in `Logo.tsx`, the mega-footer wordmark in `page.tsx`, the favicon SVG, the metadata title + OG + Twitter card in `layout.tsx`, the `apps/landing/package.json` package name, the order-id and order-description prefixes in the NOWPayments checkout route, the four-pass terminal block (`[03/04] PRESS`), the `cal.com/prin7r/pagewright-concierge` link, and the `pagewright.so` placeholder subdomain were all updated. The `.render-bar` / `.render-scan` CSS animation pair was renamed to `.press-bar` / `.press-scan` to keep the visual metaphor (a printing press scan line) without leaning on the retired brand verb. The DESIGN.md title and §1 / §2 / §8 / §9 / §10 / §11 / §13 brand mentions were swapped. The repo slug, the GitHub remote, the live URL `landing-pages-on-demand.prin7r.com`, the NOWPayments invoice contract, the brief-form webhook, and the sitemap stayed unchanged so no external integration broke. The Wave 2 docs (`docs/01..10`) were swept in the same pass. | Wave 2 rebrand agent |

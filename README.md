@@ -1,4 +1,4 @@
-# Landing pages on demand &middot; Render
+# Landing pages on demand &middot; Pagewright
 
 > Send the brief. We write the copy, pick the palette, and push the page live to your domain &mdash; with a real Next.js repo, real analytics, and a real Let's Encrypt certificate. The site at the deploy URL below was generated, alongside 19 sibling landings, by the very pipeline this product packages.
 
@@ -14,7 +14,7 @@ Captured from the live deploy via Playwright. Re-run the capture script after an
 
 | Desktop &mdash; 1440 &times; 900 | Mobile &mdash; 390 &times; 844 |
 | --- | --- |
-| [![Render landing &mdash; desktop](docs/screenshots/landing-desktop.png)](docs/screenshots/landing-desktop.png) | [![Render landing &mdash; mobile](docs/screenshots/landing-mobile.png)](docs/screenshots/landing-mobile.png) |
+| [![Pagewright landing &mdash; desktop](docs/screenshots/landing-desktop.png)](docs/screenshots/landing-desktop.png) | [![Pagewright landing &mdash; mobile](docs/screenshots/landing-mobile.png)](docs/screenshots/landing-mobile.png) |
 
 ## Repo layout
 

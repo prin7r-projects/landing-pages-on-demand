@@ -1,4 +1,4 @@
-# Multistage Next.js standalone build for Render landing
+# Multistage Next.js standalone build for Pagewright landing
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY apps/landing/package.json ./

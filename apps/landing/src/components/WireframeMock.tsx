@@ -1,6 +1,6 @@
 /**
- * WireframeMock — an inline SVG sketch of a page-being-rendered.
- * Pure SVG, no images. Animated via the parent's render-bar.
+ * WireframeMock — an inline SVG sketch of a page-being-pressed.
+ * Pure SVG, no images. Animated via the parent's press-bar.
  * Swiss Industrial palette: carbon ink #0A0A0A on newsprint #F8F8F6,
  * single aviation-red accent #E61919.
  */
@@ -71,8 +71,8 @@ export function WireframeMock() {
         </g>
       </svg>
 
-      {/* render bar */}
-      <div className="render-bar" aria-hidden />
+      {/* press bar */}
+      <div className="press-bar" aria-hidden />
     </div>
   );
 }

@@ -2,7 +2,7 @@
 
 ## System overview
 
-Render is a thin orchestration layer over (a) an LLM-driven brand+copy generator, (b) a Next.js template renderer, (c) an automated deploy pipeline. The product surface is a brief form; the product output is a live URL.
+Pagewright is a thin orchestration layer over (a) an LLM-driven brand+copy generator, (b) a Next.js template renderer, (c) an automated deploy pipeline. The product surface is a brief form; the product output is a live URL.
 
 ```mermaid
 graph TD
@@ -24,7 +24,7 @@ graph TD
 
 | Component         | Tech                          | Responsibility                                                       |
 |-------------------|-------------------------------|----------------------------------------------------------------------|
-| `apps/landing`    | Next.js 15 App Router + ShadCN | Marketing site for Render itself; hosts the brief intake form.       |
+| `apps/landing`    | Next.js 15 App Router + ShadCN | Marketing site for Pagewright itself; hosts the brief intake form.       |
 | `apps/app`        | wasp-lang/open-saas (forked)  | (Wave 3+) Auth, billing, dashboard, brief history, page versioning.  |
 | Brief API         | Bun + Hono + SQLite           | Receives briefs, enqueues jobs, exposes `/status/:id` polling.       |
 | Orchestrator      | Bun + Anthropic SDK + GitHub API | Runs the four-step generation pipeline.                             |
@@ -37,7 +37,7 @@ graph TD
 1. **Intake**: form POST → API → SQLite row `briefs(id, payload, status='queued')`. Acknowledge in <300ms.
 2. **Brand pass**: orchestrator pulls brief; calls Claude with the brand-pyramid template; writes `briefs.brand_json`.
 3. **Copy pass**: orchestrator calls Claude with brand_json + brief; produces hero, feature triad, social proof slot, CTA, footer; writes `briefs.copy_json`.
-4. **Render pass**: orchestrator clones `templates/landing-base`, injects `theme.css` + `content.json`, runs `pnpm build`, captures stdout/stderr.
+4. **Press pass**: orchestrator clones `templates/landing-base`, injects `theme.css` + `content.json`, runs `pnpm build`, captures stdout/stderr.
 5. **Deploy pass**: orchestrator calls `gh repo create prin7r-projects/<slug>`, `git push`, then `ssh storage-contabo "cd /opt/prin7r-deploys/<slug> && git pull && docker compose up -d"`. Polls `https://<slug>.<client-domain>/` with curl until 200 + valid cert (max 5 min).
 6. **Notify**: writes `briefs.url + status='live'`, fires webhook, sends email.
 
@@ -77,7 +77,7 @@ graph TD
 
 ## How this very pipeline works
 
-This product packages a workflow that is already running in production: the **prin7r-projects Wave 2 pipeline** generates 20 standalone landings (this one included) by running the same four passes — brand → copy → render → deploy — in parallel from a single playbook. Each Wave 2 build is dispatched as a fresh Claude Opus 4.7 agent with:
+This product packages a workflow that is already running in production: the **prin7r-projects Wave 2 pipeline** generates 20 standalone landings (this one included) by running the same four passes — brand → copy → press → deploy — in parallel from a single playbook. Each Wave 2 build is dispatched as a fresh Claude Opus 4.7 agent with:
 
 1. A **playbook** (`/Users/keer/projects/prin7r/wave2-playbook.md`) describing infra, conventions, and the deliverable contract.
 2. A **per-project assignment** (slug, Notion opportunity ID, stack, summary, brand-identity hint).
@@ -86,7 +86,7 @@ This product packages a workflow that is already running in production: the **pr
 
 The agent reads the playbook + opportunity, generates the brand identity + 10 strategy docs, scaffolds the monorepo, pushes to `github.com/prin7r-projects/<slug>`, SSHes to the server, brings up the container, verifies HTTPS within 5 minutes, then writes the artifacts back into the Notion opportunity (Source URL, Status Notes, body bullets linking to repo + deploy + sub-page docs).
 
-The same pipeline, productized for non-Prin7r users, becomes Render. The brief intake replaces the per-project assignment. The Notion read-back becomes a customer-facing dashboard. Everything else is identical.
+The same pipeline, productized for non-Prin7r users, becomes Pagewright. The brief intake replaces the per-project assignment. The Notion read-back becomes a customer-facing dashboard. Everything else is identical.
 
 This is the strongest possible proof: **the product's own marketing site was built by the product itself**, alongside 19 sibling landings, on the same day, with the same pipeline.
 
@@ -98,4 +98,4 @@ This is the strongest possible proof: **the product's own marketing site was bui
 | Build fails inside container             | Orchestrator captures `next build` output; aborts and rolls back the repo.  |
 | ACME rate limit                          | Use existing wildcard cert until per-host vol justifies LE upgrade tier.    |
 | Server overload                          | Storage-contabo has spare capacity; load-balance batch builds nightly.      |
-| Customer wants edits post-deploy         | Apps/app dashboard exposes `re-render with diff` (planned Wave 3).          |
+| Customer wants edits post-deploy         | Apps/app dashboard exposes `re-press with diff` (planned Wave 3).          |

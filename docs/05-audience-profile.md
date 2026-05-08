@@ -23,7 +23,7 @@ Concretely:
 | Goals (90d)   | Launch the new product line; hold the company narrative consistent across 6 LPs.      |
 | Anti-goals    | Spending Saturday writing CSS; hiring a full-time designer at this stage.            |
 | Frustrations  | Webflow eats afternoons; agencies quote $8k for a single LP; AI generators look fake. |
-| Triggers      | Sees a beautiful landing on HN that quietly says "built by Render" in the footer.    |
+| Triggers      | Sees a beautiful landing on HN that quietly says "built by Pagewright" in the footer.    |
 | Buying motion | Tries free brief; ships 1 page; decides on day 2 whether to upgrade to the team plan. |
 | Lives in      | Linear, Slack, Cursor, GitHub; reads HN comments more than HN posts.                  |
 | Budget        | Personal: $0–$50/mo. Company: $200–$500/mo if framed as "vs. one Webflow seat."       |
@@ -38,7 +38,7 @@ Concretely:
 | Goals (90d)   | Stand up 18 campaign LPs across 6 clients without adding a third designer.           |
 | Anti-goals    | Eating margin on production; explaining why every page costs $4k to a CFO.           |
 | Frustrations  | Designer scheduling; copy approval cycles; CMS lock-in per client.                   |
-| Triggers      | A peer in a private Slack mentions "we use Render for campaign LPs — $99/mo, ships same-day." |
+| Triggers      | A peer in a private Slack mentions "we use Pagewright for campaign LPs — $99/mo, ships same-day." |
 | Buying motion | Direct to retainer tier ($499/mo, unlimited briefs); books an onboarding call.       |
 | Lives in      | Notion, Loom, Slack Connect, Calendly, Zoom.                                          |
 | Budget        | Pass-through to clients at margin; retainer is a line-item on the practice's books.  |
@@ -46,13 +46,13 @@ Concretely:
 ## Anti-personas (do not target, do not let copy address them)
 
 ### Anti-1 — *Greg, "the indie hacker collecting tools"*
-Wants free credits, will ship one page, will write a blog post about it, will not subscribe. Render does not court him; the free tier is constrained to 1 page/email and clearly labeled.
+Wants free credits, will ship one page, will write a blog post about it, will not subscribe. Pagewright does not court him; the free tier is constrained to 1 page/email and clearly labeled.
 
 ### Anti-2 — *Karen, "agency owner who thinks her team can build it cheaper"*
-Will spend the trial trying to find Render's seams to publish a "I built this in Figma in 2 hours" video. Render's positioning ignores her; the copy speaks past her to her customers (the fractional CMOs eating her lunch).
+Will spend the trial trying to find Pagewright's seams to publish a "I built this in Figma in 2 hours" video. Pagewright's positioning ignores her; the copy speaks past her to her customers (the fractional CMOs eating her lunch).
 
 ### Anti-3 — *Multi-page corporate buyer*
-Needs nav, blog, careers, integrations, footer-of-fifty-links. Render's whole pitch is single-page; the website explicitly redirects multi-page enquiries to a partner agency referral. (Saying no is part of the brand.)
+Needs nav, blog, careers, integrations, footer-of-fifty-links. Pagewright's whole pitch is single-page; the website explicitly redirects multi-page enquiries to a partner agency referral. (Saying no is part of the brand.)
 
 ## Channel preferences (per persona)
 

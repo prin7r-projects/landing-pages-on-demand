@@ -84,7 +84,7 @@ export function BriefForm() {
           label="Domain (if you have one)"
           name="domain"
           placeholder="acme.com"
-          help="If blank, you'll get a render.so subdomain to start."
+          help="If blank, you'll get a pagewright.so subdomain to start."
         />
       </div>
 

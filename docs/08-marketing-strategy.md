@@ -2,14 +2,14 @@
 
 ## Positioning (one sentence)
 
-**Render writes, designs, and deploys your landing page in 30 minutes. On your domain. With a real repo. Built for founders and operators who already shipped — and don't want to spend Saturday in a CMS.**
+**Pagewright writes, designs, and deploys your landing page in 30 minutes. On your domain. With a real repo. Built for founders and operators who already shipped — and don't want to spend Saturday in a CMS.**
 
 ## Messaging hierarchy
 
 ### Top of funnel — the headline
 > **A landing page on your domain in 30 minutes.**
-> Send the brief. Render writes the copy, picks the palette, and pushes it live.
-> *This site was made by Render in 27 minutes.*
+> Send the brief. Pagewright writes the copy, picks the palette, and pushes it live.
+> *This site was made by Pagewright in 27 minutes.*
 
 ### Mid funnel — the proof
 > Below the fold: a grid of 20 landings, each labeled with brief duration and live URL. All built by the same pipeline as the page you're reading. Click any to inspect.
@@ -21,7 +21,7 @@
 ## Content pillars
 
 1. **The 30-minute proof.** Every artifact ships with a stopwatch. Every case study leads with the number.
-2. **Self-referential demos.** The marketing site, the changelog, the docs — all built using Render. Visitor curiosity is the conversion.
+2. **Self-referential demos.** The marketing site, the changelog, the docs — all built using Pagewright. Visitor curiosity is the conversion.
 3. **Founder-grade taste.** Editorial typography, restrained palette, no glassmorphism. The brand looks like it belongs in a design annual, not a Webflow showcase.
 4. **Operator language.** Copy is written for someone who already shipped a thing. We do not say "powerful, scalable, modern."
 
@@ -34,7 +34,7 @@ Send the brief. We write the copy, pick the palette,
 and push the page live to your domain — with a real Next.js
 repo, real analytics, and a real Let's Encrypt certificate.
 
-This site you're reading was rendered in 27 minutes,
+This site you're reading was wrought in 27 minutes,
 alongside 19 sibling landings, by the very pipeline
 this product packages.
 
@@ -43,13 +43,13 @@ this product packages.
 
 ## Feature triad
 
-1. **From brief to live URL in 30 minutes.** No empty canvas. No template gallery. You describe the business; Render ships the page.
+1. **From brief to live URL in 30 minutes.** No empty canvas. No template gallery. You describe the business; Pagewright ships the page.
 2. **Yours to own.** Each output is a real GitHub repo on your account, with a real Next.js standalone build. Fork, edit, redeploy, walk away.
 3. **One look per business, not one template for all.** The brand-pyramid pass runs first. Palette, typography, voice and logo concept are generated *before* a single section gets laid out.
 
 ## Social-proof slot (gallery)
 
-A 4×5 grid of 20 thumbnails, each linking to a different prin7r-projects landing. Footer caption: *"All 20 sites above were built in a single afternoon by the pipeline behind Render."*
+A 4×5 grid of 20 thumbnails, each linking to a different prin7r-projects landing. Footer caption: *"All 20 sites above were built in a single afternoon by the pipeline behind Pagewright."*
 
 ## Voice samples
 

@@ -2,7 +2,7 @@
 // (no rounded radii anywhere in this brand).
 export function Logo({
   className = "",
-  ariaLabel = "Render",
+  ariaLabel = "Pagewright",
 }: {
   className?: string;
   ariaLabel?: string;
@@ -12,7 +12,7 @@ export function Logo({
       className={`inline-flex items-baseline font-display uppercase tracking-tighter2 ${className}`}
       aria-label={ariaLabel}
     >
-      <span>Render</span>
+      <span>Pagewright</span>
       <span
         aria-hidden
         className="ml-[3px] inline-block h-[7px] w-[7px] translate-y-[-2px] bg-accent"

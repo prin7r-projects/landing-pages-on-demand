@@ -1,6 +1,6 @@
 # 09 — Go-to-market: 90-day plan
 
-The plan is dated relative to **launch day** (T=0). The launch day is the day Render's marketing site (`landing-pages-on-demand.prin7r.com`) and the prin7r-projects portfolio (20 landings) are simultaneously live and link to each other.
+The plan is dated relative to **launch day** (T=0). The launch day is the day Pagewright's marketing site (`landing-pages-on-demand.prin7r.com`) and the prin7r-projects portfolio (20 landings) are simultaneously live and link to each other.
 
 ## Pre-launch (T-21 to T-1)
 
@@ -37,16 +37,16 @@ The plan is dated relative to **launch day** (T=0). The launch day is the day Re
 
 ## Weeks 5–8 — Channel deepening (T+28 to T+55)
 
-- Begin "Built with Render" footer experiment: A/B remove/keep on a 50/50 split. (Removal is a paid feature; the experiment measures whether the footer drives signups or just looks branded.)
+- Begin "Built with Pagewright" footer experiment: A/B remove/keep on a 50/50 split. (Removal is a paid feature; the experiment measures whether the footer drives signups or just looks branded.)
 - Launch the team tier publicly. Reach into 3 fractional-CMO communities for the team-tier soft sell.
 - Open a `templates/` directory: 4 hand-curated variants (saas / agency / clinic / course) the brief generator can draw on.
-- Start the "rendered.weekly" — 1 newsletter/week shipping the previous week's portfolio (Mailchimp, ~$0 spend).
+- Start the "pagewright.weekly" — 1 newsletter/week shipping the previous week's portfolio (Mailchimp, ~$0 spend).
 
 **Targets** (cumulative T+55): $35k MRR, 200 paid self-serve, 35 paid concierge.
 
 ## Weeks 9–12 — Position (T+56 to T+89)
 
-- Comparison post grid completed (12/12). Begin publishing one "we re-rendered the X.com landing" satirical demo per week.
+- Comparison post grid completed (12/12). Begin publishing one "we re-pressed the X.com landing" satirical demo per week.
 - Apply for a Stripe Atlas / Mercury feature placement.
 - First case study: a paying customer's landing + before/after, on their domain.
 - Refresh hero copy with month-3 numbers (X pages live, X median minutes-to-live).

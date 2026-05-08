@@ -24,7 +24,7 @@ export const portfolio: PortfolioEntry[] = [
   { idx: 10, slug: "clinic-pages",            title: "Clinic pages",            minutes: 30 },
   { idx: 11, slug: "founder-fast-track",      title: "Founder fast-track",      minutes: 26 },
   { idx: 12, slug: "saturday-no-more",        title: "Saturday no more",        minutes: 28 },
-  { idx: 13, slug: "render-portfolio",        title: "Render portfolio",        minutes: 32 },
+  { idx: 13, slug: "pagewright-portfolio",    title: "Pagewright portfolio",    minutes: 32 },
   { idx: 14, slug: "trade-press-pages",       title: "Trade-press pages",       minutes: 29 },
   { idx: 15, slug: "creator-shop",            title: "Creator shop",            minutes: 27 },
   { idx: 16, slug: "consultancy-page",        title: "Consultancy page",        minutes: 25 },

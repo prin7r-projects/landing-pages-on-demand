@@ -20,10 +20,10 @@ const PLAN_PRICES_USD: Record<string, number> = {
 };
 
 const PLAN_LABELS: Record<string, string> = {
-  free: "Render — Free trial",
-  "self-serve": "Render — Self-serve plan",
-  team: "Render — Team plan",
-  concierge: "Render — Concierge setup",
+  free: "Pagewright — Free trial",
+  "self-serve": "Pagewright — Self-serve plan",
+  team: "Pagewright — Team plan",
+  concierge: "Pagewright — Concierge setup",
 };
 
 function appUrlFromRequest(request: Request) {
@@ -79,7 +79,7 @@ export async function POST(request: Request) {
   }
 
   const baseUrl = appUrlFromRequest(request);
-  const orderId = `render-${plan}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+  const orderId = `pagewright-${plan}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
 
   const payload = {
     price_amount: amount,
@@ -87,7 +87,7 @@ export async function POST(request: Request) {
     pay_currency: body.pay_currency ?? "usdttrc20",
     ipn_callback_url: `${baseUrl}/api/webhooks/nowpayments`,
     order_id: orderId,
-    order_description: PLAN_LABELS[plan] ?? `Render — ${plan}`,
+    order_description: PLAN_LABELS[plan] ?? `Pagewright — ${plan}`,
     success_url: `${baseUrl}/?order=${orderId}&status=success`,
     cancel_url: `${baseUrl}/?order=${orderId}&status=cancelled`,
     is_fixed_rate: false,
