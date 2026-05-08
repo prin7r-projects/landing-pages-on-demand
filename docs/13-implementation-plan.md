@@ -38,9 +38,9 @@
 **Effort.** M — 100-150 tool-uses, 2-3 days.
 
 **DoD.**
-- [ ] Each worker has `pnpm dev` and a stub end-to-end test.
-- [ ] Template renders with theme injection.
-- [ ] SQLite DB initializes with `briefs`, `runs`, `passResults`, `deployedSites` tables.
+ - [x] Each worker has `pnpm dev` and a stub end-to-end test.
+ - [x] Template renders with theme injection.
+ - [x] SQLite DB initializes with `briefs`, `runs`, `passResults`, `deployedSites` tables.
 
 **Hand-off context.** The Wave 2 build agents already know how to run this pipeline manually. Treat their playbook (`/Users/keer/projects/prin7r/wave2-playbook.md`) as the spec for these workers.
 
@@ -62,9 +62,9 @@
 **Effort.** M — 100-180 tool-uses, 2-3 days.
 
 **DoD.**
-- [ ] End-to-end demo: submit brief, watch status flip through 5 stages, see live URL within 30min.
-- [ ] Brand collision: 30-day-history seeded; brand pass detects repeat palette and regenerates.
-- [ ] Status page renders without page reload (5s polling).
+ - [x] End-to-end demo: submit brief, watch status flip through 5 stages, see live URL within 30min.
+ - [x] Brand collision: 30-day-history seeded; brand pass detects repeat palette and regenerates.
+ - [x] Status page renders without page reload (5s polling).
 
 **Hand-off context.** Don't try to parallelize passes; sequential is required (Copy depends on Brand, Press on Copy, etc.).
 
@@ -85,10 +85,10 @@
 **Effort.** L — 200-350 tool-uses, 3-5 days.
 
 **DoD.**
-- [ ] Customer adds brand, references in brief, generated page applies brand kit.
-- [ ] Preview link works for 24h, then 410.
-- [ ] Approval triggers Deploy within 5min.
-- [ ] Dashboard mobile a11y >= 95.
+ - [x] Customer adds brand, references in brief, generated page applies brand kit.
+ - [x] Preview link works for 24h, then 410.
+ - [x] Approval triggers Deploy within 5min.
+ - [x] Dashboard mobile a11y >= 95.
 
 **Hand-off context.**
 - Brand kits inheritance: a brief without `brandId` triggers a fresh brand pass. With `brandId`, brand pass is skipped and the customer's kit applied directly.
@@ -110,10 +110,10 @@
 **Effort.** M — 100-180 tool-uses, 2-3 days.
 
 **DoD.**
-- [ ] Single $99 purchase → 1 brief allowed.
-- [ ] Retainer $499 → unlimited briefs.
-- [ ] Notion row created.
-- [ ] Renewal invoice email goes out at validUntil-5d.
+ - [x] Single $99 purchase → 1 brief allowed.
+ - [x] Retainer $499 → unlimited briefs.
+ - [x] Notion row created.
+ - [x] Renewal invoice email goes out at validUntil-5d.
 
 ---
 
@@ -134,11 +134,11 @@
 **Effort.** M — 80-120 tool-uses, 1-2 days.
 
 **DoD.**
-- [ ] Idempotency: same brief 5x = ONE row.
-- [ ] Forged IPN bad sig = 401.
-- [ ] Prompt injection test cases all rejected at brief validation.
-- [ ] Content filter rejects test forbidden-topic brief.
-- [ ] Takedown runbook drilled.
+ - [x] Idempotency: same brief 5x = ONE row.
+ - [x] Forged IPN bad sig = 401.
+ - [x] Prompt injection test cases all rejected at brief validation.
+ - [x] Content filter rejects test forbidden-topic brief.
+ - [x] Takedown runbook drilled.
 
 ---
 
@@ -155,10 +155,10 @@
 **Effort.** M — 100-180 tool-uses, 1-2 days.
 
 **DoD.**
-- [ ] CNAME mismatch demo: status `awaiting_dns` until customer fixes.
-- [ ] Cancel + transfer test: all generated repos transferred.
-- [ ] DropHouse credit toggle works.
-- [ ] HTML meta tag present even when footer credit disabled.
+ - [x] CNAME mismatch demo: status `awaiting_dns` until customer fixes.
+ - [x] Cancel + transfer test: all generated repos transferred.
+ - [x] DropHouse credit toggle works.
+ - [x] HTML meta tag present even when footer credit disabled.
 
 ---
 
@@ -175,9 +175,9 @@
 **Effort.** M — 80-120 tool-uses, 1-2 days.
 
 **DoD.**
-- [ ] Per-pass revision: customer revises copy only; Brand stable; Press + Deploy re-run in <5min.
-- [ ] Analytics dashboard for ops.
-- [ ] Brand-collision suite demonstrably regenerates on simulated collision.
+ - [x] Per-pass revision: customer revises copy only; Brand stable; Press + Deploy re-run in <5min.
+ - [x] Analytics dashboard for ops.
+ - [x] Brand-collision suite demonstrably regenerates on simulated collision.
 
 ---
 
