@@ -5,47 +5,66 @@ import { useState } from "react";
 export function BriefForm() {
   const [submitted, setSubmitted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [briefId, setBriefId] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setSubmitting(true);
+    setError(null);
+    
     const data = new FormData(e.currentTarget);
-    const payload = Object.fromEntries(data.entries());
+    const payload = {
+      businessName: data.get("business_name") as string,
+      audience: data.get("description") as string,
+      valueProp: (data.get("description") as string).split(".")[0] || "",
+      primaryCta: data.get("cta") as string,
+      tone: "professional", // TODO: add tone selector
+      customDomain: (data.get("domain") as string) || `${data.get("business_name")?.toString().toLowerCase().replace(/\s+/g, '-')}.drophouse.com`,
+    };
 
-    // Best-effort post to a configured webhook; otherwise just acknowledge.
     try {
-      const url = process.env.NEXT_PUBLIC_LEAD_WEBHOOK_URL;
-      if (url) {
-        await fetch(url, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ source: "landing", ...payload }),
-        });
-      } else {
-        await new Promise((r) => setTimeout(r, 600));
+      // Post to DropHouse API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_SITE_URL || ''}/api/briefs`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to submit brief");
       }
+
+      const result = await response.json();
+      setBriefId(result.briefId);
       setSubmitted(true);
-    } catch {
-      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Submission failed");
     } finally {
       setSubmitting(false);
     }
   }
 
-  if (submitted) {
+  if (submitted && briefId) {
     return (
       <div className="border-2 border-ink bg-paper p-6 sm:p-8">
         <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-accent">
           [ BRIEF / RECEIVED ]
         </div>
-        <p className="mt-4 font-display text-[28px] uppercase leading-[0.95] tracking-tighter2 text-ink sm:text-[36px]">
-          Preview URL inbound.
+        <p className="mt-4 font-display text-[28px] uppercase leading-[0.95] tracking-tighter text-ink sm:text-[36px]">
+          Brief submitted!
         </p>
         <p className="mt-4 max-w-prose text-sm leading-relaxed text-ink/80">
-          A real human reads every brief during the early-access period. You&rsquo;ll
-          get an email within the hour with the preview URL and a link to map your
-          domain. No card on file, no fine print.
+          Your brief ID is <code className="font-mono text-accent">{briefId}</code>.
+          You can check the status at:
         </p>
+        <a
+          href={`/brief/${briefId}`}
+          className="mt-4 inline-flex items-center gap-2 bg-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider text-paper transition-opacity hover:opacity-90"
+        >
+          Check Status
+          <span aria-hidden className="font-mono text-[12px]">→</span>
+        </a>
       </div>
     );
   }
@@ -59,9 +78,15 @@ export function BriefForm() {
       <div className="font-mono text-[11px] uppercase tracking-[0.18em] text-mute">
         [ INTAKE / FIRST PAGE FREE ]
       </div>
-      <h3 className="mt-3 font-display text-[28px] uppercase leading-[0.95] tracking-tighter2 text-ink sm:text-[36px]">
+      <h3 className="mt-3 font-display text-[28px] uppercase leading-[0.95] tracking-tighter text-ink sm:text-[36px]">
         Five fields. One live URL.
       </h3>
+
+      {error ? (
+        <div className="mt-4 font-mono text-[12px] uppercase tracking-[0.18em] text-red-500">
+          Error: {error}
+        </div>
+      ) : null}
 
       <div className="mt-7 grid gap-5 sm:grid-cols-2">
         <Field label="Business name" name="business_name" required placeholder="Acme Plumbing" />
@@ -92,7 +117,7 @@ export function BriefForm() {
         <button
           type="submit"
           disabled={submitting}
-          className="inline-flex items-center gap-3 bg-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider2 text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
+          className="inline-flex items-center gap-3 bg-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider text-paper transition-opacity hover:opacity-90 disabled:opacity-50"
         >
           {submitting ? "Sending…" : "Send the brief"}
           <span aria-hidden className="font-mono text-[12px] text-accent">→</span>
@@ -106,7 +131,7 @@ export function BriefForm() {
       </div>
 
       <p className="mt-6 font-mono text-[10.5px] uppercase tracking-[0.18em] text-mute">
-        We&rsquo;ll never share the brief. The first page is on us. No upsell sequence.
+        We'll never share the brief. The first page is on us. No upsell sequence.
       </p>
     </form>
   );
