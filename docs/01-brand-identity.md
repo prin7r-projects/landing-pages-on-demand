@@ -2,14 +2,14 @@
 
 ## Brand pyramid
 
-- **Essence (1 word)**: *Pagewright.* The product turns scattered business intent into a deployed page — the wright (craftsperson) who builds the page. The compound is the brand.
+- **Essence (1 word)**: *DropHouse.* The product turns scattered business intent into a deployed page — the wright (craftsperson) who builds the page. The compound is the brand.
 - **Personality (3 traits)**: candid, design-aware, fast-finishing.
 - **Values (3)**: Clarity over cleverness. Real screenshots over stock vectors. Done beats perfect.
 - **Attributes (5)**: typography-forward, generous whitespace, monochrome-with-one-accent, evidence-first copy, deploy-as-proof.
 
 ## Positioning statement
 
-> For founders and operators who need a real landing page yesterday, **Pagewright** is a productized landing-page studio that ships a deployed, branded one-pager in 30 minutes — unlike DIY page builders that hand you a blank canvas, because Pagewright writes the copy, picks the palette, and pushes the page live to your domain while you finish coffee.
+> For founders and operators who need a real landing page yesterday, **DropHouse** is a productized landing-page studio that ships a deployed, branded one-pager in 30 minutes — unlike DIY page builders that hand you a blank canvas, because DropHouse writes the copy, picks the palette, and pushes the page live to your domain while you finish coffee.
 
 ## Audience personas
 
@@ -27,7 +27,7 @@
 
 **Do**
 - Quote the turnaround in literal minutes.
-- Show the page that proves the claim ("this site you're reading was built by Pagewright").
+- Show the page that proves the claim ("this site you're reading was built by DropHouse").
 - Treat the reader like an operator who has shipped before.
 
 **Don't**
@@ -61,11 +61,11 @@ Pairing rationale: the serif/sans contrast cues "studio + product" rather than "
 
 ### Logo concept
 
-A heavy-display block with the word `Pagewright` set in Archivo Black uppercase, leading-trimmed, with a single aviation-red square replacing the period at the end. The square is the deploy. Inline SVG (the actual canonical wordmark lives in `apps/landing/src/components/Logo.tsx`):
+A heavy-display block with the word `DropHouse` set in Archivo Black uppercase, leading-trimmed, with a single aviation-red square replacing the period at the end. The square is the deploy. Inline SVG (the actual canonical wordmark lives in `apps/landing/src/components/Logo.tsx`):
 
 ```svg
 <svg width="220" height="40" viewBox="0 0 220 40" xmlns="http://www.w3.org/2000/svg">
-  <text x="0" y="28" font-family="Archivo Black, Helvetica, sans-serif" font-size="26" font-weight="900" fill="#0A0A0A" letter-spacing="-1">PAGEWRIGHT</text>
+  <text x="0" y="28" font-family="Archivo Black, Helvetica, sans-serif" font-size="26" font-weight="900" fill="#0A0A0A" letter-spacing="-1">DROPHOUSE</text>
   <rect x="200" y="22" width="7" height="7" fill="#E61919"/>
 </svg>
 ```

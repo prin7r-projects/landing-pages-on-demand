@@ -1,6 +1,6 @@
 # 09 — Go-to-market: 90-day plan
 
-The plan is dated relative to **launch day** (T=0). The launch day is the day Pagewright's marketing site (`landing-pages-on-demand.prin7r.com`) and the prin7r-projects portfolio (20 landings) are simultaneously live and link to each other.
+The plan is dated relative to **launch day** (T=0). The launch day is the day DropHouse's marketing site (`landing-pages-on-demand.prin7r.com`) and the prin7r-projects portfolio (20 landings) are simultaneously live and link to each other.
 
 ## Pre-launch (T-21 to T-1)
 
@@ -37,10 +37,10 @@ The plan is dated relative to **launch day** (T=0). The launch day is the day Pa
 
 ## Weeks 5–8 — Channel deepening (T+28 to T+55)
 
-- Begin "Built with Pagewright" footer experiment: A/B remove/keep on a 50/50 split. (Removal is a paid feature; the experiment measures whether the footer drives signups or just looks branded.)
+- Begin "Built with DropHouse" footer experiment: A/B remove/keep on a 50/50 split. (Removal is a paid feature; the experiment measures whether the footer drives signups or just looks branded.)
 - Launch the team tier publicly. Reach into 3 fractional-CMO communities for the team-tier soft sell.
 - Open a `templates/` directory: 4 hand-curated variants (saas / agency / clinic / course) the brief generator can draw on.
-- Start the "pagewright.weekly" — 1 newsletter/week shipping the previous week's portfolio (Mailchimp, ~$0 spend).
+- Start the "drophouse.weekly" — 1 newsletter/week shipping the previous week's portfolio (Mailchimp, ~$0 spend).
 
 **Targets** (cumulative T+55): $35k MRR, 200 paid self-serve, 35 paid concierge.
 

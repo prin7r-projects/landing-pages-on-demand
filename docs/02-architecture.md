@@ -2,7 +2,7 @@
 
 ## System overview
 
-Pagewright is a thin orchestration layer over (a) an LLM-driven brand+copy generator, (b) a Next.js template renderer, (c) an automated deploy pipeline. The product surface is a brief form; the product output is a live URL.
+DropHouse is a thin orchestration layer over (a) an LLM-driven brand+copy generator, (b) a Next.js template renderer, (c) an automated deploy pipeline. The product surface is a brief form; the product output is a live URL.
 
 ```mermaid
 graph TD
@@ -24,7 +24,7 @@ graph TD
 
 | Component         | Tech                          | Responsibility                                                       |
 |-------------------|-------------------------------|----------------------------------------------------------------------|
-| `apps/landing`    | Next.js 15 App Router + ShadCN | Marketing site for Pagewright itself; hosts the brief intake form.       |
+| `apps/landing`    | Next.js 15 App Router + ShadCN | Marketing site for DropHouse itself; hosts the brief intake form.       |
 | `apps/app`        | wasp-lang/open-saas (forked)  | (Wave 3+) Auth, billing, dashboard, brief history, page versioning.  |
 | Brief API         | Bun + Hono + SQLite           | Receives briefs, enqueues jobs, exposes `/status/:id` polling.       |
 | Orchestrator      | Bun + Anthropic SDK + GitHub API | Runs the four-step generation pipeline.                             |
@@ -86,7 +86,7 @@ This product packages a workflow that is already running in production: the **pr
 
 The agent reads the playbook + opportunity, generates the brand identity + 10 strategy docs, scaffolds the monorepo, pushes to `github.com/prin7r-projects/<slug>`, SSHes to the server, brings up the container, verifies HTTPS within 5 minutes, then writes the artifacts back into the Notion opportunity (Source URL, Status Notes, body bullets linking to repo + deploy + sub-page docs).
 
-The same pipeline, productized for non-Prin7r users, becomes Pagewright. The brief intake replaces the per-project assignment. The Notion read-back becomes a customer-facing dashboard. Everything else is identical.
+The same pipeline, productized for non-Prin7r users, becomes DropHouse. The brief intake replaces the per-project assignment. The Notion read-back becomes a customer-facing dashboard. Everything else is identical.
 
 This is the strongest possible proof: **the product's own marketing site was built by the product itself**, alongside 19 sibling landings, on the same day, with the same pipeline.
 

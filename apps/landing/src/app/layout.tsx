@@ -31,11 +31,11 @@ const SITE_URL =
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Pagewright — A landing page on your domain in 30 minutes",
-    template: "%s · Pagewright",
+    default: "DropHouse — A landing page on your domain in 30 minutes",
+    template: "%s · DropHouse",
   },
   description:
-    "Send the brief. Pagewright writes the copy, picks the palette, and pushes the page live to your domain — with a real Next.js repo, real analytics, and a real Let’s Encrypt certificate.",
+    "Send the brief. DropHouse writes the copy, picks the palette, and pushes the page live to your domain — with a real Next.js repo, real analytics, and a real Let’s Encrypt certificate.",
   keywords: [
     "landing page service",
     "landing page generator",
@@ -48,16 +48,16 @@ export const metadata: Metadata = {
   authors: [{ name: "prin7r-projects" }],
   openGraph: {
     type: "website",
-    title: "Pagewright — A landing page on your domain in 30 minutes",
+    title: "DropHouse — A landing page on your domain in 30 minutes",
     description:
-      "Send the brief. We write the copy, pick the palette, and push the page live. This site itself was made by Pagewright in 27 minutes.",
+      "Send the brief. We write the copy, pick the palette, and push the page live. This site itself was made by DropHouse in 27 minutes.",
     url: SITE_URL,
-    siteName: "Pagewright",
+    siteName: "DropHouse",
     locale: "en_US",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Pagewright — A landing page on your domain in 30 minutes",
+    title: "DropHouse — A landing page on your domain in 30 minutes",
     description:
       "This site you’re reading was generated, alongside 19 sibling landings, by the very pipeline this product packages.",
   },

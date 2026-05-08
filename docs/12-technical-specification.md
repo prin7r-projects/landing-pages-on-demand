@@ -1,17 +1,17 @@
 # 12 — Technical Specification
 
-This is the authoritative technical contract for Pagewright Wave 2 → Wave 3. Doc 11 specifies user-visible flows; this doc specifies runtime, schema, contracts, and operational guardrails. Every endpoint here traces back to a story in doc 11.
+This is the authoritative technical contract for DropHouse Wave 2 → Wave 3. Doc 11 specifies user-visible flows; this doc specifies runtime, schema, contracts, and operational guardrails. Every endpoint here traces back to a story in doc 11.
 
 ---
 
 ## 1. Architecture overview
 
-Pagewright is a **brief-to-URL pipeline**: 4-pass generation (Brand → Copy → Press → Deploy) that produces a fully deployed landing on the customer's domain in <30min p95.
+DropHouse is a **brief-to-URL pipeline**: 4-pass generation (Brand → Copy → Press → Deploy) that produces a fully deployed landing on the customer's domain in <30min p95.
 
 ```mermaid
 flowchart TB
   subgraph Client[Browser]
-    LP[Pagewright marketing landing]
+    LP[DropHouse marketing landing]
     DB[Customer dashboard]
   end
 
@@ -140,7 +140,7 @@ export const deployedSites = pgTable('deployed_sites', {
   url: text('url').notNull(),
   ghRepo: text('gh_repo').notNull(),
   certIssuedAt: timestamp('cert_issued_at'),
-  pagewrightCreditEnabled: boolean('pagewright_credit_enabled').default(true),
+  drophouseCreditEnabled: boolean('drophouse_credit_enabled').default(true),
 });
 ```
 
@@ -254,7 +254,7 @@ CSRF: Next.js + samesite. CORS: locked to `landing-pages-on-demand.prin7r.com` +
 - **Logs.** Stdout JSON `{ ts, level, route, briefId?, passKind?, event, message }`. PII scrubbed.
 - **Metrics.** Wave 3: brief-completion-time p95/p99 per pass; brief-error-rate per pass; daily brief volume.
 - **Alerts.**
-  - Brief stuck >45min in any pass → Slack `#alerts-pagewright`.
+  - Brief stuck >45min in any pass → Slack `#alerts-drophouse`.
   - Daily brief volume <2σ below mean → Slack.
   - Anthropic API 5xx >5/h → Slack.
   - GitHub API 5xx >5/h → Slack.

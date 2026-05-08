@@ -6,9 +6,9 @@
 
 ## Slide 1 — Title
 
-**Pagewright — A landing page on your domain in 30 minutes.**
+**DropHouse — A landing page on your domain in 30 minutes.**
 
-The site you are reading was made by Pagewright in 27 minutes.
+The site you are reading was made by DropHouse in 27 minutes.
 
 ---
 
@@ -41,7 +41,7 @@ The site you are reading was made by Pagewright in 27 minutes.
 
 ## Slide 5 — The self-referential proof
 
-- The marketing site for Pagewright was built by Pagewright.
+- The marketing site for DropHouse was built by DropHouse.
 - 19 sibling landings (the prin7r-projects Wave 2 portfolio) were built in the same afternoon, by the same pipeline.
 - Visitors can click any of the 20 thumbnails on the landing and inspect a different distinctive output.
 - This collapses the demo-to-trust gap from minutes to seconds.
@@ -50,7 +50,7 @@ The site you are reading was made by Pagewright in 27 minutes.
 
 ## Slide 6 — Pricing
 
-- Free: 1 page on Pagewright's subdomain.
+- Free: 1 page on DropHouse's subdomain.
 - $29/mo: unlimited briefs, custom domain, 1 brand kit.
 - $99/mo: 5 seats, 10 brand kits, page versioning.
 - $1,200 + $99/mo: concierge — Zoom brief intake, human polish pass.
@@ -60,7 +60,7 @@ The site you are reading was made by Pagewright in 27 minutes.
 ## Slide 7 — Market & wedge
 
 - TAM: every operator who currently buys Webflow + a freelancer for marketing pages. ~$2B annual spend on small-business landing-page work globally (estimate).
-- Wedge: the 30-minute promise. Other vendors compete on flexibility; Pagewright competes on the entire delivery loop.
+- Wedge: the 30-minute promise. Other vendors compete on flexibility; DropHouse competes on the entire delivery loop.
 - Beachhead segment: technical founders + fractional CMOs (Persona 1 + Persona 2).
 
 ---

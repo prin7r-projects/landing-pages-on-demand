@@ -1,6 +1,6 @@
-# Pagewright — DESIGN.md
+# DropHouse — DESIGN.md
 
-Canonical design + style guide for `landing-pages-on-demand` (brand: **Pagewright**).
+Canonical design + style guide for `landing-pages-on-demand` (brand: **DropHouse**).
 
 This document is the single source of truth for visual decisions on the project. It is the Wave 2 v2 mandatory artifact owned by the Chief of Design and must stay in sync with the actual implementation in `apps/landing/`. Source of brand decisions: [`docs/01-brand-identity.md`](docs/01-brand-identity.md).
 
@@ -10,7 +10,7 @@ Last updated: 2026-05-08 (Wave 2 redesign — Swiss Industrial Print archetype).
 
 ## 1. Product and audience
 
-**Product**: Pagewright is a productized landing-page studio. The customer sends a one-screen brief; we ship a deployed, branded one-page Next.js site on their domain in roughly 30 minutes — with a real Let's Encrypt cert, real Lighthouse score, and a real GitHub repo they own.
+**Product**: DropHouse is a productized landing-page studio. The customer sends a one-screen brief; we ship a deployed, branded one-page Next.js site on their domain in roughly 30 minutes — with a real Let's Encrypt cert, real Lighthouse score, and a real GitHub repo they own.
 
 **Tagline**: *A landing page on your domain in 30 minutes.*
 
@@ -28,7 +28,7 @@ The landing has one job: convince a busy operator that we can produce a live URL
 
 ## 2. Visual positioning
 
-Pagewright is positioned as **"editorial studio meets deploy pipeline"**. The page reads like a print piece — large serif headlines, generous whitespace, a single saturated accent — and behaves like an engineering tool — terminal blocks, lighthouse scoreboards, status callouts in monospace.
+DropHouse is positioned as **"editorial studio meets deploy pipeline"**. The page reads like a print piece — large serif headlines, generous whitespace, a single saturated accent — and behaves like an engineering tool — terminal blocks, lighthouse scoreboards, status callouts in monospace.
 
 Anti-references (do **not** look like these):
 
@@ -37,9 +37,9 @@ Anti-references (do **not** look like these):
 - **Notion.so** — pastel illustrative figures, rounded everything.
 - **Webflow / Framer template galleries** — generic SaaS hero with stock illustrations.
 
-Where Pagewright sits on common axes:
+Where DropHouse sits on common axes:
 
-| Axis | Pole A | Pagewright | Pole B |
+| Axis | Pole A | DropHouse | Pole B |
 |---|---|---|---|
 | Geometry | Strict 12-col grid | **Toward A — strict** | Free-form |
 | Color saturation | Monochrome | **Mostly A + one accent** | Maximalist |
@@ -177,7 +177,7 @@ Components shipped in `apps/landing/src/components/`:
 
 | Component | File | Role |
 |---|---|---|
-| `Logo` | [`Logo.tsx`](apps/landing/src/components/Logo.tsx) | Inline-SVG wordmark "Pagewright" with the aviation-red square-block glyph. Used in nav + footer + favicon source. |
+| `Logo` | [`Logo.tsx`](apps/landing/src/components/Logo.tsx) | Inline-SVG wordmark "DropHouse" with the aviation-red square-block glyph. Used in nav + footer + favicon source. |
 | `WireframeMock` | [`WireframeMock.tsx`](apps/landing/src/components/WireframeMock.tsx) | Hero aside — an inline SVG miniature of a landing page with an animated 1px aviation-red bar that scans top-to-bottom (the "press scan"). Disabled under `prefers-reduced-motion`. |
 | `PortfolioGrid` | [`PortfolioGrid.tsx`](apps/landing/src/components/PortfolioGrid.tsx) | 20-thumbnail self-referential grid linking to sibling Wave 2 deploys. Each thumbnail is text-only (slug + tagline) — no image dependency. |
 | `BriefForm` | [`BriefForm.tsx`](apps/landing/src/components/BriefForm.tsx) | 5-field intake form (name, email, business, audience, deadline). POSTs to `LEAD_WEBHOOK_URL` if set; otherwise acknowledges locally. |
@@ -205,7 +205,7 @@ The landing is a single-scroll page composed of these sections, in order:
 5. **Triad** (`#features`) — three numbered cards: brand pyramid → repo ownership → re-brief workflow.
 6. **FromTheCode** — ink-on-paper inverted band; copy + a terminal-block showing the four passes (`brand / copy / press / deploy`).
 7. **Pricing** (`#pricing`) — H2 + paragraph + crypto-checkout note + 4-card grid (Free / Self-serve / Team / Concierge). The two paid plans route through the NOWPayments CTA.
-8. **Concierge** (`#talk`) — three-step ordered list + `cal.com/prin7r/pagewright-concierge` button.
+8. **Concierge** (`#talk`) — three-step ordered list + `cal.com/prin7r/drophouse-concierge` button.
 9. **Send** (`#send`) — split layout: copy bullets on the left, `BriefForm` on the right.
 10. **Footer** — Logo + tagline + nav + self-referential proof line.
 
@@ -215,7 +215,7 @@ The landing is a single-scroll page composed of these sections, in order:
 
 ## 10. Imagery and generated asset rules
 
-Pagewright's identity is **type-led, not image-led**. The landing ships with **zero raster images**. All visual elements are SVG (logo, wireframe mock) or text-on-color (portfolio grid, terminal block).
+DropHouse's identity is **type-led, not image-led**. The landing ships with **zero raster images**. All visual elements are SVG (logo, wireframe mock) or text-on-color (portfolio grid, terminal block).
 
 **Why no hero image**: hero photography on a Webflow-alternative landing reads as ironic. Type and a 1px scan line tell the story better.
 
@@ -229,7 +229,7 @@ Pagewright's identity is **type-led, not image-led**. The landing ships with **z
 
 ## 11. Motion and interaction rules
 
-Pagewright's motion budget is intentionally tiny. Three approved motion types:
+DropHouse's motion budget is intentionally tiny. Three approved motion types:
 
 1. **Page enter**: nothing. The page is the reward; no reveal animation.
 2. **Hover**: 80ms color shift on links and buttons. No scale, no translate, no shadow. Buttons darken via `hover:opacity-90` (filled) or invert via `hover:bg-ink hover:text-paper` (outline).
@@ -285,11 +285,11 @@ Captured from the live deployment via Playwright (chromium, full-page) immediate
 
 **Desktop (1440 × 900)** — [`docs/screenshots/landing-desktop.png`](docs/screenshots/landing-desktop.png)
 
-![Pagewright landing — desktop, 1440×900](docs/screenshots/landing-desktop.png)
+![DropHouse landing — desktop, 1440×900](docs/screenshots/landing-desktop.png)
 
 **Mobile (390 × 844)** — [`docs/screenshots/landing-mobile.png`](docs/screenshots/landing-mobile.png)
 
-![Pagewright landing — mobile, 390×844](docs/screenshots/landing-mobile.png)
+![DropHouse landing — mobile, 390×844](docs/screenshots/landing-mobile.png)
 
 **Capture command** (re-run when the landing changes):
 
@@ -325,4 +325,5 @@ node /tmp/prin7r-screenshots/capture.mjs https://landing-pages-on-demand.prin7r.
 | 2026-05-08 | Initial Wave 2 build: full landing, palette + type system, brand identity finalised. | Wave 2 build agent |
 | 2026-05-08 | **Wave 2 v2 polish**: added `DESIGN.md` (this file) at root; added desktop + mobile screenshots; integrated NOWPayments hosted-invoice flow on paid pricing tiers; added IPN webhook handler with HMAC-SHA512 verification; updated `.env.example` with `NOWPAYMENTS_API_KEY`, `NOWPAYMENTS_IPN_SECRET`, `NOWPAYMENTS_SANDBOX`. | Wave 2 polish agent |
 | 2026-05-08 | **Wave 2 redesign — Swiss Industrial Print archetype**. Retired the warm beige paper/bone palette (`#FAF7F2` / `#EDE7DD`) for newsprint off-white `#F8F8F6` over carbon ink `#0A0A0A`. Pushed accent from tomato `#E8554E` to aviation red `#E61919` per Swiss Industrial alert-grade rule. Retired Fraunces (serif) and Inter (banned) display+body stack; replaced with Archivo Black (display, uppercase, viewport-bleeding macro scale) + Geist (body) + JetBrains Mono (kept). Added `.display-mega` and `.display-large` clamp() utilities for viewport-bleeding type. Hero H1 redrafted as a single architectural block ("30·MINUTES"). Replaced the previous 3-column zig-zag with rigid hairline-grid sections separated by 2px solid ink rules between each band. Pricing tiers became a 4-cell rigid grid with monolithic display prices and a square aviation-red "Recommended" pill on the Self-serve tier; CTA on the featured tier flipped from filled-ink to filled-accent. Portfolio rack rebuilt with extreme scale variance — two hero cells (col-6 row-2), supporting cells at col-3 / col-4 / col-6, and per-cell type sized to its span (mega 56px / mid 34px / micro 20px). Marquee converted to a kinetic ink-on-paper inverted strip with `///` separators and reduced-motion fallback. Added a fixed-position low-opacity SVG noise grain overlay to break digital flatness. Removed all `border-radius` (radius scale is now `0 / 0 / 0`). Re-shot desktop (1440×900) and mobile (390×844) screenshots from the redeployed live site and replaced the pre-redesign captures in `docs/screenshots/`. NOWPayments routes, brief webhook, sitemap, and live URL contract were preserved unchanged. | Wave 2 redesign agent |
-| 2026-05-08 | **Wave 2 rebrand — Render → Pagewright (FAIL on render.com PaaS conflict)**. Per the `wave2-name-research.md` backfill audit, the previous brand "Render" was unsalvageable: render.com is Render Inc. (a major Vercel/Heroku-tier PaaS), the SERP for "Render landing pages" is buried under their docs, and the trademark and Googleability checks all failed. Renamed to **Pagewright** — a craft-led compound (page + wright) with no active SaaS competitor and a clean SERP. All landing copy, the wordmark in `Logo.tsx`, the mega-footer wordmark in `page.tsx`, the favicon SVG, the metadata title + OG + Twitter card in `layout.tsx`, the `apps/landing/package.json` package name, the order-id and order-description prefixes in the NOWPayments checkout route, the four-pass terminal block (`[03/04] PRESS`), the `cal.com/prin7r/pagewright-concierge` link, and the `pagewright.so` placeholder subdomain were all updated. The `.render-bar` / `.render-scan` CSS animation pair was renamed to `.press-bar` / `.press-scan` to keep the visual metaphor (a printing press scan line) without leaning on the retired brand verb. The DESIGN.md title and §1 / §2 / §8 / §9 / §10 / §11 / §13 brand mentions were swapped. The repo slug, the GitHub remote, the live URL `landing-pages-on-demand.prin7r.com`, the NOWPayments invoice contract, the brief-form webhook, and the sitemap stayed unchanged so no external integration broke. The Wave 2 docs (`docs/01..10`) were swept in the same pass. | Wave 2 rebrand agent |
+| 2026-05-08 | **Wave 2 rebrand v1 — Render → Pagewright (FAIL on render.com PaaS conflict)**. Per the `wave2-name-research.md` backfill audit, "Render" was unsalvageable: render.com is Render Inc. (a major Vercel/Heroku-tier PaaS), the SERP for "Render landing pages" is buried under their docs. Renamed to Pagewright — a craft-led compound (page + wright). | Wave 2 rebrand agent |
+| 2026-05-08 | **Wave 2 rebrand v2 — Pagewright → DropHouse (FAIL on pagewright.co.uk and Playwright SEO eclipse)**. The Pagewright name failed two new criteria: (a) `pagewright.co.uk` is a live "Your Digital Layer, Handled" agency in the same sector, and (b) Microsoft's `playwright.dev` causes autocorrect/SEO eclipse on every search for "Pagewright". Renamed to **DropHouse** on `drophouse.com` (verified available). Brand essence: "drop a landing page on your domain" — productized landing studio, fast finish, museum-quality. Monogram swapped from `P` → `D` (or `Dh` for the double-letter mark). All occurrences of `Pagewright` / `pagewright` / `PAGEWRIGHT` swept across `apps/landing/src/**`, all 13 files in `docs/`, `README.md`, `DESIGN.md`, `apps/landing/package.json` (`@prin7r/pagewright-landing` → `@prin7r/drophouse-landing`), `Dockerfile.landing`, the NOWPayments checkout order-description block, the wordmark in `Logo.tsx`, the metadata title + OG + Twitter card in `layout.tsx`, and the `pitch-deck.html`. The placeholder subdomain `drophouse.so` (carried over from the v1 sweep) was promoted to `drophouse.com` to match the verified domain. One vestigial Render reference (`apps/app/README.md` line 3, "backs Render's self-serve product") was caught and cleaned to "backs DropHouse's self-serve product" — a layered three-stage cleanup (Render → Pagewright → DropHouse). The repo slug `landing-pages-on-demand`, GitHub remote, live URL `landing-pages-on-demand.prin7r.com`, NOWPayments invoice contract, brief-form webhook, and sitemap all stayed unchanged so no external integration broke. | Wave 2 rebrand Agent O |

@@ -52,8 +52,8 @@ The product is its own best ad — a deployed page that *looks* like a deployed 
 **Why it fits**: "Webflow alternative for landings", "Durable AI alternative", "fast landing page service" — the buyer is in evaluation mode, not awareness mode.
 
 **Tactics**:
-- 12 comparison posts, each a side-by-side gallery of 4 alternative outputs vs Pagewright's output. Each post deploys a *real* Pagewright output of the same brief and links to it.
-- The comparison posts themselves are deployed using Pagewright's own pipeline (more self-referential proof).
+- 12 comparison posts, each a side-by-side gallery of 4 alternative outputs vs DropHouse's output. Each post deploys a *real* DropHouse output of the same brief and links to it.
+- The comparison posts themselves are deployed using DropHouse's own pipeline (more self-referential proof).
 
 **KPIs**: 10–20 organic signups/mo per post once indexed (~3 months).
 

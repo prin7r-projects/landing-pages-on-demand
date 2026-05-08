@@ -1,6 +1,6 @@
 # apps/app — SaaS shell (deferred)
 
-This directory is a placeholder for the full SaaS shell that backs Render's
+This directory is a placeholder for the full SaaS shell that backs DropHouse's
 self-serve product (auth, billing, brief history, dashboard).
 
 ## Status — Wave 2 batch 1 (2026-05-08)

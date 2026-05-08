@@ -1,8 +1,8 @@
 # 11 — User Stories and Scenarios
 
-This document is the canonical input contract for Pagewright's Phase 2 SaaS implementation. It enumerates personas, primary user stories, end-to-end scenarios, and ties each flow to the frontend touch-points and backend services that doc 12 specifies. Every API endpoint in doc 12 must trace back to a story here; no orphan endpoints, no orphan stories.
+This document is the canonical input contract for DropHouse's Phase 2 SaaS implementation. It enumerates personas, primary user stories, end-to-end scenarios, and ties each flow to the frontend touch-points and backend services that doc 12 specifies. Every API endpoint in doc 12 must trace back to a story here; no orphan endpoints, no orphan stories.
 
-Pagewright is a **productized landing-page studio** — operator submits a brief, receives a deployed branded one-pager on their domain in 30 minutes. The product is **the deployed URL itself**. Self-referential proof: the Pagewright marketing site WAS built by Pagewright; same for the 19 sister Wave 2 landings.
+DropHouse is a **productized landing-page studio** — operator submits a brief, receives a deployed branded one-pager on their domain in 30 minutes. The product is **the deployed URL itself**. Self-referential proof: the DropHouse marketing site WAS built by DropHouse; same for the 19 sister Wave 2 landings.
 
 ---
 
@@ -22,7 +22,7 @@ Pagewright is a **productized landing-page studio** — operator submits a brief
 
 ### Anti-personas (out of scope — see doc 05 §Anti-personas)
 
-Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who thinks her team can build it cheaper, multi-page corporate buyer (Pagewright is single-page only).
+Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who thinks her team can build it cheaper, multi-page corporate buyer (DropHouse is single-page only).
 
 ---
 
@@ -36,9 +36,9 @@ Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who
 4. **As Maya, I want the page to come with a real CMS (so I can edit copy without a deploy), real analytics, and a Let's Encrypt cert, so that I can hand it to my marketing hire on day 2.** *(US-04)*
 5. **As Maya, I want to revise a section by re-prompting the brief, so that I can iterate without learning Webflow.** *(US-05)*
 6. **As Daniel, I want a retainer tier ($499/mo unlimited briefs) with white-label client domains, so that my CFO sees one line item, not 18.** *(US-06)*
-7. **As Daniel, I want client-domain pages that point at my customer's domain (not Pagewright's), so that the page reads as the client's own.** *(US-07)*
+7. **As Daniel, I want client-domain pages that point at my customer's domain (not DropHouse's), so that the page reads as the client's own.** *(US-07)*
 8. **As Daniel, I want to share a brief preview link with a client before deploy, so that approval cycles compress to one round.** *(US-08)*
-9. **As any buyer, I want to see proof that Pagewright built this very site (footer mark + repo link), so that the claim is auditable.** *(US-09)*
+9. **As any buyer, I want to see proof that DropHouse built this very site (footer mark + repo link), so that the claim is auditable.** *(US-09)*
 10. **As any buyer, I want to pay $99 (Single) or $499/mo (Retainer) via NOWPayments USDT/USDC, so that I don't deal with a card-merchant onboarding.** *(US-10)*
 11. **As any buyer, I want a refund within 7 days if the deployed page doesn't go live or doesn't match my brief, so that the 30-min promise has teeth.** *(US-11)*
 12. **As any buyer, I want my generated repo handed to me (`gh repo transfer`) on cancellation, so that I don't lose my page if I leave.** *(US-12)*
@@ -49,10 +49,10 @@ Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who
 
 ### Scenario 1 — Maya submits brief, page deploys in 28 minutes
 
-**Trigger.** Maya reads HN comments at 09:00 Tuesday. Sees Pagewright footer credit on a peer's launch page.
+**Trigger.** Maya reads HN comments at 09:00 Tuesday. Sees DropHouse footer credit on a peer's launch page.
 
 **Steps.**
-1. Lands on `https://landing-pages-on-demand.prin7r.com`. Reads hero. Self-referential footer "this site was built by Pagewright" closes the deal. *Frontend: `Hero`, `SelfReferentialFooter` on `apps/landing/app/page.tsx`.*
+1. Lands on `https://landing-pages-on-demand.prin7r.com`. Reads hero. Self-referential footer "this site was built by DropHouse" closes the deal. *Frontend: `Hero`, `SelfReferentialFooter` on `apps/landing/app/page.tsx`.*
 2. Clicks **Start brief** (Single tier, $99). 8-field form: name, audience, value prop, CTA, brand-color preference (free text or "surprise me"), tone, custom domain, brand assets (optional).
 3. Pays $99 via NOWPayments. *Backend: `POST /api/checkout/nowpayments` returns invoice; pays USDT.*
 4. IPN fires. *Backend: `POST /api/webhooks/nowpayments` activates brief.*
@@ -70,14 +70,14 @@ Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who
 
 ### Scenario 2 — Daniel buys Retainer, runs 6 client briefs in week 1
 
-**Trigger.** Daniel hears about Pagewright in a Demand Curve Slack.
+**Trigger.** Daniel hears about DropHouse in a Demand Curve Slack.
 
 **Steps.**
 1. Lands. Clicks **Retainer $499/mo unlimited briefs**.
 2. Pays. Onboarding magic-link email arrives. He logs into `app.landing-pages-on-demand.prin7r.com`.
 3. Adds his 6 clients to "Brands" with each client's brand kit (colors, fonts, logos).
 4. Submits 6 briefs over 3 days. Each picks the relevant client brand from the dropdown.
-5. Each brief generates at the client's domain (e.g., `acme.client.com`). DNS prep: Daniel sets a CNAME at his client's DNS pointing to `pagewright-edge.prin7r.com`.
+5. Each brief generates at the client's domain (e.g., `acme.client.com`). DNS prep: Daniel sets a CNAME at his client's DNS pointing to `drophouse-edge.prin7r.com`.
 6. All 6 deploy in <30min each. Daniel forwards the URLs to clients.
 
 **Success criteria.** Retainer dashboard supports multi-brand; brand kits applied to generated pages; CNAME-pointed domains TLS-valid.
@@ -100,7 +100,7 @@ Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who
 
 **Steps.**
 1. Daniel submits brief. After Press pass completes, status = "Awaiting approval."
-2. Daniel clicks **Share preview**. Generates a temporary URL `preview.pagewright.app/<token>`.
+2. Daniel clicks **Share preview**. Generates a temporary URL `preview.drophouse.app/<token>`.
 3. Client opens preview, approves via "Looks good" CTA → `POST /api/briefs/:id/approve` → deploy pass runs.
 4. Production URL active.
 
@@ -127,7 +127,7 @@ Indie hacker collecting tools (free-tier shopper, 1-page only), agency owner who
 3. `POST /api/account/cancel { transferReposTo: 'maya-org' }` → for each generated repo, run `gh api -X POST /repos/prin7r-projects/<slug>/transfer -f new_owner=maya-org`.
 4. Email confirms transfer + lists transferred repos.
 
-**Success criteria.** All her generated repos owned by her org within 24h. Pagewright's deploy stops within 5min of cancellation.
+**Success criteria.** All her generated repos owned by her org within 24h. DropHouse's deploy stops within 5min of cancellation.
 
 ---
 
@@ -155,11 +155,11 @@ Retry with naming suffix. If exhausted, status = "Deploy error" + ops-desk page.
 
 ### EC-6 — Customer asks for multi-page (4+ sections)
 
-Brand voice politely redirects: "Pagewright is single-page. For multi-page, see [partner agency]." No multi-page code path exists.
+Brand voice politely redirects: "DropHouse is single-page. For multi-page, see [partner agency]." No multi-page code path exists.
 
 ### EC-7 — Self-referential footer credit removed by customer
 
-Allowed per terms. Brand still tracks the page via `Pagewright-Generated: true` HTML meta tag for portfolio audit.
+Allowed per terms. Brand still tracks the page via `DropHouse-Generated: true` HTML meta tag for portfolio audit.
 
 ---
 
@@ -167,7 +167,7 @@ Allowed per terms. Brand still tracks the page via `Pagewright-Generated: true` 
 
 ### AS-1 — No multi-page output
 
-Pagewright is single-page only. Implementation must NOT add a multi-page renderer.
+DropHouse is single-page only. Implementation must NOT add a multi-page renderer.
 
 ### AS-2 — No template marketplace
 
@@ -183,7 +183,7 @@ Brand voice forbids. Implementation must promise a deployed URL, not magic.
 
 ### AS-5 — No e-commerce / shopping cart
 
-Pagewright is for marketing pages, not stores.
+DropHouse is for marketing pages, not stores.
 
 ### AS-6 — No "free month" trial
 

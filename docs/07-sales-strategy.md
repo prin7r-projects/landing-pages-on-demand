@@ -2,7 +2,7 @@
 
 ## Motion: PLG with a high-touch concierge tail
 
-- **Self-serve is the front door.** Free brief → live URL on a Pagewright-owned subdomain in 30 minutes. No card required for the first page.
+- **Self-serve is the front door.** Free brief → live URL on a DropHouse-owned subdomain in 30 minutes. No card required for the first page.
 - **PLG paywall trips on the second page** (custom domain) and on team features (multi-brief workspace, brand-kit reuse).
 - **Concierge tier is inbound only.** No outbound sales. The "Talk to a human" CTA on the landing routes to a single calendar; the concierge call is the close.
 
@@ -10,15 +10,15 @@
 
 ### Free — *"One page, our subdomain, no card"*
 - 1 brief / lifetime
-- Output on `<your-slug>.pagewright.so` (placeholder; final domain TBD)
+- Output on `<your-slug>.drophouse.com` (placeholder; final domain TBD)
 - 7-day analytics retention
-- "Built with Pagewright" footer (removable on paid tiers)
+- "Built with DropHouse" footer (removable on paid tiers)
 
 ### Self-serve — $29/mo
 - Unlimited briefs
-- Custom domain (Pagewright handles ACME)
+- Custom domain (DropHouse handles ACME)
 - 90-day analytics retention
-- Edit-via-PR (each brief is a real GitHub repo on the user's account or a Pagewright-owned org)
+- Edit-via-PR (each brief is a real GitHub repo on the user's account or a DropHouse-owned org)
 - One brand-kit slot
 
 ### Team — $99/mo
@@ -48,7 +48,7 @@ The competitor pricing matrix:
 | Freelance designer  | one-page         |   —  | $400–$4,000 / page         |
 | Agency              | one-page         |   —  | $4,000–$15,000 / page      |
 
-Pagewright's $29/mo with unlimited briefs prices like a builder but delivers like a (cheap) freelancer. The team tier ($99) prices like a single Webflow seat but absorbs five.
+DropHouse's $29/mo with unlimited briefs prices like a builder but delivers like a (cheap) freelancer. The team tier ($99) prices like a single Webflow seat but absorbs five.
 
 ## Objection handling
 
@@ -57,9 +57,9 @@ Pagewright's $29/mo with unlimited briefs prices like a builder but delivers lik
 | "AI-generated pages all look the same."            | Show the prin7r-projects portfolio: 20 landings, 20 distinct identities, all by the pipeline. |
 | "I want to control every pixel."                   | Output is a real Next.js + Tailwind repo on your GitHub. Edit anything; redeploy with `git push`. |
 | "What if I want to change the copy later?"         | Two paths: re-brief (regenerate with a tweaked input) or open a PR in your repo. Both supported. |
-| "Why not just use Webflow?"                        | Webflow is a tool; Pagewright is a service. The afternoon you'd spend in Webflow is the price. |
+| "Why not just use Webflow?"                        | Webflow is a tool; DropHouse is a service. The afternoon you'd spend in Webflow is the price. |
 | "Will the page actually rank in search?"           | Output is a Next.js standalone with proper meta, OG, sitemap, structured data. Lighthouse SEO ≥95 baseline. |
-| "$1,200 for concierge feels steep."                | Compare to a designer's deposit. Pagewright's concierge ships the artifact in 48h, not 5 weeks. |
+| "$1,200 for concierge feels steep."                | Compare to a designer's deposit. DropHouse's concierge ships the artifact in 48h, not 5 weeks. |
 
 ## Trial → paid conversion
 

@@ -10,8 +10,8 @@ Three journeys are documented. Each is mapped to (a) trigger, (b) emotional stat
 | Step | Surface         | Emotional state | Action                                                  | Artifact                |
 |------|-----------------|-----------------|---------------------------------------------------------|-------------------------|
 | 1    | HN tab          | curious + skeptical | Clicks link                                             | —                       |
-| 2    | Pagewright landing  | scanning        | Reads hero (10s), spots the "press line" animation, scrolls | —                       |
-| 3    | Pagewright landing  | reassured       | Sees the "all 20 sites you can click below were built by Pagewright" social proof grid | —                       |
+| 2    | DropHouse landing  | scanning        | Reads hero (10s), spots the "press line" animation, scrolls | —                       |
+| 3    | DropHouse landing  | reassured       | Sees the "all 20 sites you can click below were built by DropHouse" social proof grid | —                       |
 | 4    | Brief form      | committed       | Fills in: business name, 1-paragraph description, target audience, primary CTA, brand vibe (3-tag picker) | brief draft             |
 | 5    | Status page     | watchful        | Watches a 4-step progress (Brand → Copy → Press → Deploy) with live LLM excerpts | brief enqueued          |
 | 6    | Email + status  | delighted       | Receives "your page is live at acme.com — preview link, edit-via-PR link, screenshot" | live URL                |
@@ -25,7 +25,7 @@ Three journeys are documented. Each is mapped to (a) trigger, (b) emotional stat
 
 | Step | Surface         | Emotional state | Action                                                  | Artifact                |
 |------|-----------------|-----------------|---------------------------------------------------------|-------------------------|
-| 1    | Pagewright dashboard | impatient   | Logs in, opens the workspace for client A               | brief history list      |
+| 1    | DropHouse dashboard | impatient   | Logs in, opens the workspace for client A               | brief history list      |
 | 2    | New brief modal | efficient       | Selects "Use prior brand kit" (cached from last campaign), changes only the offer + headline | brief draft (forked)    |
 | 3    | Status page     | parallel-tasking | Submits, opens two more tabs, repeats for clients B & C | 3 enqueued briefs       |
 | 4    | Email digest    | confident       | All 3 live within 90 min; one digest with all 3 URLs    | 3 live URLs             |

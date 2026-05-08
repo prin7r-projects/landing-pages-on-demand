@@ -1,6 +1,6 @@
 # 13 — Implementation Plan
 
-> **Hand-off ready.** This plan is for the Phase 2 implementation agent picking up Pagewright after Wave 2's marketing landing has shipped. You will find: (a) deployed marketing landing at `https://landing-pages-on-demand.prin7r.com` (which itself was built by Pagewright's pipeline); (b) brand identity / audience / architecture in `/docs/01..10-*.md`; (c) the user-story contract in `/docs/11-user-stories-and-scenarios.md`; (d) the technical spec in `/docs/12-technical-specification.md`; (e) the existing pipeline that built the 20 Wave 2 sites — that pipeline IS your starting point. The Pagewright product is a productized version of the Wave 2 build pipeline. Wave 3's job: turn the agent-orchestrated pipeline into a self-serve API surface. Read docs 11 + 12 before starting.
+> **Hand-off ready.** This plan is for the Phase 2 implementation agent picking up DropHouse after Wave 2's marketing landing has shipped. You will find: (a) deployed marketing landing at `https://landing-pages-on-demand.prin7r.com` (which itself was built by DropHouse's pipeline); (b) brand identity / audience / architecture in `/docs/01..10-*.md`; (c) the user-story contract in `/docs/11-user-stories-and-scenarios.md`; (d) the technical spec in `/docs/12-technical-specification.md`; (e) the existing pipeline that built the 20 Wave 2 sites — that pipeline IS your starting point. The DropHouse product is a productized version of the Wave 2 build pipeline. Wave 3's job: turn the agent-orchestrated pipeline into a self-serve API surface. Read docs 11 + 12 before starting.
 
 ---
 
@@ -104,7 +104,7 @@
 2. Webhook activates subscription; for Single, sets `briefsRemaining=1`.
 3. `POST /api/admin/subscriptions` for retainer-tier custom invoicing.
 4. Magic-link onboarding email post-payment.
-5. Notion sync: paid subscriptions → `Pagewright Subscriptions` data source.
+5. Notion sync: paid subscriptions → `DropHouse Subscriptions` data source.
 6. Retainer renewal: NOWPayments lacks recurring; email fresh invoice 5d before validUntil.
 
 **Effort.** M — 100-180 tool-uses, 2-3 days.
@@ -150,14 +150,14 @@
 1. CNAME pre-flight: pre-deploy check polls customer's CNAME for 5min. If not pointed, status `awaiting_dns`; emails CNAME instruction.
 2. Resume deploy when CNAME resolves.
 3. Cancel + transfer flow: form lets customer pick GH org for repo transfer; queues `gh repo transfer` for each.
-4. Pagewright credit footer: customer can disable in dashboard; we still track via `Pagewright-Generated: true` HTML meta.
+4. DropHouse credit footer: customer can disable in dashboard; we still track via `DropHouse-Generated: true` HTML meta.
 
 **Effort.** M — 100-180 tool-uses, 1-2 days.
 
 **DoD.**
 - [ ] CNAME mismatch demo: status `awaiting_dns` until customer fixes.
 - [ ] Cancel + transfer test: all generated repos transferred.
-- [ ] Pagewright credit toggle works.
+- [ ] DropHouse credit toggle works.
 - [ ] HTML meta tag present even when footer credit disabled.
 
 ---
