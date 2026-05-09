@@ -1,0 +1,6 @@
+packages:
+  - "apps/*"
+  - "server"
+  - "workers/*"
+  - "templates/*"
+  - "lib"
