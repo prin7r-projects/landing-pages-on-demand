@@ -493,8 +493,10 @@ export default app;
 // Start if run directly
 const isMain = process.argv[1]?.endsWith("index.js");
 if (isMain) {
-  const { serve } = await import("@hono/node-server");
-  const port = parseInt(process.env.PORT || "4000", 10);
-  console.log(`[drophouse] Phase 3 on port ${port}`);
-  serve({ fetch: app.fetch, port });
+  (async () => {
+    const { serve } = await import("@hono/node-server");
+    const port = parseInt(process.env.PORT || "4000", 10);
+    console.log(`[drophouse] Phase 3 on port ${port}`);
+    serve({ fetch: app.fetch, port });
+  })();
 }

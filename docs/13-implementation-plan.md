@@ -115,6 +115,14 @@
  - [x] Notion row created.
  - [x] Renewal invoice email goes out at validUntil-5d.
 
+**Verification (2026-05-09 by Pi DeepSeek, PR-2168):**
+- All 6 tasks implemented on `origin/main` (commit `09522d1` by gima Mimo) + renewal processor added
+- Smoke test passed: `/health`, `/api`, `/api/checkout/nowpayments` (checkout + idempotency), `/api/admin/subscriptions` (auth + create + list), `/api/webhooks/nowpayments` (secret gate)
+- Renewal processor (`server/src/renewal-processor.js`): detects retainer subscriptions 5d before `valid_until`, creates NOWPayments invoice, sends Postmark email, idempotent (skips duplicates within 7d window)
+- Fixed: `isMain` block async bug in `server/src/index.js` (top-level `await` in non-async `if`)
+- Fixed: `@hono/node-server` dependency not installed locally
+- All CORS, auth, validation, and idempotency gates verified
+
 ---
 
 ### Phase 4 — Production hardening

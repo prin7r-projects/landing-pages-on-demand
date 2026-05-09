@@ -55,3 +55,29 @@ services:
       - ./data:/app/data
       - /var/run/docker.sock:/var/run/docker.sock
     command: ["node", "server/src/queue-processor.js"]
+
+  renewal:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: prin7r/drophouse-server:latest
+    container_name: drophouse-renewal
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DB_PATH=/app/data/app.sqlite
+    volumes:
+      - ./data:/app/data
+    # Run renewal check daily at 08:00 UTC via a simple sleep-loop (cron-free)
+    # Each iteration: process renewals, then sleep 24h
+    command:
+      - sh
+      - -c
+      - |
+        while true; do
+          echo "[renewal-cron] Running renewal processor at $$(date -Iseconds)"
+          node server/src/renewal-processor.js
+          echo "[renewal-cron] Sleeping 24h..."
+          sleep 86400
+        done
