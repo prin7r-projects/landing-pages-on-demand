@@ -111,8 +111,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.app
-    image: prin7r/pickupcraft-app:latest
-    container_name: pickupcraft-app
+    image: prin7r/personalindustryscout-app:latest
+    container_name: personalindustryscout-app
     restart: unless-stopped
     env_file:
       - .env
@@ -120,7 +120,7 @@ services:
       - "3001"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.pickupcraft-app.rule=Host(`pickupcraft.prin7r-app.com`)"
-      - "traefik.http.routers.pickupcraft-app.entrypoints=websecure"
-      - "traefik.http.routers.pickupcraft-app.tls.certresolver=letsencrypt"
-      - "traefik.http.services.pickupcraft-app.loadbalancer.server.port=3001"
+      - "traefik.http.routers.personalindustryscout-app.rule=Host(`personalindustryscout.prin7r-app.com`)"
+      - "traefik.http.routers.personalindustryscout-app.entrypoints=websecure"
+      - "traefik.http.routers.personalindustryscout-app.tls.certresolver=letsencrypt"
+      - "traefik.http.services.personalindustryscout-app.loadbalancer.server.port=3001"
