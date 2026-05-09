@@ -137,10 +137,34 @@ db.run(`
   )
 `);
 
+// Phase 3: Payment idempotency + webhook tracking
+db.run(`
+  CREATE TABLE IF NOT EXISTS idempotency_keys (
+    id TEXT PRIMARY KEY,
+    idem_hash TEXT NOT NULL,
+    idem_key TEXT NOT NULL,
+    response_payload TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
+db.run(`
+  CREATE TABLE IF NOT EXISTS payment_events (
+    id TEXT PRIMARY KEY,
+    subscription_id TEXT NOT NULL,
+    payment_status TEXT NOT NULL,
+    nowpayments_invoice_id TEXT,
+    raw_payload TEXT,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
 // Create indexes
 try {
   db.run('CREATE INDEX IF NOT EXISTS idx_briefs_customer_status ON briefs(customer_id, status)');
   db.run('CREATE INDEX IF NOT EXISTS idx_pass_results_run_pass ON pass_results(run_id, pass_kind)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_idem_hash ON idempotency_keys(idem_hash, created_at)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_payment_events_sub_status ON payment_events(subscription_id, payment_status)');
 } catch (e) {
   // Indexes may already exist
 }
