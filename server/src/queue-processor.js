@@ -3,10 +3,11 @@
 // Processes briefs in status: queued → brand → copy → press → deploy → live
 
 import { db, saveDb, allQuery, getQuery, runQuery } from './schema.js';
-import brandPass from '../workers/brand-pass/index.js';
-import copyPass from '../workers/copy-pass/index.js';
-import pressPass from '../workers/press-pass/index.js';
-import deployPass from '../workers/deploy-pass/index.js';
+import brandPass, { BrandCollisionError } from '../../workers/brand-pass/index.js';
+import copyPass from '../../workers/copy-pass/index.js';
+import pressPass from '../../workers/press-pass/index.js';
+import deployPass from '../../workers/deploy-pass/index.js';
+import { sendStatusEmail } from './lib/email.js';
 
 const BRIEF_TIMEOUT = 45 * 60 * 1000; // 45 minutes
 
@@ -43,22 +44,51 @@ async function processBrief(brief) {
   
   try {
     // Step 1: Brand Pass
-    if (!brief.brand_id) {
+    let brandResult = null;
+    let brandId = brief.brand_id;
+    if (!brandId) {
       console.log(`Running brand pass for ${briefId}...`);
       updateBriefStatus(briefId, 'brand');
-      const brandResult = await brandPass(payload);
-      
+      brandResult = await brandPass(payload);
+
+      // Persist brand to brands table for collision detection and reuse
+      const newBrandId = `brand_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      runQuery(`
+        INSERT INTO brands (id, customer_id, name, palette_json, font_pair, logo_svg, created_at)
+        VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+      `, [
+        newBrandId,
+        brief.customer_id,
+        payload.businessName,
+        JSON.stringify(brandResult.palette),
+        brandResult.fontPair,
+        brandResult.logoSvg,
+      ]);
+      // Link brand to brief
+      runQuery(`UPDATE briefs SET brand_id = ? WHERE id = ?`, [newBrandId, briefId]);
+      brandId = newBrandId;
+
       // Save brand result
       runQuery(`
         INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
         VALUES (?, ?, 'brand', 'success', ?, datetime('now'), datetime('now'))
       `, [`pass_${Date.now()}`, runId, JSON.stringify(brandResult)]);
+    } else {
+      // Load existing brand from brief's brand_id
+      const brandRow = getQuery('SELECT * FROM brands WHERE id = ?', [brandId]);
+      if (brandRow) {
+        brandResult = {
+          palette: JSON.parse(brandRow.palette_json || '{}'),
+          fontPair: brandRow.font_pair,
+          logoSvg: brandRow.logo_svg,
+        };
+      }
     }
     
     // Step 2: Copy Pass
     console.log(`Running copy pass for ${briefId}...`);
     updateBriefStatus(briefId, 'copy');
-    const copyResult = await copyPass(payload, payload); // TODO: get brand result
+    const copyResult = await copyPass(brandResult, payload);
     
     runQuery(`
       INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
@@ -68,7 +98,7 @@ async function processBrief(brief) {
     // Step 3: Press Pass
     console.log(`Running press pass for ${briefId}...`);
     updateBriefStatus(briefId, 'press');
-    const pressResult = await pressPass(payload, payload, payload); // TODO: get brand + copy results
+    const pressResult = await pressPass(brandResult, copyResult, payload);
     
     runQuery(`
       INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
@@ -78,7 +108,7 @@ async function processBrief(brief) {
     // Step 4: Deploy Pass
     console.log(`Running deploy pass for ${briefId}...`);
     updateBriefStatus(briefId, 'deploy');
-    const deployResult = await deployPass('/tmp/built-site', payload); // TODO: get actual built path
+    const deployResult = await deployPass(pressResult.builtPath, payload);
     
     // Update brief status to live
     runQuery(`
@@ -92,7 +122,25 @@ async function processBrief(brief) {
       INSERT INTO deployed_sites (id, brief_id, url, gh_repo, drophouse_credit_enabled)
       VALUES (?, ?, ?, ?, 1)
     `, [`site_${Date.now()}`, briefId, deployResult.url, deployResult.ghRepo]);
-    
+
+    // Notify customer that site is live
+    const customerRow = getQuery(`
+      SELECT c.email FROM customers c
+      JOIN briefs b ON b.customer_id = c.id
+      WHERE b.id = ?
+    `, [briefId]);
+
+    if (customerRow?.email) {
+      await sendStatusEmail({
+        to: customerRow.email,
+        briefId,
+        status: 'live',
+        liveUrl: deployResult.url,
+      });
+    } else {
+      console.warn(`[queue-processor] No customer email found for brief ${briefId}; skipping notification`);
+    }
+
     // Update run as completed
     runQuery(`
       UPDATE brief_runs 
@@ -105,7 +153,12 @@ async function processBrief(brief) {
     
   } catch (error) {
     console.error(`Error processing brief ${briefId}:`, error);
-    updateBriefStatus(briefId, 'error');
+    if (error instanceof BrandCollisionError) {
+      console.warn(`[queue-processor] Brand collision for ${briefId} — marking as manual_review`);
+      updateBriefStatus(briefId, 'manual_review');
+    } else {
+      updateBriefStatus(briefId, 'error');
+    }
   }
 }
 

@@ -1,0 +1,31 @@
+# DropHouse API + Queue Processor
+# Shared image for both the Hono API server and the queue processor cron worker.
+
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install pnpm (needed by press-pass worker)
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
+# Copy server dependencies first for layer caching
+COPY server/package.json ./server/package.json
+RUN cd server && pnpm install
+
+# Copy source code
+COPY server/src/ ./server/src/
+COPY workers/ ./workers/
+COPY lib/ ./lib/
+COPY data/ ./data/
+COPY templates/ ./templates/
+
+# Ensure data directory exists and is writable
+RUN mkdir -p /app/data && chmod 777 /app/data
+
+ENV NODE_ENV=production
+ENV DB_PATH=/app/data/app.sqlite
+
+EXPOSE 4000
+
+# Default to API server; override CMD for queue worker
+CMD ["node", "server/src/index.js"]

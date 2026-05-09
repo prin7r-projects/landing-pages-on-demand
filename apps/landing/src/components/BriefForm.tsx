@@ -16,6 +16,7 @@ export function BriefForm() {
     const data = new FormData(e.currentTarget);
     const payload = {
       businessName: data.get("business_name") as string,
+      email: data.get("email") as string,
       audience: data.get("description") as string,
       valueProp: (data.get("description") as string).split(".")[0] || "",
       primaryCta: data.get("cta") as string,
@@ -59,7 +60,7 @@ export function BriefForm() {
           You can check the status at:
         </p>
         <a
-          href={`/brief/${briefId}`}
+          href={`/briefs/${briefId}`}
           className="mt-4 inline-flex items-center gap-2 bg-ink px-6 py-3 font-display text-[14px] uppercase tracking-wider text-paper transition-opacity hover:opacity-90"
         >
           Check Status

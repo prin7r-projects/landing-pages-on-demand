@@ -1,12 +1,21 @@
 import { Hono } from 'hono';
+import { cors } from 'hono/cors';
 import { db, saveDb, runQuery, allQuery, getQuery } from './schema.js';
 import { z } from 'zod';
 
 const app = new Hono();
 
+// CORS — allow same-origin and configured frontends
+app.use(cors({
+  origin: process.env.CORS_ORIGIN ? process.env.CORS_ORIGIN.split(',') : '*',
+  allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowHeaders: ['Content-Type', 'Authorization'],
+}));
+
 // Validation schemas
 const briefSchema = z.object({
   businessName: z.string().min(1),
+  email: z.string().email(),
   audience: z.string().min(1),
   valueProp: z.string().min(1),
   primaryCta: z.string().min(1),
@@ -35,13 +44,24 @@ app.post('/api/briefs', async (c) => {
     const body = await c.req.json();
     const validated = briefSchema.parse(body);
 
+    // Create or find customer by email
+    let customer = getQuery('SELECT * FROM customers WHERE email = ?', [validated.email]);
+    if (!customer) {
+      const customerId = `cust_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      runQuery(`
+        INSERT INTO customers (id, email, created_at)
+        VALUES (?, ?, datetime('now'))
+      `, [customerId, validated.email]);
+      customer = { id: customerId };
+    }
+
     const briefId = `brief_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
     const estimatedCompleteAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
 
     runQuery(`
       INSERT INTO briefs (id, customer_id, brand_id, payload, custom_domain, status)
       VALUES (?, ?, ?, ?, ?, 'queued')
-    `, [briefId, null, validated.brandId || null, JSON.stringify(validated), validated.customDomain]);
+    `, [briefId, customer.id, validated.brandId || null, JSON.stringify(validated), validated.customDomain]);
     saveDb();
 
     return c.json({

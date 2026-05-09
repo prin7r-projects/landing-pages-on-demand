@@ -16,3 +16,42 @@ services:
       - "traefik.http.routers.landing-pages-on-demand.entrypoints=websecure"
       - "traefik.http.routers.landing-pages-on-demand.tls.certresolver=letsencrypt"
       - "traefik.http.services.landing-pages-on-demand.loadbalancer.server.port=3000"
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: prin7r/drophouse-server:latest
+    container_name: drophouse-api
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - PORT=4000
+      - DB_PATH=/app/data/app.sqlite
+    volumes:
+      - ./data:/app/data
+    expose:
+      - "4000"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.drophouse-api.rule=Host(`api.drophouse.com`) || (Host(`landing-pages-on-demand.prin7r.com`) && PathPrefix(`/api`))"
+      - "traefik.http.routers.drophouse-api.entrypoints=websecure"
+      - "traefik.http.routers.drophouse-api.tls.certresolver=letsencrypt"
+      - "traefik.http.services.drophouse-api.loadbalancer.server.port=4000"
+
+  queue:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: prin7r/drophouse-server:latest
+    container_name: drophouse-queue
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DB_PATH=/app/data/app.sqlite
+    volumes:
+      - ./data:/app/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: ["node", "server/src/queue-processor.js"]
