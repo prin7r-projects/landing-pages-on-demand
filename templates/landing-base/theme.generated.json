@@ -1,0 +1,32 @@
+{
+  "palette": {
+    "primary": "#06b6d4",
+    "secondary": "#1e293b",
+    "accent": "#f59e0b"
+  },
+  "fontPair": "Inter + Playfair",
+  "logoSvg": "<svg width=\"40\" height=\"40\" viewBox=\"0 0 40 40\" xmlns=\"http://www.w3.org/2000/svg\"><circle cx=\"20\" cy=\"20\" r=\"18\" fill=\"#06b6d4\"/></svg>",
+  "copy": {
+    "hero": {
+      "headline": "Your Headline Here",
+      "subhead": "A compelling subheadline that explains the value proposition."
+    },
+    "features": [
+      { "title": "Feature One", "description": "Brief description of this feature and why it matters." },
+      { "title": "Feature Two", "description": "Another key benefit that addresses a customer pain point." },
+      { "title": "Feature Three", "description": "A third reason to choose this product or service." }
+    ],
+    "socialProof": {
+      "quote": "This product changed how we work. Highly recommend.",
+      "author": "Alex Morgan",
+      "role": "Founder, AcmeCo"
+    },
+    "cta": {
+      "text": "Get Started",
+      "url": "#"
+    },
+    "footer": {
+      "copyright": "© 2026 Your Company. All rights reserved."
+    }
+  }
+}
