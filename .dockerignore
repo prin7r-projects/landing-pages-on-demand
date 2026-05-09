@@ -1,0 +1,20 @@
+node_modules
+.git
+pnpm-store
+.next
+out
+dist
+build
+.turbo
+*.log
+.DS_Store
+.idea
+.vscode
+
+# OpenSaaS reference fork (not needed in any Docker image)
+apps/app/opensaas-ref
+apps/app/.wasp
+apps/app/.wasp-cache
+apps/app/.env.server
+apps/app/.env.client
+apps/app/migrations
