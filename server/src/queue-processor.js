@@ -44,9 +44,21 @@ async function processBrief(brief) {
   
   try {
     // Step 1: Brand Pass
-    let brandResult = null;
+    let brandResult;
     let brandId = brief.brand_id;
-    if (!brandId) {
+    if (brandId) {
+      const existingBrand = getQuery('SELECT palette_json, font_pair, logo_svg FROM brands WHERE id = ?', [brandId]);
+      if (existingBrand) {
+        brandResult = {
+          palette: JSON.parse(existingBrand.palette_json || '{}'),
+          fontPair: existingBrand.font_pair || '',
+          logoSvg: existingBrand.logo_svg || '',
+        };
+        console.log(`Reusing existing brand ${brandId} for ${briefId}`);
+      }
+    }
+    
+    if (!brandResult) {
       console.log(`Running brand pass for ${briefId}...`);
       updateBriefStatus(briefId, 'brand');
       brandResult = await brandPass(payload);
@@ -64,26 +76,14 @@ async function processBrief(brief) {
         brandResult.fontPair,
         brandResult.logoSvg,
       ]);
-      // Link brand to brief
       runQuery(`UPDATE briefs SET brand_id = ? WHERE id = ?`, [newBrandId, briefId]);
       brandId = newBrandId;
-
-      // Save brand result
-      runQuery(`
-        INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
-        VALUES (?, ?, 'brand', 'success', ?, datetime('now'), datetime('now'))
-      `, [`pass_${Date.now()}`, runId, JSON.stringify(brandResult)]);
-    } else {
-      // Load existing brand from brief's brand_id
-      const brandRow = getQuery('SELECT * FROM brands WHERE id = ?', [brandId]);
-      if (brandRow) {
-        brandResult = {
-          palette: JSON.parse(brandRow.palette_json || '{}'),
-          fontPair: brandRow.font_pair,
-          logoSvg: brandRow.logo_svg,
-        };
-      }
     }
+
+    runQuery(`
+      INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
+      VALUES (?, ?, 'brand', 'success', ?, datetime('now'), datetime('now'))
+    `, [`pass_${Date.now()}`, runId, JSON.stringify(brandResult)]);
     
     // Step 2: Copy Pass
     console.log(`Running copy pass for ${briefId}...`);
