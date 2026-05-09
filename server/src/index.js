@@ -250,7 +250,7 @@ app.post("/api/briefs/:id/approve", (c) => {
 // Phase 2: Digest builder
 // =============================================================================
 
-function buildDigest(customerId, { topN = 5, since = null } = {}) {
+export function buildDigest(customerId, { topN = 5, since = null } = {}) {
   const customer = getQuery("SELECT * FROM customers WHERE id = ?", [customerId]);
   if (!customer) return null;
 

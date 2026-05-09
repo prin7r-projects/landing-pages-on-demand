@@ -82,6 +82,31 @@ services:
           sleep 86400
         done
 
+  digest:
+    build:
+      context: .
+      dockerfile: Dockerfile.server
+    image: prin7r/drophouse-server:latest
+    container_name: drophouse-digest
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - DB_PATH=/app/data/app.sqlite
+    volumes:
+      - ./data:/app/data
+    # Run digest builder daily at 06:00 UTC via sleep-loop
+    command:
+      - sh
+      - -c
+      - |
+        while true; do
+          echo "[digest-cron] Running digest builder at $$(date -Iseconds)"
+          node server/src/digest-processor.js
+          echo "[digest-cron] Sleeping 24h..."
+          sleep 86400
+        done
+
   app:
     build:
       context: .
