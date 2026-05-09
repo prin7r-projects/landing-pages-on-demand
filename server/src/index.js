@@ -164,7 +164,7 @@ app.post("/api/briefs", async (c) => {
     // Create or find customer by email
     let customer = getQuery("SELECT * FROM customers WHERE email = ?", [validated.email]);
     if (!customer) {
-      const customerId = `cust_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      const customerId = `cust_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       runQuery(
         `INSERT INTO customers (id, email, created_at) VALUES (?, ?, datetime('now'))`,
         [customerId, validated.email],
@@ -172,7 +172,7 @@ app.post("/api/briefs", async (c) => {
       customer = { id: customerId };
     }
 
-    const briefId = `brief_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const briefId = `brief_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const estimatedCompleteAt = new Date(Date.now() + 30 * 60 * 1000).toISOString();
 
     runQuery(
@@ -213,7 +213,7 @@ app.post("/api/briefs/:id/revise", async (c) => {
     const brief = getQuery("SELECT * FROM briefs WHERE id = ?", [briefId]);
     if (!brief) return c.json({ error: "Brief not found" }, 404);
 
-    const runId = `run_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     runQuery("INSERT INTO brief_runs (id, brief_id, started_at) VALUES (?, ?, datetime('now'))", [runId, briefId]);
 
     if (validated.patches.brand) {
@@ -244,6 +244,121 @@ app.post("/api/briefs/:id/approve", (c) => {
   runQuery(`UPDATE briefs SET status = 'deploy' WHERE id = ?`, [briefId]);
   saveDb();
   return c.json({ message: "Deploy triggered" });
+});
+
+// =============================================================================
+// Phase 2: Digest builder
+// =============================================================================
+
+function buildDigest(customerId, { topN = 5, since = null } = {}) {
+  const customer = getQuery("SELECT * FROM customers WHERE id = ?", [customerId]);
+  if (!customer) return null;
+
+  const briefs = allQuery(
+    `SELECT b.*, ds.url as live_url, ds.gh_repo
+     FROM briefs b
+     LEFT JOIN deployed_sites ds ON ds.brief_id = b.id
+     WHERE b.customer_id = ?
+     ORDER BY b.created_at DESC`,
+    [customerId],
+  );
+
+  const brands = allQuery(
+    "SELECT * FROM brands WHERE customer_id = ? ORDER BY created_at DESC",
+    [customerId],
+  );
+
+  // Group briefs by tone (interest topic)
+  const topics = {};
+  for (const brief of briefs) {
+    const payload = JSON.parse(brief.payload || "{}");
+    const tone = payload.tone || "general";
+    if (!topics[tone]) {
+      topics[tone] = { tone, briefs: [] };
+    }
+    topics[tone].briefs.push({
+      id: brief.id,
+      businessName: payload.businessName || "Untitled",
+      status: brief.status,
+      customDomain: brief.custom_domain,
+      liveUrl: brief.live_url || null,
+      audience: payload.audience || "",
+      valueProp: payload.valueProp || "",
+      createdAt: brief.created_at,
+      liveAt: brief.live_at || null,
+    });
+  }
+
+  // Top-N per topic
+  const topicSummaries = Object.values(topics).map((topic) => ({
+    tone: topic.tone,
+    count: topic.briefs.length,
+    topBriefs: topic.briefs.slice(0, topN),
+  }));
+
+  const digest = {
+    customerId,
+    customerEmail: customer.email,
+    generatedAt: new Date().toISOString(),
+    totalBriefs: briefs.length,
+    totalBrands: brands.length,
+    briefsByStatus: briefs.reduce((acc, b) => {
+      acc[b.status] = (acc[b.status] || 0) + 1;
+      return acc;
+    }, {}),
+    topics: topicSummaries,
+    recentBriefs: briefs.slice(0, topN).map((b) => {
+      const p = JSON.parse(b.payload || "{}");
+      return {
+        id: b.id,
+        businessName: p.businessName || "Untitled",
+        status: b.status,
+        tone: p.tone || "general",
+        createdAt: b.created_at,
+      };
+    }),
+    brands: brands.slice(0, topN).map((b) => ({
+      id: b.id,
+      name: b.name,
+      fontPair: b.font_pair,
+      createdAt: b.created_at,
+    })),
+  };
+
+  return digest;
+}
+
+// GET /api/digests/:customerId — latest digest; auto-builds if none or stale
+app.get("/api/digests/:customerId", (c) => {
+  const customerId = c.req.param("customerId");
+  const customer = getQuery("SELECT 1 FROM customers WHERE id = ?", [customerId]);
+  if (!customer) return c.json({ error: "Customer not found" }, 404);
+
+  // Return latest stored digest if within 6 hours
+  const latest = getQuery(
+    "SELECT digest_json FROM digests WHERE customer_id = ? ORDER BY sent_at DESC LIMIT 1",
+    [customerId],
+  );
+  if (latest) {
+    const existing = JSON.parse(latest.digest_json);
+    const age = Date.now() - new Date(existing.generatedAt).getTime();
+    if (age < 6 * 3600000) {
+      return c.json(existing);
+    }
+  }
+
+  // Build fresh digest
+  const digest = buildDigest(customerId);
+  if (!digest) return c.json({ error: "Customer not found" }, 404);
+
+  // Store it
+  runQuery(
+    "INSERT INTO digests (id, customer_id, digest_json, sent_at) VALUES (?, ?, ?, datetime('now'))",
+    [`dgst_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, customerId, JSON.stringify(digest)],
+  );
+  saveDb();
+
+  return c.json(digest);
 });
 
 // =============================================================================
@@ -279,13 +394,13 @@ app.post("/api/checkout/nowpayments", async (c) => {
           runQuery("UPDATE customers SET agency_partner_code = ? WHERE id = ?", [referralCode, customerId]);
         }
       } else {
-        customerId = `cust_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+        customerId = `cust_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
         runQuery("INSERT INTO customers (id, email, agency_partner_code) VALUES (?,?,?)", [customerId, email, referralCode]);
       }
     }
 
     // Create subscription (pending)
-    const subId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const subId = `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     runQuery("INSERT INTO subscriptions (id, customer_id, tier, status, briefs_remaining) VALUES (?,?,?,'pending',?)",
       [subId, customerId, v.tier, v.tier === "single" ? 1 : null]);
     saveDb();
@@ -403,11 +518,11 @@ app.post("/api/admin/subscriptions", async (c) => {
       customerId = ex.id;
       if (v.referralCode) runQuery("UPDATE customers SET agency_partner_code = ? WHERE id = ?", [v.referralCode, customerId]);
     } else {
-      customerId = `cust_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      customerId = `cust_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       runQuery("INSERT INTO customers (id, email, agency_partner_code) VALUES (?,?,?)", [customerId, email, v.referralCode ?? null]);
     }
 
-    const subId = `sub_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+    const subId = `sub_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     runQuery(
       "INSERT INTO subscriptions (id, customer_id, tier, status, briefs_remaining, valid_until) VALUES (?,?,?,'active',?,datetime('now','+1 month'))",
       [subId, customerId, v.tier, v.tier === "single" ? 1 : null],

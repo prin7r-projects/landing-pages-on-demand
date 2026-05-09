@@ -159,12 +159,24 @@ db.run(`
   )
 `);
 
+// Phase 2: Digest tracking
+db.run(`
+  CREATE TABLE IF NOT EXISTS digests (
+    id TEXT PRIMARY KEY,
+    customer_id TEXT REFERENCES customers(id),
+    digest_json TEXT NOT NULL,
+    sent_at TEXT DEFAULT (datetime('now')),
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
 // Create indexes
 try {
   db.run('CREATE INDEX IF NOT EXISTS idx_briefs_customer_status ON briefs(customer_id, status)');
   db.run('CREATE INDEX IF NOT EXISTS idx_pass_results_run_pass ON pass_results(run_id, pass_kind)');
   db.run('CREATE INDEX IF NOT EXISTS idx_idem_hash ON idempotency_keys(idem_hash, created_at)');
   db.run('CREATE INDEX IF NOT EXISTS idx_payment_events_sub_status ON payment_events(subscription_id, payment_status)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_digests_customer_sent ON digests(customer_id, sent_at)');
 } catch (e) {
   // Indexes may already exist
 }

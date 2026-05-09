@@ -36,7 +36,7 @@ async function processBrief(brief) {
   console.log(`Processing brief ${briefId}...`);
   
   // Create a new run
-  const runId = `run_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+  const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
   runQuery(`
     INSERT INTO brief_runs (id, brief_id, started_at)
     VALUES (?, ?, datetime('now'))
@@ -64,7 +64,7 @@ async function processBrief(brief) {
       brandResult = await brandPass(payload);
 
       // Persist brand to brands table for collision detection and reuse
-      const newBrandId = `brand_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`;
+      const newBrandId = `brand_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
       runQuery(`
         INSERT INTO brands (id, customer_id, name, palette_json, font_pair, logo_svg, created_at)
         VALUES (?, ?, ?, ?, ?, ?, datetime('now'))

@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
-import { font-mono } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 
-const mono = font-mono({ subsets: ["latin"], weight: "400" });
+const mono = JetBrains_Mono({ subsets: ["latin"], weight: "400" });
 
 export default async function BriefStatusPage({
   params,

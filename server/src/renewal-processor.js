@@ -86,7 +86,7 @@ async function processRenewals() {
     runQuery(
       `INSERT INTO renewal_invoices (id, subscription_id, invoice_url, invoice_id, created_at)
        VALUES (?, ?, ?, ?, datetime('now'))`,
-      [`rnwl_${Date.now()}_${Math.random().toString(36).substr(2, 4)}`, subId, invoiceUrl, invoiceId],
+      [`rnwl_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`, subId, invoiceUrl, invoiceId],
     );
 
     // Send renewal email via Postmark
