@@ -86,8 +86,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.app
-    image: prin7r/drophouse-app:latest
-    container_name: drophouse-app
+    image: prin7r/saltrun-app:latest
+    container_name: saltrun-app
     restart: unless-stopped
     env_file:
       - .env
@@ -95,7 +95,7 @@ services:
       - "3001"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.drophouse-app.rule=Host(`drophouse.prin7r-app.com`)"
-      - "traefik.http.routers.drophouse-app.entrypoints=websecure"
-      - "traefik.http.routers.drophouse-app.tls.certresolver=letsencrypt"
-      - "traefik.http.services.drophouse-app.loadbalancer.server.port=3001"
+      - "traefik.http.routers.saltrun-app.rule=Host(`saltrun.prin7r-app.com`)"
+      - "traefik.http.routers.saltrun-app.entrypoints=websecure"
+      - "traefik.http.routers.saltrun-app.tls.certresolver=letsencrypt"
+      - "traefik.http.services.saltrun-app.loadbalancer.server.port=3001"
