@@ -16,6 +16,10 @@ services:
       - "traefik.http.routers.landing-pages-on-demand.entrypoints=websecure"
       - "traefik.http.routers.landing-pages-on-demand.tls.certresolver=letsencrypt"
       - "traefik.http.services.landing-pages-on-demand.loadbalancer.server.port=3000"
+      - "traefik.http.middlewares.landing-ratelimit.ratelimit.average=60"
+      - "traefik.http.middlewares.landing-ratelimit.ratelimit.period=1m"
+      - "traefik.http.middlewares.landing-ratelimit.ratelimit.burst=20"
+      - "traefik.http.routers.landing-pages-on-demand.middlewares=landing-ratelimit@docker"
 
   api:
     build:
@@ -39,6 +43,10 @@ services:
       - "traefik.http.routers.drophouse-api.entrypoints=websecure"
       - "traefik.http.routers.drophouse-api.tls.certresolver=letsencrypt"
       - "traefik.http.services.drophouse-api.loadbalancer.server.port=4000"
+      - "traefik.http.middlewares.api-ratelimit.ratelimit.average=120"
+      - "traefik.http.middlewares.api-ratelimit.ratelimit.period=1m"
+      - "traefik.http.middlewares.api-ratelimit.ratelimit.burst=30"
+      - "traefik.http.routers.drophouse-api.middlewares=api-ratelimit@docker"
 
   queue:
     build:
