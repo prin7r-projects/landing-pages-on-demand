@@ -119,8 +119,8 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.app
-    image: prin7r/personalindustryscout-app:latest
-    container_name: personalindustryscout-app
+    image: prin7r/drophouse-app:latest
+    container_name: drophouse-app
     restart: unless-stopped
     env_file:
       - .env
@@ -128,7 +128,10 @@ services:
       - "3001"
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.personalindustryscout-app.rule=Host(`personalindustryscout.prin7r-app.com`)"
-      - "traefik.http.routers.personalindustryscout-app.entrypoints=websecure"
-      - "traefik.http.routers.personalindustryscout-app.tls.certresolver=letsencrypt"
-      - "traefik.http.services.personalindustryscout-app.loadbalancer.server.port=3001"
+      - "traefik.http.routers.drophouse-app.rule=Host(`landing-pages-on-demand.prin7r.com`) && PathPrefix(`/app`)"
+      - "traefik.http.routers.drophouse-app.entrypoints=websecure"
+      - "traefik.http.routers.drophouse-app.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.drophouse-app.priority=100"
+      - "traefik.http.routers.drophouse-app.middlewares=drophouse-app-strip@docker"
+      - "traefik.http.middlewares.drophouse-app-strip.stripprefix.prefixes=/app"
+      - "traefik.http.services.drophouse-app.loadbalancer.server.port=3001"
