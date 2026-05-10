@@ -98,7 +98,7 @@ db.run(`
     brand_id TEXT REFERENCES brands(id),
     payload TEXT NOT NULL,
     custom_domain TEXT NOT NULL,
-    status TEXT DEFAULT 'queued' CHECK(status IN ('queued', 'brand', 'copy', 'press', 'deploy', 'live', 'error', 'awaiting_dns', 'awaiting_approval', 'manual_review')),
+    status TEXT DEFAULT 'queued' CHECK(status IN ('queued', 'brand', 'copy', 'press', 'deploy', 'live', 'error', 'awaiting_dns', 'awaiting_tls', 'awaiting_approval', 'manual_review')),
     created_at TEXT DEFAULT (datetime('now')),
     live_at TEXT
   )

@@ -10,8 +10,13 @@ import deployPass from '../../workers/deploy-pass/index.js';
 import { sendStatusEmail } from './lib/email.js';
 
 const BRIEF_TIMEOUT = 45 * 60 * 1000; // 45 minutes
+const defaultPasses = { brandPass, copyPass, pressPass, deployPass };
 
-async function processQueue() {
+function makeId(prefix) {
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+async function processQueue(passes = defaultPasses) {
   console.log('Checking queue...');
   
   // Get queued briefs ordered by created_at
@@ -25,18 +30,18 @@ async function processQueue() {
   console.log(`Found ${queuedBriefs.length} queued brief(s)`);
   
   for (const brief of queuedBriefs) {
-    await processBrief(brief);
+    await processBrief(brief, passes);
   }
 }
 
-async function processBrief(brief) {
+async function processBrief(brief, passes = defaultPasses) {
   const briefId = brief.id;
   const payload = JSON.parse(brief.payload);
   
   console.log(`Processing brief ${briefId}...`);
   
   // Create a new run
-  const runId = `run_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  const runId = makeId('run');
   runQuery(`
     INSERT INTO brief_runs (id, brief_id, started_at)
     VALUES (?, ?, datetime('now'))
@@ -61,10 +66,10 @@ async function processBrief(brief) {
     if (!brandResult) {
       console.log(`Running brand pass for ${briefId}...`);
       updateBriefStatus(briefId, 'brand');
-      brandResult = await brandPass(payload);
+      brandResult = await passes.brandPass(payload);
 
       // Persist brand to brands table for collision detection and reuse
-      const newBrandId = `brand_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      const newBrandId = makeId('brand');
       runQuery(`
         INSERT INTO brands (id, customer_id, name, palette_json, font_pair, logo_svg, created_at)
         VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
@@ -83,47 +88,71 @@ async function processBrief(brief) {
     runQuery(`
       INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
       VALUES (?, ?, 'brand', 'success', ?, datetime('now'), datetime('now'))
-    `, [`pass_${Date.now()}`, runId, JSON.stringify(brandResult)]);
+    `, [makeId('pass'), runId, JSON.stringify(brandResult)]);
     
     // Step 2: Copy Pass
     console.log(`Running copy pass for ${briefId}...`);
     updateBriefStatus(briefId, 'copy');
-    const copyResult = await copyPass(brandResult, payload);
+    const copyResult = await passes.copyPass(brandResult, payload);
     
     runQuery(`
       INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
       VALUES (?, ?, 'copy', 'success', ?, datetime('now'), datetime('now'))
-    `, [`pass_${Date.now()}`, runId, JSON.stringify(copyResult)]);
+    `, [makeId('pass'), runId, JSON.stringify(copyResult)]);
     
     // Step 3: Press Pass
     console.log(`Running press pass for ${briefId}...`);
     updateBriefStatus(briefId, 'press');
-    const pressResult = await pressPass(brandResult, copyResult, payload);
+    const pressResult = await passes.pressPass(brandResult, copyResult, payload);
     
     runQuery(`
       INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
       VALUES (?, ?, 'press', 'success', ?, datetime('now'), datetime('now'))
-    `, [`pass_${Date.now()}`, runId, JSON.stringify(pressResult)]);
+    `, [makeId('pass'), runId, JSON.stringify(pressResult)]);
     
     // Step 4: Deploy Pass
     console.log(`Running deploy pass for ${briefId}...`);
     updateBriefStatus(briefId, 'deploy');
-    const deployResult = await deployPass(pressResult.builtPath, payload);
-    
-    // Update brief status to live
+    const deployResult = await passes.deployPass(pressResult.builtPath, payload);
+
+    // Handle deploy result: failure, live, and partial-success states.
+    if (!deployResult.success) {
+      runQuery(`
+        INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, error_message, started_at, completed_at)
+        VALUES (?, ?, 'deploy', 'error', ?, ?, datetime('now'), datetime('now'))
+      `, [makeId('pass'), runId, JSON.stringify(deployResult), deployResult.error || 'Deploy failed']);
+
+      updateBriefStatus(briefId, 'error');
+      throw new Error(deployResult.error || 'Deploy failed');
+    }
+
+    // Save deploy pass_result
     runQuery(`
-      UPDATE briefs 
-      SET status = 'live', live_at = datetime('now')
-      WHERE id = ?
-    `, [briefId]);
+      INSERT INTO pass_results (id, run_id, pass_kind, status, output_json, started_at, completed_at)
+      VALUES (?, ?, 'deploy', 'success', ?, datetime('now'), datetime('now'))
+    `, [makeId('pass'), runId, JSON.stringify(deployResult)]);
+
+    const deployStatus = deployResult.status || 'live';
+
+    if (deployStatus === 'live') {
+      // Update brief status to live
+      runQuery(`
+        UPDATE briefs
+        SET status = 'live', live_at = datetime('now')
+        WHERE id = ?
+      `, [briefId]);
+    } else {
+      // Partial success: awaiting DNS or TLS.
+      updateBriefStatus(briefId, deployStatus);
+    }
     
-    // Save deployed site
+    // Save deployed site (url and gh_repo are set even in partial-success states)
     runQuery(`
       INSERT INTO deployed_sites (id, brief_id, url, gh_repo, drophouse_credit_enabled)
       VALUES (?, ?, ?, ?, 1)
-    `, [`site_${Date.now()}`, briefId, deployResult.url, deployResult.ghRepo]);
+    `, [makeId('site'), briefId, deployResult.url, deployResult.ghRepo]);
 
-    // Notify customer that site is live
+    // Notify customer
     const customerRow = getQuery(`
       SELECT c.email FROM customers c
       JOIN briefs b ON b.customer_id = c.id
@@ -134,8 +163,9 @@ async function processBrief(brief) {
       await sendStatusEmail({
         to: customerRow.email,
         briefId,
-        status: 'live',
+        status: deployStatus,
         liveUrl: deployResult.url,
+        note: deployResult.note || null,
       });
     } else {
       console.warn(`[queue-processor] No customer email found for brief ${briefId}; skipping notification`);
@@ -203,4 +233,4 @@ if (process.argv[1]?.endsWith('queue-processor.js')) {
   main().catch(console.error);
 }
 
-export { processQueue, checkStuckBriefs };
+export { processQueue, processBrief, checkStuckBriefs };

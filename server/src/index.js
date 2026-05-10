@@ -146,6 +146,13 @@ function idemHash(email, tier) {
     .digest("hex");
 }
 
+function briefIdemHash(brief) {
+  return crypto
+    .createHash("sha256")
+    .update(`${brief.email}|${brief.businessName}|${brief.customDomain}|${brief.audience}|${brief.valueProp}|${Math.floor(Date.now() / 3600000)}`)
+    .digest("hex");
+}
+
 async function sendOnboardingEmail({ toEmail, subscriptionId, tier, dashboardUrl }) {
   const token = process.env.POSTMARK_SERVER_TOKEN;
   if (!token) return { sent: false, reason: "not_configured" };
@@ -223,6 +230,17 @@ app.post("/api/briefs", async (c) => {
       return c.json({ error: "Brief rejected: possible prompt injection", detail: injection }, 400);
     }
 
+    // Idempotency check: deduplicate identical briefs within the same hour.
+    const idem = briefIdemHash(validated);
+    const existing = getQuery(
+      "SELECT response_payload FROM idempotency_keys WHERE idem_hash = ? AND created_at > datetime('now','-1 hour') LIMIT 1",
+      [idem],
+    );
+    if (existing) {
+      console.log(`[briefs] idempotent_replay ${validated.email} ${validated.businessName}`);
+      return c.json(JSON.parse(existing.response_payload), 200);
+    }
+
     // Create or find customer by email
     let customer = getQuery("SELECT * FROM customers WHERE email = ?", [validated.email]);
     if (!customer) {
@@ -243,7 +261,18 @@ app.post("/api/briefs", async (c) => {
     );
     saveDb();
 
-    return c.json({ briefId, statusUrl: `/api/briefs/${briefId}`, estimatedCompleteAt }, 201);
+    const response = { briefId, statusUrl: `/api/briefs/${briefId}`, estimatedCompleteAt };
+
+    // Cache idempotency response.
+    try {
+      runQuery(
+        "INSERT INTO idempotency_keys (id, idem_hash, idem_key, response_payload) VALUES (?, ?, ?, ?)",
+        [`idem_${Date.now()}`, idem, `${validated.email}|${validated.businessName}`, JSON.stringify(response)],
+      );
+      saveDb();
+    } catch { /* non-fatal — duplicate idem_hash wins */ }
+
+    return c.json(response, 201);
   } catch (error) {
     return c.json({ error: error.message }, 400);
   }

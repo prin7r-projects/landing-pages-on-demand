@@ -25,6 +25,7 @@ const DRY_RUN = process.env.DH_DEPLOY_DRY_RUN === '1';
 const SITES_ROOT = '/opt/drophouse/sites';
 const GITHUB_ORG = 'prin7r-projects';
 const BASE_DOMAIN = 'landing-pages-on-demand.prin7r.com';
+const DEPLOY_TARGET_IP = process.env.DH_DEPLOY_TARGET_IP || '144.91.94.91';
 const DNS_POLL_MAX_MS = parseInt(process.env.DH_DNS_POLL_MAX_MS || '300000', 10); // 5 min
 const TLS_VERIFY_TIMEOUT_MS = parseInt(process.env.DH_TLS_VERIFY_TIMEOUT_MS || '15000', 10);
 
@@ -124,6 +125,7 @@ export default async function deployPass(builtPath, briefPayload) {
   try {
     // Upload built site files
     await scpUpload(`${builtPath}/.`, `${siteDir}/site/`, { timeout: 60_000 });
+    await sshExec(`chmod -R a+rX ${siteDir}/site`, { timeout: 15_000 });
     console.log(`[deploy-pass] Site files uploaded.`);
   } catch (err) {
     return { success: false, url, ghRepo, error: `SCP upload failed: ${err.message}` };
@@ -184,13 +186,21 @@ export default async function deployPass(builtPath, briefPayload) {
     } else {
       // Subdomain under our control — shorter poll
       try {
-        await pollDns(domain, {
+        const dnsResult = await pollDns(domain, {
           maxWaitMs: Math.min(DNS_POLL_MAX_MS, 60_000),
           intervalMs: 10_000,
+          expectedIp: DEPLOY_TARGET_IP,
         });
-        console.log(`[deploy-pass] DNS resolved for ${domain}`);
+        console.log(`[deploy-pass] DNS resolved for ${domain}: ${JSON.stringify(dnsResult)}`);
       } catch {
-        console.log(`[deploy-pass] DNS not yet resolved, but returning success (subdomain should propagate)`);
+        console.log(`[deploy-pass] DNS for ${domain} does not point to ${DEPLOY_TARGET_IP}`);
+        return {
+          success: true,
+          url,
+          ghRepo,
+          status: 'awaiting_dns',
+          note: `Point ${domain} to ${DEPLOY_TARGET_IP}.`,
+        };
       }
     }
 
@@ -198,6 +208,15 @@ export default async function deployPass(builtPath, briefPayload) {
     try {
       const tlsResult = await verifyTls(domain, 443, TLS_VERIFY_TIMEOUT_MS);
       console.log(`[deploy-pass] TLS verified: subject=${tlsResult.subject?.CN}, authorized=${tlsResult.authorized}`);
+      if (!tlsResult.authorized) {
+        return {
+          success: true,
+          url,
+          ghRepo,
+          status: 'awaiting_tls',
+          note: `TLS certificate is not trusted yet. Traefik returned ${tlsResult.subject?.CN || 'an unauthorized certificate'}.`,
+        };
+      }
     } catch (err) {
       console.log(`[deploy-pass] TLS not ready yet: ${err.message}`);
       return {
