@@ -8,7 +8,6 @@ export default {
         ink: "#0A0A0A",
         paper: "#F8F8F6",
         bone: "#ECECE8",
-        accent: "#E61919",
         mute: "#5C5C58",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
