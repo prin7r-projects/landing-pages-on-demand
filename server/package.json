@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "node --watch src/index.js",
     "start": "node src/index.js",
-    "test": "node --test"
+    "test": "node --test",
+    "digest": "node src/digest-processor.js"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",

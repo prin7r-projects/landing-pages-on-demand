@@ -9,6 +9,7 @@ import {
   verifyNowpaymentsIpn,
   MissingEnvError,
 } from "./nowpayments.js";
+import { redactRunLogs, redactTokens } from "./redact.js";
 
 const app = new Hono();
 
@@ -291,7 +292,7 @@ app.get("/api/briefs/:id", (c) => {
   );
   const deployedSite = getQuery("SELECT * FROM deployed_sites WHERE brief_id = ?", [briefId]);
 
-  return c.json({ ...brief, payload: JSON.parse(brief.payload), runs, passResults, deployedSite });
+  return c.json({ ...brief, payload: JSON.parse(brief.payload), runs, passResults: redactRunLogs(passResults), deployedSite });
 });
 
 // POST /api/briefs/:id/revise (3.3)
@@ -419,6 +420,28 @@ export function buildDigest(customerId, { topN = 5, since = null } = {}) {
   return digest;
 }
 
+export function storeDigest(customerId, digest) {
+  const existing = getQuery(
+    "SELECT id FROM digests WHERE customer_id = ? AND date(sent_at) = date('now') ORDER BY sent_at DESC LIMIT 1",
+    [customerId],
+  );
+
+  if (existing) {
+    runQuery(
+      "UPDATE digests SET digest_json = ?, sent_at = datetime('now') WHERE id = ?",
+      [JSON.stringify(digest), existing.id],
+    );
+    return { digestId: existing.id, action: "digest_updated" };
+  }
+
+  const digestId = `dgst_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+  runQuery(
+    "INSERT INTO digests (id, customer_id, digest_json, sent_at) VALUES (?, ?, ?, datetime('now'))",
+    [digestId, customerId, JSON.stringify(digest)],
+  );
+  return { digestId, action: "digest_stored" };
+}
+
 // GET /api/digests/:customerId — latest digest; auto-builds if none or stale
 app.get("/api/digests/:customerId", (c) => {
   const customerId = c.req.param("customerId");
@@ -442,11 +465,7 @@ app.get("/api/digests/:customerId", (c) => {
   const digest = buildDigest(customerId);
   if (!digest) return c.json({ error: "Customer not found" }, 404);
 
-  // Store it
-  runQuery(
-    "INSERT INTO digests (id, customer_id, digest_json, sent_at) VALUES (?, ?, ?, datetime('now'))",
-    [`dgst_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`, customerId, JSON.stringify(digest)],
-  );
+  storeDigest(customerId, digest);
   saveDb();
 
   return c.json(digest);
@@ -644,6 +663,256 @@ app.get("/api/admin/subscriptions", (c) => {
 });
 
 // =============================================================================
+// PRI-2728: Scout config routes (Phase 1)
+// =============================================================================
+
+const scoutCreateSchema = z.object({
+  email: z.string().email(),
+  industry: z.string().min(1),
+  region: z.string().min(1),
+  signals: z.array(z.string()).default([]),
+});
+
+const scoutUpdateSchema = z.object({
+  email: z.string().email(),
+  industry: z.string().min(1).optional(),
+  region: z.string().min(1).optional(),
+  signals: z.array(z.string()).optional(),
+});
+
+/** Customer-scope auth — Bearer token validated against CUSTOMER_API_KEY or ADMIN_API_KEY */
+function customerAuth(c) {
+  const apiKey = process.env.CUSTOMER_API_KEY || process.env.ADMIN_API_KEY;
+  if (!apiKey) {
+    return c.json({ error: { code: "not_configured", message: "CUSTOMER_API_KEY not set" } }, 503);
+  }
+  const authHeader = c.req.header("Authorization") ?? "";
+  const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
+  if (token.length !== apiKey.length) {
+    return c.json({ error: { code: "unauthorized" } }, 401);
+  }
+  let mismatch = 0;
+  for (let i = 0; i < token.length; i++) {
+    mismatch |= token.charCodeAt(i) ^ apiKey.charCodeAt(i);
+  }
+  if (mismatch !== 0) {
+    return c.json({ error: { code: "unauthorized" } }, 401);
+  }
+  return null;
+}
+
+// POST /api/scouts — create scout config for a customer
+app.post("/api/scouts", async (c) => {
+  const ae = customerAuth(c);
+  if (ae) return ae;
+
+  try {
+    const body = await c.req.json();
+    const v = scoutCreateSchema.parse(body);
+
+    let customer = getQuery("SELECT id FROM customers WHERE email = ?", [v.email.toLowerCase().trim()]);
+    if (!customer) {
+      const customerId = `cust_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+      runQuery("INSERT INTO customers (id, email, created_at) VALUES (?, ?, datetime('now'))", [customerId, v.email.toLowerCase().trim()]);
+      customer = { id: customerId };
+    }
+
+    const scoutId = `scout_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    runQuery(
+      "INSERT INTO scouts (id, customer_id, industry, region, signals, created_at, updated_at) VALUES (?, ?, ?, ?, ?, datetime('now'), datetime('now'))",
+      [scoutId, customer.id, v.industry, v.region, JSON.stringify(v.signals)],
+    );
+    saveDb();
+
+    return c.json({
+      id: scoutId,
+      customerId: customer.id,
+      industry: v.industry,
+      region: v.region,
+      signals: v.signals,
+    }, 201);
+  } catch (e) {
+    if (e.name === "ZodError") return c.json({ error: { code: "validation_error", message: e.message } }, 400);
+    return c.json({ error: { code: "internal", message: e.message } }, 500);
+  }
+});
+
+// PUT /api/scouts/:id — update scout config with ownership enforcement
+app.put("/api/scouts/:id", async (c) => {
+  const ae = customerAuth(c);
+  if (ae) return ae;
+
+  try {
+    const scoutId = c.req.param("id");
+    const body = await c.req.json();
+    const v = scoutUpdateSchema.parse(body);
+
+    const scout = getQuery("SELECT * FROM scouts WHERE id = ?", [scoutId]);
+    if (!scout) return c.json({ error: "Scout not found" }, 404);
+
+    const customer = getQuery("SELECT id FROM customers WHERE email = ?", [v.email.toLowerCase().trim()]);
+    if (!customer || customer.id !== scout.customer_id) {
+      return c.json({ error: { code: "unauthorized", message: "Scout does not belong to this customer" } }, 403);
+    }
+
+    const industry = v.industry ?? scout.industry;
+    const region = v.region ?? scout.region;
+    const signals = v.signals !== undefined ? JSON.stringify(v.signals) : scout.signals;
+
+    runQuery(
+      "UPDATE scouts SET industry = ?, region = ?, signals = ?, updated_at = datetime('now') WHERE id = ?",
+      [industry, region, signals, scoutId],
+    );
+    saveDb();
+
+    return c.json({
+      id: scoutId,
+      customerId: scout.customer_id,
+      industry,
+      region,
+      signals: JSON.parse(signals),
+    });
+  } catch (e) {
+    if (e.name === "ZodError") return c.json({ error: { code: "validation_error", message: e.message } }, 400);
+    return c.json({ error: { code: "internal", message: e.message } }, 500);
+  }
+});
+
+// =============================================================================
+// PRI-2618: Relayhouse — Chat proxy (ZhipuAI GLM)
+// =============================================================================
+
+const GLM_CHAT_URL = "https://open.bigmodel.cn/api/paas/v4/chat/completions";
+
+const chatRequestSchema = z.object({
+  messages: z.array(
+    z.object({
+      role: z.enum(["user", "assistant", "system"]),
+      content: z.string(),
+    }),
+  ),
+});
+
+app.post("/api/chat", async (c) => {
+  const apiKey = process.env.ZHIPUAI_API_KEY;
+  if (!apiKey) {
+    return c.json({ error: { code: "not_configured", message: "ZHIPUAI_API_KEY not set" } }, 503);
+  }
+
+  const botId = c.req.query("botId");
+  if (!botId) {
+    return c.json({ error: "Missing botId query parameter" }, 400);
+  }
+
+  let body;
+  try {
+    body = await c.req.json();
+  } catch {
+    return c.json({ error: "Invalid JSON body" }, 400);
+  }
+
+  const parsed = chatRequestSchema.safeParse(body);
+  if (!parsed.success) {
+    return c.json({ error: "Invalid request: messages array required with role and content" }, 400);
+  }
+
+  const { messages } = parsed.data;
+
+  // System prompt scoped to botId
+  const systemMsg = {
+    role: "system",
+    content: `You are a helpful assistant for the Relayhouse bot "${botId}". Answer concisely and helpfully.`,
+  };
+
+  try {
+    const glmRes = await fetch(GLM_CHAT_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        model: "glm-4-flash",
+        messages: [systemMsg, ...messages],
+        temperature: 0.7,
+      }),
+    });
+
+    if (!glmRes.ok) {
+      const errText = await glmRes.text().catch(() => "");
+      console.error(`[relayhouse] GLM error ${glmRes.status}: ${errText}`);
+      return c.json({ error: { code: "upstream_error", status: glmRes.status } }, 502);
+    }
+
+    const glmData = await glmRes.json();
+    const reply = glmData.choices?.[0]?.message?.content ?? "";
+
+    return c.json({ role: "assistant", content: reply });
+  } catch (err) {
+    console.error(`[relayhouse] GLM proxy error:`, err.message);
+    return c.json({ error: { code: "proxy_error", message: err.message } }, 502);
+  }
+});
+
+// =============================================================================
+// PRI-2618: Relayhouse — Widget JS snippet
+// =============================================================================
+
+const widgetTemplate = (botId) => `(function(){
+  var b="${botId}";
+  if(document.getElementById("rh-widget"))return;
+  var s=document.createElement("style");
+  s.id="rh-style";
+  s.textContent='#rh-btn{position:fixed;bottom:20px;right:20px;width:56px;height:56px;border-radius:50%;background:#7c3aed;color:#fff;border:none;cursor:pointer;font-size:24px;box-shadow:0 2px 12px rgba(0,0,0,0.2);z-index:9999;display:flex;align-items:center;justify-content:center}#rh-panel{position:fixed;bottom:90px;right:20px;width:360px;height:480px;background:#fff;border-radius:12px;box-shadow:0 4px 24px rgba(0,0,0,0.15);z-index:9998;display:none;flex-direction:column;overflow:hidden;font-family:-apple-system,system-ui,sans-serif}#rh-panel.open{display:flex}#rh-header{background:#7c3aed;color:#fff;padding:12px 16px;font-weight:600;font-size:14px;flex-shrink:0}#rh-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px}#rh-msgs .msg{padding:8px 12px;border-radius:8px;max-width:85%;font-size:14px;line-height:1.4;word-wrap:break-word}#rh-msgs .msg.user{align-self:flex-end;background:#7c3aed;color:#fff}#rh-msgs .msg.assistant{align-self:flex-start;background:#f3f4f6;color:#111}#rh-input-wrap{display:flex;padding:8px;border-top:1px solid #e5e7eb;flex-shrink:0}#rh-input{flex:1;border:1px solid #d1d5db;border-radius:8px;padding:8px 12px;font-size:14px;outline:none}#rh-input:focus{border-color:#7c3aed}#rh-send{background:#7c3aed;color:#fff;border:none;border-radius:8px;padding:8px 16px;margin-left:8px;cursor:pointer;font-size:14px;font-weight:500}#rh-send:disabled{opacity:0.5;cursor:default}';
+  document.head.appendChild(s);
+  var bEl=document.createElement("button");
+  bEl.id="rh-btn";
+  bEl.textContent="💬";
+  document.body.appendChild(bEl);
+  var pEl=document.createElement("div");
+  pEl.id="rh-panel";
+  pEl.innerHTML='<div id="rh-header">Chat with '+b+'</div><div id="rh-msgs"></div><div id="rh-input-wrap"><input id="rh-input" type="text" placeholder="Type a message..." /><button id="rh-send">Send</button></div>';
+  document.body.appendChild(pEl);
+  var open=false;
+  bEl.onclick=function(){open=!open;pEl.classList.toggle("open",open);if(open)document.getElementById("rh-input").focus()};
+  function addMsg(role,txt){
+    var d=document.getElementById("rh-msgs");
+    var m=document.createElement("div");
+    m.className="msg "+role;
+    m.textContent=txt;
+    d.appendChild(m);
+    d.scrollTop=d.scrollHeight;
+  }
+  function send(){
+    var inp=document.getElementById("rh-input");
+    var snd=document.getElementById("rh-send");
+    var txt=inp.value.trim();
+    if(!txt)return;
+    addMsg("user",txt);
+    inp.value="";
+    snd.disabled=true;
+    fetch("/api/chat?botId="+encodeURIComponent(b),{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({messages:[{role:"user",content:txt}]})}).then(function(r){return r.json()}).then(function(d){
+      snd.disabled=false;
+      if(d.error){addMsg("assistant","Sorry, something went wrong.");return}
+      addMsg("assistant",d.content||"");
+    }).catch(function(){
+      snd.disabled=false;
+      addMsg("assistant","Sorry, connection error.");
+    });
+  }
+  document.getElementById("rh-send").onclick=send;
+  document.getElementById("rh-input").onkeydown=function(e){if(e.key==="Enter")send()};
+})();`;
+
+app.get("/widget/:botId.js", (c) => {
+  const botId = c.req.param("botId");
+  return c.body(widgetTemplate(botId), 200, {
+    "Content-Type": "application/javascript; charset=utf-8",
+    "Cache-Control": "public, max-age=3600",
+  });
+});
+
+// =============================================================================
 // Other routes
 // =============================================================================
 
@@ -672,12 +941,12 @@ app.post("/api/admin/briefs/:id/retry", (c) => {
   return c.json({ message: "Retry triggered" });
 });
 
-app.get("/health", (c) => c.json({ status: "ok", service: "drophouse", version: "0.3.0", phase: "3" }));
+app.get("/health", (c) => c.json({ status: "ok", service: "drophouse", version: "0.4.0", phase: "3", relayhouse: true }));
 
 app.get("/api", (c) =>
   c.json({
     message: "DropHouse API",
-    version: "0.3.0",
+    version: "0.4.0",
     phase: "3",
     endpoints: {
       health: "GET /health",
@@ -688,8 +957,11 @@ app.get("/api", (c) =>
       webhook: "POST /api/webhooks/nowpayments",
       cancel: "POST /api/account/cancel",
       preview: "GET /api/preview/:token",
+      chat: "POST /api/chat?botId=<botId>",
+      widget: "GET /widget/:botId.js",
       adminSubscriptions: "POST /api/admin/subscriptions · GET /api/admin/subscriptions",
       adminRetry: "POST /api/admin/briefs/:id/retry",
+      scouts: "POST /api/scouts · PUT /api/scouts/:id",
     },
   }),
 );

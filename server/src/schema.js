@@ -180,6 +180,19 @@ db.run(`
   )
 `);
 
+// PRI-2728: Personal Industry Scout configs
+db.run(`
+  CREATE TABLE IF NOT EXISTS scouts (
+    id TEXT PRIMARY KEY,
+    customer_id TEXT NOT NULL REFERENCES customers(id),
+    industry TEXT NOT NULL,
+    region TEXT NOT NULL,
+    signals TEXT NOT NULL DEFAULT '[]',
+    created_at TEXT DEFAULT (datetime('now')),
+    updated_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
 // Create indexes
 try {
   db.run('CREATE INDEX IF NOT EXISTS idx_briefs_customer_status ON briefs(customer_id, status)');
@@ -188,6 +201,7 @@ try {
   db.run('CREATE INDEX IF NOT EXISTS idx_payment_events_sub_status ON payment_events(subscription_id, payment_status)');
   db.run('CREATE INDEX IF NOT EXISTS idx_digests_customer_sent ON digests(customer_id, sent_at)');
   db.run('CREATE INDEX IF NOT EXISTS idx_brief_idem_hash ON brief_submission_idem(idem_hash, created_at)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_scouts_customer ON scouts(customer_id)');
 } catch (e) {
   // Indexes may already exist
 }

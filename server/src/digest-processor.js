@@ -6,8 +6,8 @@
 //
 // Schedule: node server/src/digest-processor.js (via docker sleep-loop)
 
-import { db, saveDb, runQuery, allQuery, getQuery } from "./schema.js";
-import { buildDigest } from "./index.js";
+import { saveDb, allQuery } from "./schema.js";
+import { buildDigest, storeDigest } from "./index.js";
 
 async function processDigests() {
   console.log(`[digest-processor] Starting digest build at ${new Date().toISOString()}`);
@@ -28,16 +28,12 @@ async function processDigests() {
         continue;
       }
 
-      const digestId = `dgst_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
-      runQuery(
-        "INSERT INTO digests (id, customer_id, digest_json, sent_at) VALUES (?, ?, ?, datetime('now'))",
-        [digestId, customer.id, JSON.stringify(digest)],
-      );
+      const { digestId, action } = storeDigest(customer.id, digest);
 
-      console.log(`[digest-processor] Digest stored for ${customer.id}: ${digest.totalBriefs} briefs, ${digest.totalBrands} brands`);
+      console.log(`[digest-processor] Digest ${action} for ${customer.id}: ${digest.totalBriefs} briefs, ${digest.totalBrands} brands`);
       results.push({
         customerId: customer.id,
-        action: "digest_stored",
+        action,
         digestId,
         totalBriefs: digest.totalBriefs,
         totalBrands: digest.totalBrands,
