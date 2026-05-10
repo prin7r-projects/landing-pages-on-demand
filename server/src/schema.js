@@ -170,6 +170,16 @@ db.run(`
   )
 `);
 
+// Phase 4: Brief submission idempotency
+db.run(`
+  CREATE TABLE IF NOT EXISTS brief_submission_idem (
+    id TEXT PRIMARY KEY,
+    idem_hash TEXT NOT NULL,
+    brief_id TEXT NOT NULL,
+    created_at TEXT DEFAULT (datetime('now'))
+  )
+`);
+
 // Create indexes
 try {
   db.run('CREATE INDEX IF NOT EXISTS idx_briefs_customer_status ON briefs(customer_id, status)');
@@ -177,6 +187,7 @@ try {
   db.run('CREATE INDEX IF NOT EXISTS idx_idem_hash ON idempotency_keys(idem_hash, created_at)');
   db.run('CREATE INDEX IF NOT EXISTS idx_payment_events_sub_status ON payment_events(subscription_id, payment_status)');
   db.run('CREATE INDEX IF NOT EXISTS idx_digests_customer_sent ON digests(customer_id, sent_at)');
+  db.run('CREATE INDEX IF NOT EXISTS idx_brief_idem_hash ON brief_submission_idem(idem_hash, created_at)');
 } catch (e) {
   // Indexes may already exist
 }

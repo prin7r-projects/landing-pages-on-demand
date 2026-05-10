@@ -22,6 +22,62 @@ app.use(
 );
 
 // =============================================================================
+// Prompt injection detection (Phase 4)
+// =============================================================================
+
+const INJECTION_PATTERNS = [
+  /^\s*(?:SYSTEM|System|system)\s*:/m,
+  /\b(?:ignore|forget|disregard)\s+(?:all\s+)?(?:previous|prior|earlier|above)\s+(?:instructions?|directives?|commands?)\b/i,
+  /\byou\s+are\s+now\b/i,
+  /\bDAN\s*:/i,
+  /\bjailbreak\b/i,
+  /\bpretend\s+(?:you\s+are|to\s+be)\b/i,
+  /^(?:Assistant|Human|User)\s*:/im,
+  /\boverride\s+(?:system|safety|instructions?)\b/i,
+  /\bnew\s+instructions?\s*:/i,
+  /\bact\s+as\s+(?:if\s+)?(?:you\s+are|a)\b/i,
+  /\byour\s+(?:true|real|actual)\s+(?:purpose|goal|objective)\s+is\b/i,
+];
+
+function checkForInjection(text) {
+  if (typeof text !== "string" || !text) return null;
+  for (const pattern of INJECTION_PATTERNS) {
+    if (pattern.test(text)) {
+      return { pattern: pattern.source };
+    }
+  }
+  // Check for excessive repetition (prompt flooding)
+  const words = text.toLowerCase().split(/\s+/);
+  const wordCounts = {};
+  for (const w of words) {
+    if (w.length > 3) {
+      wordCounts[w] = (wordCounts[w] || 0) + 1;
+      if (wordCounts[w] > 30) return { pattern: "excessive_repetition", word: w };
+    }
+  }
+  return null;
+}
+
+function validateBriefNoInjection(validated) {
+  const textFields = ["businessName", "audience", "valueProp", "primaryCta", "tone", "paletteHint"];
+  for (const field of textFields) {
+    const value = validated[field];
+    if (value) {
+      const result = checkForInjection(value);
+      if (result) {
+        return { field, ...result };
+      }
+    }
+  }
+  // Also check brandAssets if it's a string
+  if (typeof validated.brandAssets === "string") {
+    const result = checkForInjection(validated.brandAssets);
+    if (result) return { field: "brandAssets", ...result };
+  }
+  return null;
+}
+
+// =============================================================================
 // Validation schemas
 // =============================================================================
 
@@ -160,6 +216,12 @@ app.post("/api/briefs", async (c) => {
   try {
     const body = await c.req.json();
     const validated = briefSchema.parse(body);
+
+    // Phase 4: Prompt injection check
+    const injection = validateBriefNoInjection(validated);
+    if (injection) {
+      return c.json({ error: "Brief rejected: possible prompt injection", detail: injection }, 400);
+    }
 
     // Create or find customer by email
     let customer = getQuery("SELECT * FROM customers WHERE email = ?", [validated.email]);
